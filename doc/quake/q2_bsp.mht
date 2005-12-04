@@ -1,0 +1,2287 @@
+From: <Saved by Microsoft Internet Explorer 5>
+Subject: flipCode - Tutorial - Quake 2 BSP File Format
+Date: Tue, 20 Jul 2004 08:03:30 +0100
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----=_NextPart_000_0000_01C46E30.0BC45BC0"
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1409
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: text/html;
+	charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.flipcode.com/tutorials/tut_q2levels.shtml
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>flipCode - Tutorial - Quake 2 BSP File Format</TITLE>
+<META http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Dwindows-1252">
+<META content=3D"MSHTML 6.00.2800.1400" name=3DGENERATOR></HEAD>
+<BODY text=3D#ffffff vLink=3D#0fff00 aLink=3D#0fff00 link=3D#0fff00 =
+bgColor=3D#000000>
+<STYLE title=3Dflipstyle type=3Dtext/css>A:link {
+	COLOR: #ffff60
+}
+A:visited {
+	COLOR: #ffff60
+}
+A:active {
+	COLOR: #ffff60
+}
+A.menulink:link {
+	BACKGROUND: #303030; COLOR: #befc80
+}
+A.menulink:visited {
+	BACKGROUND: #303030; COLOR: #befc80
+}
+A.menulink:active {
+	BACKGROUND: #303030; COLOR: #befc80
+}
+A.menulink:link {
+	TEXT-DECORATION: none
+}
+A.menulink:visited {
+	TEXT-DECORATION: none
+}
+A.menulink:active {
+	TEXT-DECORATION: none
+}
+A.menudlink:link {
+	BACKGROUND: #303030; COLOR: #fadd69
+}
+A.menudlink:visited {
+	BACKGROUND: #303030; COLOR: #fadd69
+}
+A.menudlink:active {
+	BACKGROUND: #303030; COLOR: #fadd69
+}
+A.menudlink:link {
+	TEXT-DECORATION: none
+}
+A.menulink:visited {
+	TEXT-DECORATION: none
+}
+A.menulink:active {
+	TEXT-DECORATION: none
+}
+A.pxlink:link {
+	COLOR: #fadd69
+}
+A.pxlink:visited {
+	COLOR: #fadd69
+}
+A.pxlink:active {
+	COLOR: #fadd69
+}
+A.pxlink:link {
+	TEXT-DECORATION: none
+}
+A.pxlink:visited {
+	TEXT-DECORATION: none
+}
+A.pxlink:active {
+	TEXT-DECORATION: none
+}
+A.olink:link {
+	BACKGROUND: #000000; COLOR: #fadd69
+}
+A.olink:visited {
+	BACKGROUND: #000000; COLOR: #fadd69
+}
+A.olink:active {
+	BACKGROUND: #000000; COLOR: #fadd69
+}
+A.glink:link {
+	COLOR: #ffff80
+}
+A.glink:visited {
+	COLOR: #c06c21
+}
+A.glink:active {
+	COLOR: #c06c21
+}
+A.hlink:link {
+	BACKGROUND: black; COLOR: #ccffff
+}
+A.hlink:visited {
+	BACKGROUND: black; COLOR: #ccffff
+}
+A.hlink:active {
+	BACKGROUND: black; COLOR: #ccffff
+}
+A.nlink:link {
+	BACKGROUND: black; COLOR: #ffff60
+}
+A.nlink:visited {
+	BACKGROUND: black; COLOR: #ffff60
+}
+A.nlink:active {
+	BACKGROUND: black; COLOR: #ffff60
+}
+A.nwlink:link {
+	BACKGROUND: white; COLOR: #0000ff
+}
+A.nwlink:visited {
+	BACKGROUND: white; COLOR: #0000ff
+}
+A.nwlink:active {
+	BACKGROUND: white; COLOR: #0000ff
+}
+A.grylink:link {
+	COLOR: #ccffff
+}
+A.grylink:visited {
+	COLOR: #ccffff
+}
+A.grylink:active {
+	COLOR: #ccffff
+}
+</STYLE>
+
+<CENTER>
+<TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+  <TBODY>
+  <TR>
+    <TD bgColor=3D#303030><FONT =
+size=3D1>&nbsp;</FONT></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+  <TBODY>
+  <TR>
+    <TD width=3D"100%"><A href=3D"http://www.flipcode.com/" =
+target=3D_top><IMG=20
+      height=3D137 src=3D"http://www.flipcode.com/gfx/fcc.gif" =
+width=3D529=20
+      border=3D0></A></TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+  <TBODY>
+  <TR>
+    <TD bgColor=3D#303030><FONT =
+size=3D1>&nbsp;</FONT></TD></TR></TBODY></TABLE><!--- start ad -->
+<CENTER>
+<TABLE cellSpacing=3D0 cellPadding=3D10 border=3D0>
+  <TBODY>
+  <TR>
+    <TD align=3Dmiddle>
+      <CENTER>
+      <SCRIPT language=3Djavascript><!--=0A=
+document.write('<scr'+'ipt language=3Djavascript =
+src=3D"http://a.tribalfusion.com/j.ad?site=3DflipCodecom&adSpace=3DROS&si=
+ze=3D468x60&type=3Dhoriz&pop=3D0&requestID=3D'+((new Date()).getTime() % =
+2147483648) + Math.random()+'"></scr'+'ipt>');=0A=
+//-->=0A=
+</SCRIPT>
+      <NOSCRIPT><A=20
+      =
+href=3D"http://a.tribalfusion.com/i.click?site=3DflipCodecom&amp;adSpace=3D=
+ROS&amp;size=3D468x60&amp;requestID=3D1314179715"=20
+      target=3D_blank><IMG height=3D60 alt=3D"Click Here" src=3D"" =
+width=3D468=20
+      border=3D0></A> =
+</NOSCRIPT></CENTER></TD></TR></TBODY></TABLE></CENTER><!--- end ad -->
+<TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+  <TBODY>
+  <TR>
+    <TD bgColor=3D#303030><FONT =
+size=3D1>&nbsp;</FONT></TD></TR></TBODY></TABLE><!--<img =
+src=3D"http://www.flipcode.com/bl_line.jpg"><br><br>=0A=
+-->
+<TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+  <TBODY>
+  <TR>
+    <TD vAlign=3Dtop width=3D130 bgColor=3D#303030><FONT face=3D"Arial, =
+Helvetica"=20
+      color=3D#ffffff size=3D1>
+      <DIV align=3Dright><IMG height=3D34 alt=3Dfeatures=20
+      src=3D"http://www.flipcode.com/gfx/lm_features.gif" =
+width=3D120><BR><A=20
+      class=3Dmenulink href=3D"http://www.flipcode.com/" =
+target=3D_top>Development=20
+      News</A> -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/tutorials/"=20
+      target=3D_top>Development Tutorials</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/links/" target=3D_top>Development =
+Links</A>=20
+      -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/interviews/interviews.shtml"=20
+      target=3D_top>Industry Interviews</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/books/" target=3D_top>Computer =
+Book=20
+      Reviews</A> -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/contest/"=20
+      target=3D_top>Programming Contest</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/desktops/" target=3D_top>FC =
+Developer=20
+      Desktops</A> -<BR><BR><BR><IMG height=3D34 alt=3Dcolumns=20
+      src=3D"http://www.flipcode.com/gfx/lm_columns.gif" =
+width=3D120><BR><BR>
+      <DIV align=3Dleft><FONT face=3D"Arial, Verdana" color=3D#d0d0d0=20
+      size=3D1>&nbsp;Currently Active:</FONT><BR></DIV><A =
+class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/askmid/" target=3D_top>Ask =
+MidNight -=20
+      Q&amp;A</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tpractice/" target=3D_top>Theory =
+&amp;=20
+      Practice</A> -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/dp/"=20
+      target=3D_top>DirtyPunk's Column</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/geometry/" target=3D_top>3D =
+Geometry=20
+      Primer</A> -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/harmless/"=20
+      target=3D_top>Harmless Algorithms</A> -<BR><BR>
+      <DIV align=3Dleft><FONT face=3D"Arial, Verdana" color=3D#d0d0d0=20
+      size=3D1>&nbsp;Complete / Closed: &nbsp;</FONT><BR></DIV><A =
+class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/demomaking/" target=3D_top>Art Of=20
+      Demomaking</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/knowledge/" target=3D_top>Fountain =
+Of=20
+      Knowledge</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/network/" target=3D_top>Network=20
+      Programming</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/portal/" target=3D_top>Portal =
+Engine=20
+      Series</A> -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/cworks/"=20
+      target=3D_top>Cool, It Works!</A> -<BR><BR><BR><IMG height=3D34 =
+alt=3Dforums=20
+      src=3D"http://www.flipcode.com/gfx/lm_forums.gif" =
+width=3D120><BR><A=20
+      class=3Dmenulink href=3D"http://www.flipcode.com/forums/">Message =
+Center</A>=20
+      -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/fc-chan.shtml"=20
+      target=3D_top>#flipCode IRC Channel</A> -<BR><BR><BR><IMG =
+height=3D34=20
+      alt=3Dsiteinfo src=3D"http://www.flipcode.com/gfx/lm_siteinfo.gif" =
+
+      width=3D120><BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/siteinfo.shtml" =
+target=3D_top>General=20
+      Information</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/advertise.shtml" =
+target=3D_top>Advertising=20
+      Information</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/archives.shtml" target=3D_top>News =
+
+      Archives</A> -<BR><BR><BR><IMG height=3D34 alt=3D"tech files"=20
+      src=3D"http://www.flipcode.com/gfx/lm_techfiles.gif" =
+width=3D120><BR><A=20
+      class=3Dmenulink href=3D"http://www.flipcode.com/tfiles/" =
+target=3D_top>Tech=20
+      File Information</A> -<BR><BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/anis.shtml" =
+target=3D_top>Anis=20
+      Ahmad</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/jacco.shtml" =
+target=3D_top>Jacco=20
+      Bikker</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/jeroen.shtml" =
+target=3D_top>Jeroen=20
+      Bouwens</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/lionel.shtml" =
+target=3D_top>Lionel=20
+      Brits</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/phil.shtml" =
+target=3D_top>Phil=20
+      Carlisle</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/alexc.shtml" =
+target=3D_top>Alex=20
+      Champandard</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/roy.shtml" =
+target=3D_top>Roy Jacobs</A>=20
+      -<BR><A class=3Dmenulink =
+href=3D"http://www.flipcode.com/tfiles/alexh.shtml"=20
+      target=3D_top>Alexander Herz</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/victor.shtml" =
+target=3D_top>Victor=20
+      Ho</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/luke.shtml" =
+target=3D_top>Luke=20
+      Hodorowicz</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/mike.shtml" =
+target=3D_top>Mike=20
+      Hommel</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/steven.shtml" =
+target=3D_top>Steven=20
+      Hugg</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/toby.shtml" =
+target=3D_top>Toby=20
+      Jones</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/jacob.shtml" =
+target=3D_top>Jacob=20
+      McCosh</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/kurt.shtml" =
+target=3D_top>Kurt=20
+      Miller</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/jan.shtml" =
+target=3D_top>Jan=20
+      Niestadt</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/tane.shtml" =
+target=3D_top>Tane=20
+      Piper</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/muresan.shtml" =
+target=3D_top>Muresan=20
+      Robert</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/adam.shtml" =
+target=3D_top>Adam=20
+      Robinson</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/henry.shtml" =
+target=3D_top>Henry=20
+      Robinson</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/conor.shtml" =
+target=3D_top>Conor=20
+      Stokes</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/jaap.shtml" =
+target=3D_top>Jaap=20
+      Suter</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/nicholas.shtml" =
+target=3D_top>Nicholas=20
+      Vining</A> -<BR><A class=3Dmenulink=20
+      href=3D"http://www.flipcode.com/tfiles/peter.shtml" =
+target=3D_top>Peter=20
+      White</A> -<BR></DIV></FONT><IMG height=3D1=20
+      src=3D"http://www.flipcode.com/gfx/spacer.gif" width=3D120> </TD>
+    <TD vAlign=3Dtop align=3Dmiddle width=3D"100%">
+      <CENTER>
+      <TABLE cellSpacing=3D0 cellPadding=3D10 width=3D"100%" border=3D0>
+        <TBODY>
+        <TR>
+          <TD><FONT face=3D"Verdana, Helvetica" size=3D2>
+            <CENTER>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"95%" =
+border=3D0>
+              <TBODY>
+              <TR>
+                <TD vAlign=3Dcenter width=3D"90%">
+                  <CENTER><FONT face=3D"Verdana, Helvetica" =
+color=3D#ffffff=20
+                  size=3D2><FONT face=3D"Helvetica, Arial" =
+size=3D6>Quake 2 BSP File=20
+                  Format</FONT> </FONT><BR><BR><FONT face=3D"Helvetica, =
+Arial"=20
+                  color=3D#ffff80 size=3D2>By <A=20
+                  href=3D"mailto:amcguire@andrew.cmu.edu">Max=20
+                  McGuire</A><BR></FONT><FONT face=3D"Helvetica, Arial"=20
+                  color=3D#80cc80 size=3D2>Posted 07 June=20
+                  2000<BR></FONT></FONT></CENTER></TD>
+                <TD vAlign=3Dcenter align=3Dmiddle><IMG=20
+                  =
+src=3D"http://www.flipcode.com/tutorials/tut_button.jpg"><BR><FONT=20
+                  face=3DArial color=3D#c0c0c0 size=3D1><A=20
+                  =
+href=3D"http://www.flipcode.com/tutorials/disclaimer.shtml">Read=20
+                  This Disclaimer</A> =
+</FONT></TD></TR></TBODY></TABLE></CENTER>
+            <HR noShade>
+            <BR><!--------------------- SECTION =
+START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff =
+size=3D5>Introduction=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The purpose of this document is to detail the =
+structure=20
+                  of the BSP file format used by Quake 2 to store maps; =
+in=20
+                  particular, the focus is on rendering Quake 2 worlds. =
+Although=20
+                  there is other information contained in the BSP file =
+used for=20
+                  other game elements (such as enemy AI, etc.), I don't =
+have=20
+                  complete information on them so I won't discuss these =
+beyond=20
+                  mentioning them. If you have anything to contribute on =
+these=20
+                  parts please feel free to e-mail at the address listed =
+above.=20
+                  Also, although I've tried my best to minimize errors, =
+if you=20
+                  find anything that is incorrect please let me know. =
+<BR><BR>In=20
+                  addition to just a bare description of the BSP file =
+format,=20
+                  this document also attempts explain the techniques =
+which are=20
+                  at the core of the Quake rendering engine. In general =
+it's=20
+                  assumed that the reader is familiar with the basic =
+principles=20
+                  of 3D graphics, including the BSP tree data structure. =
+
+                  <BR><BR>This document covers version 38 of the BSP =
+file format=20
+                  which is the version used by Quake 2. This is also the =
+version=20
+                  of the BSP file format used by Kingpin (which was =
+created=20
+                  using the Quake 2 engine) and therefore all of the =
+information=20
+                  contained is relevant to those files as well. While =
+Quake 1=20
+                  and Quake 3: Arena use similar BSP formats the formats =
+are not=20
+                  directly compatible. However, because of the =
+similarity in the=20
+                  structure and techniques, this document should be of =
+some use=20
+                  to anyone interested in these formats as well. =
+<BR><BR>My=20
+                  information about the Quake 2 BSP format was all =
+learned by a=20
+                  lot of experimentation in implementing my own Quake 2 =
+BSP=20
+                  renderer along with examining source code for =
+Quake-like=20
+                  engines generously released into the public domain by =
+their=20
+                  authors. These engines were the Twister Engine by =
+Stefano=20
+                  Lanza, the Arnfold 2 Engine by Andrei Fortuna and the =
+Poly=20
+                  Engine by Alexey Goloshubin. The source code for all =
+three of=20
+                  these engines is freely available on the web; if you =
+find=20
+                  something's missing out of this document, I recommend =
+you=20
+                  check out these engines. Id Software has also released =
+the=20
+                  source code for their Quake 2 tools, including the =
+QBSP map=20
+                  file compiler which outputs BSP files, although I =
+didn't find=20
+                  it to be particularly useful in my own exploration.=20
+              =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Legality=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Using id Software file formats in a publicly=20
+                  distributed application always seemed a little =
+questionable to=20
+                  me in terms of legality. In preparation of this =
+document I=20
+                  contacted id Software to resolve the issue; John =
+Carmack was=20
+                  kind enough to send along this response: <BR><BR>"We =
+do not=20
+                  legally protect the file formats, but you can't use =
+any of the=20
+                  released tools, or tools derived from them (except the =
+GPL'd=20
+                  Quake 1 tools) to generate content for a commercial =
+venture.=20
+                  If you are writing everything yourself, no problem."=20
+              =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff =
+size=3D5>Conventions=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>To help make this document easier to read =
+I've included=20
+                  C-syntax structures for all of the file structures =
+(with the=20
+                  assumption that there no extra padding bytes between =
+the=20
+                  fields). To simplify the notation and standardize the =
+meaning,=20
+                  the abbreviations int32 and uint32 are used for signed =
+and=20
+                  unsigned 32-bit integers; similar abbreviations are =
+used for=20
+                  16-bit and 8-bit integers as well. Also, the following =
+two=20
+                  structures are used throughout the BSP file format to =
+store=20
+                  vertices and vectors: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct point3f
+{
+
+    float x;
+    float y;
+    float z;
+
+};
+
+struct point3s
+{
+
+    int16 x;
+    int16 y;
+    int16 z;
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The second version is used in=20
+                  some places to conserve memory where the precision is=20
+                  unessential (like storing the bounding boxes) since it =
+takes=20
+                  only 6 bytes compared with the 12 byte floating point =
+version.=20
+                  These are regular integer representations, not =
+fixed-point.=20
+                  =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Rendering =
+
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>To give an introduction to the terminology =
+used and the=20
+                  idea behind some of the data structures, this section =
+briefly=20
+                  describes the process of rendering a Quake 2 =
+environment.=20
+                  <BR><BR>A Quake map is carved up into convex regions =
+that=20
+                  become the leaves of the BSP tree, and anytime the =
+camera is=20
+                  positioned within a level it is contained in exactly =
+one of=20
+                  these convex regions. The leaves are grouped together =
+with=20
+                  neighboring leaves to form clusters; exactly how these =
+
+                  clusters are formed is determined by the tool that =
+creates the=20
+                  BSP file. For each cluster, a list of all of the other =
+
+                  clusters which are potentially visible is stored. This =
+is=20
+                  referred to as the potentially visible set (PVS). =
+<BR><BR>To=20
+                  render a Quake map, first the BSP tree is traversed to =
+
+                  determine which leaf the camera is located in. Once we =
+know=20
+                  which leaf the camera is in, we know which cluster =
+it's in=20
+                  (remembering that each leaf is contained in exactly =
+one=20
+                  cluster). The PVS for the cluster is then decompressed =
+giving=20
+                  a list of all the potentially visible clusters from =
+the camera=20
+                  location. Leaves store a bounding box which his used =
+to=20
+                  quickly cull leaves that are not within the viewing =
+frustum.=20
+                  =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>BSP Tree=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Many people incorrectly associate the BSP =
+tree with the=20
+                  visibility algorithm used by Quake and similar =
+engines. As=20
+                  described above, the visible surface determination is =
+done=20
+                  using a precomputed PVS. The BSP tree is primarily =
+used to=20
+                  divide the map into regions and to quickly determine =
+which=20
+                  region the camera is in. As a result, it isn't that=20
+                  fundamental to any of the rendering algorithms used in =
+Quake=20
+                  and any data structure giving a spatial subdivision =
+(like an=20
+                  octree or a k-D tree) could be used instead. BSP trees =
+are=20
+                  very simple however, and they are useful for some of =
+the other=20
+                  non-rendering tasks in the Quake engine. =
+<BR><BR>Traditionally=20
+                  when discussing BSP trees a distinction is made =
+between those=20
+                  BSP trees that store the faces in the leaves =
+(leaf-based BSP=20
+                  trees) and those that store them in the internal nodes =
+
+                  (node-based BSP trees). The variation of BSP tree =
+Quake uses=20
+                  is actually both; the reason for this is the dual use =
+of the=20
+                  BSP tree in both rendering and in collision detection. =
+For the=20
+                  purpose of rendering, it is useful to have the faces =
+stored in=20
+                  the leaves because of the way the PVS is used. If =
+you're not=20
+                  interested in performing collision detection, the =
+faces in the=20
+                  nodes can be completely ignored.=20
+            =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>File =
+Header=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>As far as I know all BSP files are stored in =
+a=20
+                  little-endian (Intel) byte order and converted as =
+loaded when=20
+                  used on a big-ending platform. This allows the same =
+map files=20
+                  to be shared by Quake clients running on all different =
+
+                  platforms. If you're going to be loading BSP files on =
+a=20
+                  big-endian machine -- like a Macintosh or UNIX machine =
+--=20
+                  you're going to have to be careful about swapping the =
+byte=20
+                  order. <BR><BR>The Quake BSP file format is organized =
+around a=20
+                  directory structure, where all of the data is =
+contained in=20
+                  "free floating" lumps within the file. There's a =
+directory in=20
+                  the beginning of the file which tells the offset of =
+the start=20
+                  of the lump and the length. This directory comes after =
+the=20
+                  first 8 bytes of the file is a table of contents which =
+gives=20
+                  the location and length of these lumps. <BR><BR>The =
+format for=20
+                  the BSP file header is the bsp_header structure shown =
+below:=20
+                  <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_lump
+{
+
+    uint32    offset;     // offset (in bytes) of the data from the =
+beginning of the file
+    uint32    length;     // length (in bytes) of the data
+
+};
+
+struct bsp_header
+{
+
+    uint32    magic;      // magic number ("IBSP")
+    uint32    version;    // version of the BSP format (38)
+
+    bsp_lump  lump[19];   // directory of the lumps
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The first four bytes of the=20
+                  BSP file is a tag which can be used to identify the =
+file as an=20
+                  id Software BSP file. These bytes spell out "IBSP". =
+Following=20
+                  that is a 32-bit unsigned integer specifying the =
+version=20
+                  number. As mentioned earlier, the version described in =
+this=20
+                  document is 38 (decimal). <BR><BR>Below is a table =
+showing the=20
+                  different lumps contained in the BSP file and their =
+index in=20
+                  the lump array in the header. The purpose of lumps =
+marked with=20
+                  a question mark is not known (the names are derived =
+from the=20
+                  QBSP source code), however they are not needed for=20
+                  constructing a simple Quake level renderer. <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+Index	Name	                Description
+0	Entities	        MAP entity text buffer=09
+1	Planes	                Plane array=09
+2	Vertices	        Vertex array=09
+3	Visibility	        Compressed PVS data and directory for all clusters=09
+4	Nodes	                Internal node array for the BSP tree=09
+5	Texture Information	Face texture application array=09
+6	Faces	                Face array=09
+7	Lightmaps	        Lightmaps=09
+8	Leaves	                Internal leaf array of the BSP tree=09
+9	Leaf Face Table 	Index lookup table for referencing the face array =
+from a leaf=09
+10	Leaf Brush Table	?=09
+11	Edges	                Edge array=09
+12	Face Edge Table	        Index lookup table for referencing the edge =
+array from a face=09
+13	Models	                ?=09
+14	Brushes	                ?=09
+15	Brush Sides	        ?=09
+16	Pop	                ?=09
+17	Areas	                ?       =09
+18	Area Portals	        ?</FONT>
+</PRE></TD></TR></TBODY></TABLE>Most of the lumps are stored=20
+                  as an array of structures where the structure has a =
+fixed=20
+                  size. For instance the vertex lump is an array of =
+point3f=20
+                  structures. Since each point3f is 12 bytes, the number =
+of=20
+                  vertices can be computed by dividing the size of the =
+vertex=20
+                  lump by 12. Similar computations can be done for the =
+plane,=20
+                  node, texture information, faces, leaf and edge lumps. =
+
+                  <BR><BR>In the following sections, the purpose and =
+structure=20
+                  of the known lumps is discussed.=20
+            =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Vertex =
+Lump=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The vertex lump is a list of all of the =
+vertices in the=20
+                  world. Each vertex is 3 floats which makes 12 bytes =
+per=20
+                  vertex. You can compute the numbers of vertices by =
+dividing=20
+                  the length of the vertex lump by 12. <BR><BR>Quake =
+uses a=20
+                  coordinate system in which the z-axis is pointing in =
+the "up"=20
+                  direction. Keep in mind that if you modify the =
+coordinates to=20
+                  use a different system, you will also need to adjust =
+the=20
+                  bounding boxes and the plane equations.=20
+            =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Edge Lump =
+
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Not only are vertices shared between faces, =
+but edges=20
+                  are as well. Each edge is stored as a pair of indices =
+into the=20
+                  vertex array. The storage is two 16-bit integers, so =
+the=20
+                  number of edges in the edge array is the size of the =
+edge lump=20
+                  divided by 4. There is a little complexity here =
+because an=20
+                  edge could be shared by two faces with different =
+windings, and=20
+                  therefore there is no particular "direction" for an =
+edge. This=20
+                  is further discussed in the section on face edges.=20
+              =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Face Lump =
+
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The face lump stores an array of bsp_face =
+structures=20
+                  which have the following format: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_face
+{
+
+    uint16   plane;             // index of the plane the face is =
+parallel to
+    uint16   plane_side;        // set if the normal is parallel to the =
+plane normal
+
+    uint32   first_edge;        // index of the first edge (in the face =
+edge array)
+    uint16   num_edges;         // number of consecutive edges (in the =
+face edge array)
+=09
+    uint16   texture_info;      // index of the texture info structure=09
+  =20
+    uint8    lightmap_syles[4]; // styles (bit flags) for the lightmaps
+    uint32   lightmap_offset;   // offset of the lightmap (in bytes) in =
+the lightmap lump
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The size of the bsp_face=20
+                  structure is 20 bytes, the number of faces can be =
+determined=20
+                  by dividing the size of the face lump by 20. =
+<BR><BR>The=20
+                  plane_side is used to determine whether the normal for =
+the=20
+                  face points in the same direction or opposite the =
+plane's=20
+                  normal. This is necessary since coplanar faces which =
+share the=20
+                  same node in the BSP tree also share the same normal, =
+however=20
+                  the true normal for the faces could be different. If=20
+                  plane_side is non-zero, then the face normal points in =
+the=20
+                  opposite direction as the plane's normal. <BR><BR>The =
+details=20
+                  of texture and lightmap coordinate generation are =
+discussed in=20
+                  the section on texture information and lightmap =
+sections.=20
+                  =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Face Edge =
+Lump=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Instead of directly accessing the edge array, =
+faces=20
+                  contain indices into the face edge array which are in =
+turn=20
+                  used as indices into the edge array. The face edge =
+lump is=20
+                  simply an array of unsigned 32-bit integers. The =
+number of=20
+                  elements in the face edge array is the size of the =
+face edge=20
+                  lump divided by 4 (note that this is not necessarily =
+the same=20
+                  as the number of edges). <BR><BR>Since edges are =
+referenced=20
+                  from multiple sources they don't have any particular=20
+                  direction. If the edge index is positive, then the =
+first point=20
+                  of the edge is the start of the edge; if it's =
+negative, then=20
+                  the second point is used as the start of the edge (and =
+
+                  obviously when you look it up in the edge array you =
+drop the=20
+                  negative sign). =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Plane =
+Lump=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The plane lump stores and array of bsp_plane =
+structures=20
+                  which are used as the splitting planes in the BSP. The =
+format=20
+                  for for the bsp_plane structure is: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_plane
+{
+
+    point3f   normal;      // A, B, C components of the plane equation
+    float     distance;    // D component of the plane equation
+    uint32    type;        // ?
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>Each bsp_plane structure is 20=20
+                  bytes, so the number of planes is the size of the =
+plane lump=20
+                  divided by 20. The x, y and z components of the normal =
+
+                  correspond to A, B, C constants and the distance to =
+the D=20
+                  constant in the plane equation: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+F(x, y, z) =3D Ax + By + Cz - D</FONT>
+</PRE></TD></TR></TBODY></TABLE>A point is on the plane is=20
+                  F(x, y, z) =3D 0, in front of the plane if F(x, y, z) =
+&gt; 0 and=20
+                  behind the plane if F(x, y, z) &lt; 0. This is used in =
+the=20
+                  traversal of the BSP tree is traversed.=20
+            =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Node Lump =
+
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The nodes are stored as an array in the node =
+lump,=20
+                  where the first element is the root of the BSP tree. =
+The=20
+                  format of a node is the bsp_node structure: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_node
+{
+
+    uint32   plane;             // index of the splitting plane (in the =
+plane array)
+   =20
+    int32    front_child;       // index of the front child node or leaf
+    int32    back_child;        // index of the back child node or leaf
+  =20
+    point3s  bbox_min;          // minimum x, y and z of the bounding =
+box
+    point3s  bbox_max;          // maximum x, y and z of the bounding =
+box
+=09
+    uint16   first_face;        // index of the first face (in the face =
+array)
+    uint16   num_faces;         // number of consecutive edges (in the =
+face array)
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>Each bsp_node is 28 bytes, so=20
+                  the number of nodes is the size of the node lump =
+divided by=20
+                  28. <BR><BR>Since a child of a node may be a leaf and =
+not a=20
+                  node, negative values for the index are used to incate =
+a leaf.=20
+                  The exact position in the leaf array for a negative =
+index is=20
+                  computed as -(index + 1) so that the first negative =
+number=20
+                  maps to 0. <BR><BR>Since the bounding boxes are axis =
+aligned,=20
+                  the eight coordinates of the box can be found from the =
+minimum=20
+                  and maximum coordinates stored in the bbox_min and =
+bbox_max=20
+                  fields. <BR><BR>As mentioned earlier, the faces listed =
+in the=20
+                  node are not used for rendering but rather for =
+collision=20
+                  detection. =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Leaf Lump =
+
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The leaf lump stores an array of bsp_leaf =
+structures=20
+                  which are the leaves of the BSP tree. The format of =
+the=20
+                  bsp_leaf structure is: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_leaf
+{
+  =20
+    uint32   brush_or;          // ?
+=09
+    uint16   cluster;           // -1 for cluster indicates no =
+visibility information
+    uint16   area;              // ?
+
+    point3s  bbox_min;          // bounding box minimums
+    point3s  bbox_max;          // bounding box maximums
+
+    uint16   first_leaf_face;   // index of the first face (in the face =
+leaf array)
+    uint16   num_leaf_faces;    // number of consecutive edges (in the =
+face leaf array)
+
+    uint16   first_leaf_brush;  // ?
+    uint16   num_leaf_brushes;  // ?
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The bsp_leaf structure is 28=20
+                  bytes so the number of leaves is the size of the leaf =
+lump=20
+                  divided by 28. <BR><BR>Leaves are grouped into =
+clusters for=20
+                  the purpose of storing the PVS, and the cluster field =
+gives=20
+                  the index into the array stored in the visibility =
+lump. See=20
+                  the Visibility section for more information on this. =
+If the=20
+                  cluster is -1, then the leaf has no visibility =
+information (in=20
+                  this case the leaf is not a place that is reachable by =
+the=20
+                  player). =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Leaf Face =
+Lump=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Instead of directly accessing the face array, =
+leaves=20
+                  contain indices into the leaf face array which are in =
+turn=20
+                  used as indices into the face array. The face edge =
+lump is=20
+                  simply an array of unsigned 16-bit integers. The =
+number of=20
+                  elements in this array is the size of the leaf face =
+lump=20
+                  divided by 2; this is not necessarily the same as the =
+number=20
+                  of faces in the world. =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Texture =
+Information=20
+            Lump </FONT><BR><IMG=20
+            src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Texture information structures specify all of =
+the=20
+                  details about how a face is textured. The structure of =
+the a=20
+                  single texture information is the bsp_texinfo =
+structure: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_texinfo
+{
+
+    point3f  u_axis;
+    float    u_offset;
+  =20
+    point3f  v_axis;
+    float    v_offset;
+
+    uint32   flags;
+    uint32   value;
+
+    char     texture_name[32];
+
+    uint32   next_texinfo;
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The bsp_texinfo structure is=20
+                  76 bytes, so the number of texture information =
+structures is=20
+                  the size of the lump divided by 76. <BR><BR>Textures =
+are=20
+                  applied to faces using a planar texture mapping =
+scheme.=20
+                  Instead of specifying texture coordinates for each of =
+the=20
+                  vertices of the face, two texture axes are specified =
+which=20
+                  define a plane. Texture coordinates are generated by=20
+                  projecting the vertices of the face onto this plane.=20
+                  <BR><BR>While this may seem to add some complexity to =
+the task=20
+                  of the programmer, it greatly reduces the burden of =
+the level=20
+                  designer in aligning textures across multiple faces.=20
+                  <BR><BR>The texture coordinates (u, v) for a point(x, =
+y, z)=20
+                  are found using the following computation: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+u =3D x * u_axis.x + y * u_axis.y + z * u_axis.z + u_offset
+v =3D x * v_axis.x + y * v_axis.y + z * v_axis.z + v_offset</FONT>
+</PRE></TD></TR></TBODY></TABLE>My own experience has shown=20
+                  that it is perfectly reasonable to generate the =
+coordinates in=20
+                  real-time rather than storing them. <BR><BR>The =
+texture name=20
+                  is stored with a path but without any extension. =
+Typically, if=20
+                  you are loading a Quake 2 map you would append the =
+extension=20
+                  "wal" to the name and then load it from the PAK file. =
+If=20
+                  you're loading a Kingpin map you would append the =
+extension=20
+                  "tga" and then load if from disk (Kingpin stires the =
+textures=20
+                  outside of the PAK file). See the section on the WAL =
+texture=20
+                  format for more details. =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff =
+size=3D5>Visibility Lump=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Leaves are grouped into clusters for the =
+purpose of=20
+                  storing the visibility information. This is to =
+conserve space=20
+                  in the PVS since it's likely that nearby leaves will =
+have=20
+                  similar potentially visible areas. The first 4 bytes =
+of the=20
+                  visibility lump is a 32-bit unsigned integer =
+indicating the=20
+                  number of clusters in the map, and after that is an =
+array of=20
+                  bsp_vis_offset structures with the same number of =
+elements as=20
+                  there are clusters. The bsp_vis_offset structure =
+format is:=20
+                  <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct bsp_vis_offset
+{
+
+	uint32 pvs;   // offset (in bytes) from the beginning of the visibility =
+lump
+	uint32 phs;   // ?
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The rest of the visibility=20
+                  lump is the actual visibility information. For every =
+cluster=20
+                  the visibility state (either visible or occluded) is =
+stored=20
+                  for every other cluster in the world. Clusters are =
+always=20
+                  visible from within themselves. Because this is such a =
+massive=20
+                  amount of data, this array is stored as a bit vector =
+(one bit=20
+                  per element) and 0's are run-length-encoded. Here's an =
+example=20
+                  of a C-routine to decompress the PVS into a byte array =
+(this=20
+                  was adapted from the "Quake Specifications" document): =
+<BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+int v =3D offset;
+
+memset(cluster_visible, 0, num_clusters);
+
+for (int c =3D 0; c &lt; num_clusters; v++) {
+=20
+   if (pvs_buffer[v] =3D=3D 0) {
+      v++;    =20
+      c +=3D 8 * pvs_buffer[v];
+   } else {
+      for (uint8 bit =3D 1; bit !=3D 0; bit *=3D 2, c++) {
+         if (pvs_buffer[v] &amp; bit) {
+            cluster_visible[c] =3D 1;
+         }
+      }
+   }  =20
+
+}</FONT>
+</PRE></TD></TR></TBODY></TABLE></FONT></TD></TR></TBODY></TABLE></DIV><!=
+--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Lightmap =
+Lump=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Static lighting is handled in the Quake =
+environment=20
+                  using lightmaps, which are low resolution bitmaps that =
+are=20
+                  combined with the texture when rendering a face. =
+Lightmaps are=20
+                  unique to a face (unlike textures which may be used on =
+
+                  multiple faces). The maximum size for any lightmap is =
+16x16=20
+                  which is enforced by the BSP creation tool by =
+splitting faces=20
+                  which would require larger lightmaps. In Quake 1 =
+lightmaps=20
+                  were limited to grayscale, however Quake 2 allows for =
+24-bit=20
+                  true color lighting. <BR><BR>Lightmaps are applied =
+either=20
+                  through multi-texturing or multi-pass rendering and =
+should be=20
+                  multiplied with the texture for a face when rendering. =
+
+                  <BR><BR>The lightmap lump contains the data for all of =
+the=20
+                  lightmaps in the world stored consecutively. Faces =
+store the=20
+                  offset of their lightmap in this lump in the bsp_face=20
+                  structure's lightmap_offset. The actual lightmap data =
+is=20
+                  stored in a 24-bits-per-pixel RGB format in a =
+left-right,=20
+                  top-down order starting at this offset. <BR><BR>The =
+width and=20
+                  height of a lightmap isn't explicitly stored anywhere =
+and must=20
+                  be computed. If max_u is the maximum u component of =
+all of the=20
+                  texture coordinates for a face, and min_u is the =
+minimum u=20
+                  component of all the texture coordinates for a face =
+(and=20
+                  similarly for the max_v and min_v), then the width and =
+height=20
+                  of the lightmap for the face is given by the =
+computation: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+lightmap_width  =3D ceil(max_u / 16) - floor(min_u / 16) + 1
+lightmap_height =3D ceil(max_v / 16) - floor(min_v / 16) + 1</FONT>
+</PRE></TD></TR></TBODY></TABLE>For information on computing=20
+                  the texture coordinates for a face see the Texture =
+Information=20
+                  Lump section. =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>WAL Image =
+Format=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>Quake 2 stores textures in a proprietary 2D =
+image=20
+                  format called WAL. While this isn't actually part of =
+the BSP=20
+                  file format, it's essential information for loading =
+Quake 2=20
+                  maps so I've decided to include it. Note that this =
+doesn't=20
+                  apply to Kingpin maps which use textures stored as TGA =
+files.=20
+                  <BR><BR>WAL textures are stored in a 8-bit indexed =
+color=20
+                  format with a specific palette being used by all =
+textures=20
+                  (this palette is stored in the PAK data file that =
+comes with=20
+                  Quake 2). Four mip-map levels are stored for each =
+texture at=20
+                  sizes decreasing by a factor of two. This is mostly =
+for=20
+                  software rendering since most 3D APIs will =
+automatically=20
+                  generate the mip-map levels when you create a texture. =
+Each=20
+                  frame of an animated texture is stored as an =
+individual WAL=20
+                  file, and the animation sequence is encoded by storing =
+the=20
+                  name of the next texture in the sequence for each =
+frame;=20
+                  texture names are stored with paths and without any =
+extension.=20
+                  <BR><BR>The format for the WAL file header is the =
+wal_header=20
+                  structure: <BR>
+                  <TABLE width=3D"85%" border=3D0>
+                    <TBODY>
+                    <TR>
+                      <TD><PRE><FONT color=3D#ffffcc>
+struct wal_header
+{
+
+    char    name[32];        // name of the texture
+=20
+    uint32  width;           // width (in pixels) of the largest mipmap =
+level
+    uint32  height;          // height (in pixels) of the largest mipmap =
+level
+=20
+    int32   offset[4];       // byte offset of the start of each of the =
+4 mipmap levels
+
+    char    next_name[32];   // name of the next texture in the =
+animation
+
+    uint32  flags;           // ?
+    uint32  contents;        // ?
+    uint32  value;           // ?
+
+};</FONT>
+</PRE></TD></TR></TBODY></TABLE>The actual texture data is=20
+                  stored in an 8-bits-per-pixel raw format in a =
+left-right,=20
+                  top-down order. =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><!--------------------- =
+SECTION START--------------------------><FONT=20
+            face=3D"Helvetica, Arial" color=3D#ffffff size=3D5>Entities=20
+            </FONT><BR><IMG =
+src=3D"http://www.flipcode.com/gl_line.jpg"><BR><BR>
+            <DIV align=3Dright>
+            <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"96%">
+              <TBODY>
+              <TR>
+                <TD><FONT face=3D"Verdana, Arial, Helvetica" =
+color=3D#fadd69=20
+                  size=3D2>The entity section of the BSP file is an =
+ASCII text=20
+                  buffer, formatted in the same manner as the entities =
+in the=20
+                  MAP file (recall that BSP files are compiled from MAP =
+files).=20
+                  Entities are things like the player spawn points, =
+lights,=20
+                  health, ammunition and guns. A comprehensive list of =
+the=20
+                  entities used in Quake 1 (and because of the =
+considerable=20
+                  overlap, Quake 2) is available in the MAP file format =
+section=20
+                  of the "Quake Specifications" document.=20
+            =
+</FONT></TD></TR></TBODY></TABLE></DIV><!--------------------- SECTION =
+END----------------------------><BR><BR><BR><IMG=20
+            src=3D"http://www.flipcode.com/gl_line.jpg">=20
+            <DIV align=3Dright><BR><BR><I><A=20
+            href=3D"http://www.flipcode.com/tutorials.shtml">Return To =
+The=20
+            Tutorial Index</A></I>=20
+            <DIV><BR><BR>
+            <CENTER>
+            <TABLE width=3D"70%">
+              <TBODY>
+              <TR>
+                <TD>
+                  <CENTER><FONT face=3DArial color=3D#c0c0c0 =
+size=3D1>The views=20
+                  expressed in this document are those of <I>the =
+author</I>, not=20
+                  neccesarily anyone else related to flipCode. This =
+document may=20
+                  not be reproduced in any way without explicit =
+permission from=20
+                  <I>flipCode</I> and the author.=20
+            =
+</FONT></CENTER></TD></TR></TBODY></TABLE></CENTER></DIV></DIV></FONT>
+          <TD></TD></TR></TBODY></TABLE></CENTER></TD>
+    <TD width=3D20 bgColor=3D#303030>&nbsp; &nbsp;&nbsp; =
+</TD></TR></TBODY></TABLE>
+<TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%">
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+        <TBODY>
+        <TR>
+          <TD width=3D"100%" bgColor=3D#303030><FONT=20
+        =
+size=3D1>&nbsp;</FONT></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE=
+><BR><FONT=20
+face=3D"Arial, Helvetica" color=3D#ffffff size=3D1>Any and all =
+trademarks used belong=20
+to their respective owners. Please read our <A=20
+href=3D"http://www.flipcode.com/terms.shtml" target=3D_top>Terms</A>, <A =
+
+href=3D"http://www.flipcode.com/terms.shtml" =
+target=3D_top>Conditions</A>, and <A=20
+href=3D"http://www.flipcode.com/terms.shtml" target=3D_top>Privacy</A> =
+information.=20
+<BR>This site is optimized for at least 1024x768 resolution (hi-color) =
+viewing=20
+with a browser that supports style sheets.=20
+</FONT><BR><BR><BR><BR></CENTER></BODY></HTML>
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/fcc.gif
+
+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
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/lm_features.gif
+
+R0lGODlheAAiAPcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgAQEBISEhERMVMTEzGRkZCQsNKSk
+rDw8POTk5FRcZHR8hJycnGRkdBQcHFRUVDw8TISMlNTU1DQ0NLS0tERMXPT09HR0dCQkJOz09Fxc
+ZGx0dERETJSUlExMTMzMzGxsbCwsNKysrEREROzs9GxsdBwcHNzc3DQ0RLy8xFxkZBQUFIyMjGRs
+bDxEROzs7Hx8hKSkpDxETIyMlNTc3Ly8vExMXCQsLExUVCw0NBwkJISEjMTMzGRkbKSsrDw8ROTs
+7JycpGRsdFRUXNTU3DQ0PLS0vPz8/HR0fCQkLFxcbEREVJSUnExMVMzM1KystGxsfBwcJDQ8RFxk
+bBQUHHyEhDxEVIyUnExUXCw0PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMDAwP8AAAD/AP//AAAA//8A/wD//////yH5BAUAAAgALAAAAAB4ACIA
+QAj/ABEIHEiwoMGDCBMqXMiwocOHDCd0cOIBosWLGDM6HJHDCMcLHHMwaeHECRUZMoLEcALiAUqU
+WEA4CWEkBw0nLl6iZFDyQ82RJU+mNFLyBxYjF3LkEFFSBoocI0o6OfEyakudQVY4iWGkpo2ZOmVk
+cJKASUelaEOqRfulh4IvHHr0gDu3pIUgUr5kGZvhxpcvN8Z2AAJECg8nGcxGmAJhohMZYOJ+KckF
+ioIeHA6DOJFXR+OmTDhMdqIkiALRexH7BSwYBZAuCiAg5jI3gpeJB7YwmStasu+2br/8yAGluPHj
+yJMrX868ufPn0KM/z6GxuvXr2CGWVJH94Pbu4B/O/73sW+7ou3lLZsCHb8iCBe55wJBxQYTjBSkw
+sCDSNHJd0qb994NlmPUgAWiiFYVFF/+t19578c2XBQcXyGDEATDIVFIHFJwmGm+8tUXXF5d9QQV5
+cKXIQRYogZFXXDmAgYUMW6C0xVOYfZFDAzXWiAUTLwRBYwNScKAACj36UOQISNKIUnEoTdgDizeW
+CKOMTtL4lIpSoFBBjzQGkcVbvYVY5oeXhafmmmy26eab3ZWUQJvfwWlnQYdJRdFAY+nphA0tEKSB
+hnp2gMJAeUpVEQJ1DqRCSQTZ1eeifeoJaEGV6skARm2dNqJkdgU4lgVbQJGDaDnwh49pHKCgpRZC
+TP/hAoL/leZpqCUaiOBoDGxRwQs5VOEEqaaiqioUDMKg3gQ3GAkGjUqa91t5JJp3mpn/ofeFsiRk
+SaMFXHhQwQUTxeDkFlvc9Jh/ow3YRVsl2cqbFbvGy+oXh3Vbo40WHCACFllgkEETRjTwJY08OdHA
+tR+qGGIPef3gVo7l4YoZEx8EVhIEDgDRogJdbVDSEhg0IIMIWt1wag8RjLUCFzkocAEQOMgEQhFZ
+/FAvgAxjrLETHHsM2WkPoEACPiWtwIMIMOWg4tMOvyUxmSB+WjW1WF+ttdVcZ9311l6HDbbWE99p
+9tlop6322my37fbbF02g6Jo88HAo3Gs2qqbeeGP/J7KeiwrEQJ4ZzCCDQS1MYIJ6MxT099yMOsEd
+QY86EankCEgU+OCMH26QB3lCkMLk4emdwp+bImDB4jwQNGsKWAi0uhMpFKQ335VfLpsDHnB3ug2p
+z976QB44YYIFArUgRE8X9TC1FAooAH0OL9i1RQNGNOFEt0Oi0AIJTuDAhBRRkMB0Sg00oERJW4xJ
+vV1OXdBFqBdIr8AT7AMhfUk4vFQBvdy7nvfAJ77oyUkGFWgACqBghB+gQEnRg579oEdB6VHhLycy
+U4riZRkO+OmDTtjCBUSTAtl8UDcbHFYHR6OEFXLgQCEEg1zgN6YegNBPW3BaDpCmpwwgIQcoGBNd
+/3rTFiJi5i0mQuK0OHiaifwATPtyUhaQ5gKP7Wt9IWQCXezSQRuq8F2iWV4MswWFF02EVOeyEUpe
+4JZn7csIJNCKC3KArQ8Z0UgS+4EUKFZEFnZweRD4ABgukAVCLsAJOniBAkriARlAoZBfmFUWU2iB
+FU6EBB3kAAUcswUwwEuF5AGkIAlJyCFs7wVSuEFJIiCFHGSBCVBgCgRkMKE+2nGI1XKelT7FRA6M
+QAFf8VMHjFCqLoSAUBvSGWKEwJtEIUE0VECmEzowA/bJ0IuVJE/0glkoYkLhlz2QZknwUSMpWW1a
+lxnP1sBQozKKRgEme8m+tuCDd0khnlFMI5H0MqJPCDYpjT3yZA+e5UhPGSmeaoQWg77QBR/MM42K
+nEuOJnpLBVBBnSmaqAKykIVT9VEBrmQCGDr6oiKC7AEjjRkHXPkAj3JACll4ALB6IzOUAgukHNUm
+R+lY0ZCOtH63NJJPH5AF6AW1jzlK0VuclxSQttKpMcvBU6Ua1alatapYhapWqbrVq3Y1q1wNq1fF
+CtaxTvUCP7iAdNbK1ra69a3RCQgAOw==
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/lm_columns.gif
+
+R0lGODlheAAiAPcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgAQEBISEhERMTMTExCQsNGRkZKys
+rDw8POTk5BwcHJycnHR8hERMXDQ0NGRkdDw8TISMlNTU1CwsLPT09CQsLHR0dFRUVLS0vBwkLExM
+TOz09FRUXDQ0RGx0dERETBQUFIyMjMzM1CwsNEREROzs9CQkJKSkpJSUlNzc3ISMjMzMzLS0tDxE
+ROzs7BwkJJykpHx8hExMXDQ8PGxsdDxETNTc3Ly8vExUVBQcHCw0NISEjERMVMTEzGxsbKystDw8
+ROTs7BwcJJycpDQ0PGRsdIyUnNTU3Pz8/HR0fCQkLExMVFRcZDQ8RGx0fEREVBQUHJSUnHyEhExU
+XDxEVLy8xCw0PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMDAwP8AAAD/AP//AAAA//8A/wD//////yH5BAUAAAgALAAAAAB4ACIA
+QAj/ABEIHEiwoMGDCBMqXMiwocOHECMWfPJkhcSLGDMi4GGCBo8LPDiGhEJRx4mTJzxQlHKE5BOT
+KB9QbHCEI0UPSY6YoPgjZ0geJSieUGHzSQ0GKINQhJEE5RGKIXTsfMICCMoTL55k0FCzxpMpV09k
+eJJgyYUVIU18VAtSrYkcWoZQ0EIB7lwqYzNUyTHFBcUXV1RQmfFEBAa4WDY8mXGShxaeUeRyKbzD
+ihYMEBQ/OdEF7k0Qlud+luv5yY/IN6NsoZtjAsUrXaxA0CoE7pQmig/AzjHXru8cln/wiEK8uPHj
+yJMrX868ufPn0J3z0Ei9uvXr2BdStJi9e0YtOYaw/6YL/maSLb4pfLRyM4LjuRRcXqHy+IkH0PVP
+h24ttHN9nO/9Z4MVdeWHmmk2mFAXf5stQcEFJxyBgw8iUPTEBhaIB59v41mmhRRD8DYefCZ00dQJ
+V5xgAwly0TXEEkmkmGISS7SYAxUoqqChCSrIeBIHUZxEBW84BmYjjpwdmeMQJJzURYsUDKGCkHRZ
+oQIQPl5hAxVQpkdeeFp4J+aYZJZp5ploKrRdmmw2dIIMFlq4gQYDvRknRRlMVNFAaxK0AkUEUdSB
+V3F2UMSd9vH5xKB3blDQWIg2ABF4GnIIwxMlaMkDBeo1Fdilutmw6YMxaMWBZZ+hah8IIYLn2mb+
+zf90QhSbDsHTCQwoQAF7pqlAwU248hDeDkLRN5lWEuAQZRconrrhiOB5GJ6Idc01mQv4FagYBloY
+8YQLLazWGxHfcvafav+xape3sJZ2X2jpkhbvaL29esISGGTwwREMYIliAxQx0GqB8LEm3g9gLsga
+BUu0gAOkC2SK4hEU4PgwRT1kgeIJVIhmWmQ5XBDEDRWy4AAVPwjlYA6pkgeZvKO9vOCrVzi4RAUv
+HCvCByWclMR7Ii5MqRYId1lwteQhveHR1Aq9dNJNK+301FJXHfXVTGcNNXziten112CHLfbYZJdt
+9tnU9Yn22gypzfaZDfhAEQQSHNQBpBl0YJDabiP/8OcTgVbUggRe5S2QBw5Q5AB3Am03uFd0n2BQ
+B3I/AcHi2cm9gQeHe+XDQIlvICkCDXjlQOCM9/134JZzjkDiFMmgAgIRwAmBolq5HtQTKAzUwRMy
+uB6BEBS18NCH4Q1hhfLKf1Bujlcagc8PSzjPGIoaMBCBty7EZqt9ovLqgQ0XMC+fjry+cBIQKkRB
+UQI+q2DDTbH95TMDGgD8BBBH8Ao/EAxo3xF+oIJTMe+Ay1teiHLwAytE7T8c2xAVIgCELlBkBCcg
+QW8osLsrXOBX9okMCD0gQrrQrAt0ueAJPpjCJ4zgCptqIQm/h0EWUuCEWuABPu6UASXwQDCteuBc
+/xb4g4GBZy6K6cCANggeulwqCwPKgYiUoBXOsCyEckmNuLRAvCfUzGMzLFBqQgTGA4XRhK/pzBC6
+4KMjvIAFT4DBppomIhENQQofEo9djki8DehAWHS5AUVMsAViPcEECqJLFXhyBRJccYY5UMwLRJgD
+C2jmi+ey0RhFNMZNzoVmS3jVFEJChSVE4XcQ4JjQ6jhEKTaQWnYxwRAIFacM2OAKQdhCBSBVy1tG
+gUBa/BAtKbKBUnkRhSOk5CNB5rER/NKTWrDXk0YwTAtxIUVDglrS4iJFbm6TN0NAysbG2YW6rDFF
+KEHnk3izhJOwKko9OkmWUOQfZs0KSktIUbZyYJ/PyLDxBNmKCwhS1JktcACd82TRHutoMCnAxYgM
+jRIPSrkEKixvoUOY6BIqOkfyWIEKJEgkOHmggyWQgAdWmKhFKUUFKgjLjiAVaZRaKqwhxLQ3vDFB
+Sy0zUorqwKIQ7c2XouTKCyhgC7JE6VGTaoWlZrSpSH2qU5UaVaoydapQvWpVsyrVrWL1q14Nq1bH
+KtULSOEC0UmrWtfK1rZCJyAAOw==
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/lm_forums.gif
+
+R0lGODlheAAiAPcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgAQEBISEhERMTMTExCQsNGRkZDw8
+PKysrOTk5HR8hBQcHJycnFRUVDQ0NGRkdDw8TISMlCQkJERMXNTU1PT09HR0dLS0vOz09BwkLDQ0
+RGx0dERETIyMjExMVCwsNEREROzs9BwcHJSUlNzc3BQUFISMjMzM1DxERLS0tOzs7Hx8hKSkpFRc
+ZDQ8PGxsdDxETCQsLExMXNTc3Ly8vCw0NBwkJISEjERMVMzMzGxsbDw8RKystOTs7JycpDQ0PGRs
+dIyUnCQkLNTU3Pz8/HR0fDQ8RGx0fEREVExUVBwcJJSUnBQUHHyEhFxcZDxEVExUXLy8xCw0PAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMDAwP8AAAD/AP//AAAA//8A/wD//////yH5BAUAAAgALAAAAAB4ACIA
+QAj/ABEIHEiwoMGDCBMqXMiwocOHDCdwWNIBosWLGDM6HHHjxIUbFzjeMJJiyZISLFhkEGGyRsqU
+Dkw2EHJjhMklR16mEGKSQhQhHEewXMLCRE2TKBi8rGByRZSXL0wqCBFjSZWXKTcsSWCE5o2aIEWG
+/Mox5EewaEV+vZLjh4YrGnLAldsThNsLMJbEwCBXykQYU1jcuGISShIrcNliWfLBxpMrGCBMJJqF
+7hIKhxPX/ZHjbc8eEJZsoCKXBpKJB6YYiTv37dzEcd/K7swWdtsrUG4k2c27t+/fwIMLH068uPHj
+xW9oXM68uXOIJk88n07dOVvOrN9aNoy4cIobsq8w/zE5pQnhy1FGaD9Pwa7cHBFMsqh8HkqPwZYp
+9LBCuzCOECy8IMMOH9zEgQU/zCVXeLTN9lp2OTR42xUlYPdgDk2wMIUJbsH1hBFRBBZYFEZ0iGFK
+WXQo2wgmiJgSDkmkFAJcAM6nYoYbmphhUT88YYIELk7RQxMqLthgYp0ZSduS2XFW3ZNQRinllFRO
+Z1ICVWapJUE73GRSRQiw4IKXJm1QUE9aUSRQdAWdYBJBX052UwdBkHnZQGmS2cCU18V2xWs9ZbbC
+ElSwEMUNnd3Qgmg4PCYTCxKEcANndT0WV3yUWdYAC0mA90NPUzSqwaeXMdClaBPIMGoWGibx2IV/
+Zv9nG2ytsTXhbX6ytpkGQywxAwhPGLmAr/PVl4SJ7LkHV6+ZJutWfu55dpkNLnggBANAatiASQzw
+B6uDECKJpHaPQdFWuNK292yGVKSpAxUiNiGtYc/CdQEPMxSIwgNNQCHfajkUdqyulwGr2RKGmWCC
+Cosx5oEIKR2aa6wRyiqrhK9xZm6R4U3s8ZEfdwzyyCKXbJvJs6Fca8ontzzqFVvGLPPMNNds8804
+56zzQRPMufPPDrEJ9NAJ5eUlmAJ1kOYGSA/EpkRgCj2Qm0vAucQJGUxQFdMCUfCASQ9IR1AHp0IQ
+9s1SI/A1B3si0EBVD1gd2gxMCLHm1W2+6XRTFAj/9LVJQJiAQApALAFB0ku40PfgPpiUgZQ5bPxD
+j0/8cEMIPRXVhAdLwJDSFAy0mNcMWVRu0gwvSWCCFZ/dUPkT4y2R4xMmqRAxA0mYVKihJkTRUxZX
+Qhp6EkJQwINRr/c4+ROVK9/88s5DX3kJEULB2crsHRvwZeU1aAN5F2gAKpH9XTbwW5hOkQVc4ycJ
+Kn7imy8EPmRuUMQNDJAPLpNsaed//7GCC2cid73/xQ8znNFKAnrwBP8VQTTz2R5mEBObQLnlLY2T
+3Wqy10D2mc9EgboBqzTEAiGoAAVLWIF6aHUk/nWMhW/5AfWsF6FxZY8zQ1EAot7ihMJMIQQS1J5s
+/yaigoHlwAKTUU26hHhD7fSkCiahwRNu0AQjJKEDhmOBeQy4IAD+T0L/GyANZ3VAV43KCHm6yQZ6
+wKkGWrBBUKiKlziwKNmtr4wWsqAT0VOCAtkJC4Exz4UYtJ6LEfIKj5FLAcdlhJQcS4BZCMxLJJmi
+zhghMAbTzg9a9DkSiog+kWRBJnPQSE49SwOXFOUNcCDJILEgBItcEgxpZcC5/MBcV4ilJpvQBETR
+JpdUNIIReimrJzQhBCusmAAvUINhuu5yRLrOMZPZFl76MobH3KHlqmiEGjShcl2UpXZ+KasHUQyR
+bIHCBRRghRFY7gnsdKfr4vlOes6znfXE5z3lCSRPffaTn/b8Zz4B6s+AGrSgCCUoQC9Qggsg56EQ
+jahEJ3qcgAAAOw==
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/lm_siteinfo.gif
+
+R0lGODlheAAiAPcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgAQEBISEhERMVMTExCQsNGRkZKSk
+rDw8POTk5BwcHJycnFRUVISMlNTU1HR8hDw8TDQ0NCwsLLS0tCQsLERMXGRsdPT09BwkLMzM1Fxk
+ZJSUlERETHR0dBQUFIyMjMzMzCwsNEREROz09CQkJFRcZNzc3DQ0RLy8xISMjExMTMTMzKysrDxE
+ROzs9BwkJKSkpIyMlNTc3Hx8hDxETLy8vExMXGxsdBQcHCw0NISEjMTEzDw8ROzs7BwcJJycpFRU
+XNTU3DQ0PLS0vPz8/CQkLJSUnEREVHR0fBQUHFxcZDQ8RExMVKystIyUnHyEhDxEVExUXGx0fCw0
+PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMDAwP8AAAD/AP//AAAA//8A/wD//////yH5BAUAAAgALAAAAAB4ACIA
+QAj/ABEIHEiwoMGDCBMqXMiwocOHEBEuWZIi4sOJFSNK8LCEhEWLO3bQuBByRMgdRJZEKcGSZYUl
+CZLsGDFxQhEUPyZOYVkkxBIVD1qWKMIxypAdKXZcMHmS5hKbQybW+CFUxJIKDIYkiaCTpQ0SE4O2
+fDAxxJARNGY2VWpyacm3I7D0UMChBxYOd51AuBrELosqHK1A0YKlJhMFPSYmOMxhyMsKOrBg0fHS
+AxAgV3r0wFv3buGnHxQYpivXwsTBdkf3GKJhiQcKdptw1MByR2e8m+Vytnt7LpYJO5gIH068uPHj
+yJMrX868uXPmOz5Kn069uvXpGK9jp6idoVzEnnNf/yhBQwcPFRNdd+hs2MnnCYcTX8WHT4YQIfZ5
+vCgh5S5v/+8dVtMKO2zWg2lLlKBFak/FV1MEtvmXxWkueLabhf/l5hsWUyB2m2dX4ARFCSNCYYMU
+dPUgBYkoKIDFFUCUuIETHIygRREksgQFECNw8CFnd62ooBMrQtFiZwqgwJIUdRXZon8KJFFEiUMl
+kSKQP1qo212Idefll2CGKeaYZEpHAgkRDJTddWemCZFiZTr0UnrpNUBQdjzQ2dFAc9JJhJsKrTkR
+CSnR6cFAedLpEQIl9JleBdd9lyFeL0xUgQQ6cKCAFiwx4V57ASL20hElMBHhFQ0sgQ9jAOIWak1Q
+eP9KF1gJSsEgfC62sMQBUBRhGwcXwHDVBpnhBmRuWfpmF3i3UVCBEkMw8EOJqS7BwKcNYosrB3mK
+kKOOE1iBZn/+XTgaqHUhqOCtjLV2gw3gbSbEEjeUkMSxvWEYnosTzJUvB0kAIQI+E6mgBAkkRpBZ
+TaH1wMJLKuiwQ5QrUDYRBA4AwZIWpF2IF8OiNXiFfwiiJh+um61oxZw5WJEjkz/+96GGiE2gaau8
+5Yzzzv/q3DPPPgcN9NA/Fy10XXP1EOfSTDft9NNQRy311FRXbdCaCPDAQwbaYe2QBOktavWb3E3t
+NdUkJArBDBmpyV1rihLUQKIVmFBCQ4JStIIEKUH/IMHdAsEdNkEknGCp2GOCdcIEAkUQxEQruN22
+1zMsUYOdCExgOA8M5X0V4wjQasKdZQvkgOWYN5DSDNb1YLMCTsAuu2Il/MAACkwMMQEKDIzgRE02
+XCBFTSVkpcQS3pKYAQMRWHWDFrHHLnv0DF8wUfI/oLBBFBP9MMQVLhDPwAXH06a8tO5CP/36sq8v
+vWYTXBneDok+asQODKB4csMgc6Dn/0uAQoF2gyyQTYRUEeLAE05zr/d8gEYH5A+yaFWCBG7JWP5B
+VtI4RBoNaUoLVBqCCFLSggj1j2HuQQ8WdPStHLlgZp4xIGhIg4WSNRBkPcgBTIpAI88Y4SoKkosH
+/7eErC05YQocDA9edDARFoRECklgAlggIMETzrAHwoLACrQgPOHNCwcu8JBclHgu0LgnXachjP9m
+yAEfTMQkuZnQU6BgKyy16oK6QYzrxJgbBRyhUHraTxVFhoX6GaEHV1AAINPjgSFA4YFKzGAZJ9Cw
+u6jrhmyMEgj+VwEbxIqPeIkk0oCkRywwK2dXyMCIckSlMGKBU6Wiy3hyNCMFMEAoq4TCjCKpIRCW
+yglJ6JSL8OKED4yIMK9kyQPxsqlVslBBLhoiBotoIAX0y5T4yuMOoKiFB0ghdnmUghQGiAUiJWGc
+nFHANpOgBSlcoIPTxI0CxGmbeY4TWTUSp4fs2UWjLamTm+icFBHjKRlmymUCJFGnEya2g4UqlKEO
+bShEJ/rQikrUohHNKEUvylGNYnSjHu0oSBl6AYQ+56QoTalKV+qcgAAAOw==
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/lm_techfiles.gif
+
+R0lGODlheAAiAPcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgAQEBISEhERMVMTEzCQsNGRkZKSk
+rDw8POTk5JycnBwcHFRUVHR8hDQ0NDw8TISMlNTU1HR0fCwsLERMXLS0tPT09CQsLHR0dCQkLFxk
+ZDQ0RERETJSUlBQUFMzMzCwsNGx0dEREROz09KSkpCQkJFRcZHx8fLy8xIyMjExMTGRsdDxEROzs
+9JykpBwkJDQ8PDxETIyMlNzc3ExMXLy8vBQcHCw0NHyEhISEjMTMzGRkbKysrDw8ROzs7JycpBwc
+JFRUXDQ0PNTc3HR0hLS0vPz8/DQ8REREVJSUnBQUHMzM1FxcZHx8hExMVDxEVIyUnExUXCw0PAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMDAwP8AAAD/AP//AAAA//8A/wD//////yH5BAUAAAgALAAAAAB4ACIA
+QAj/ABEIHEiwoMGDCBMqXMiwocOHECM2bNIkhUQEETo0+TCQokUEHi9KHIEjBQ6SJ3EkkUCxSokS
+R0I0UXHj5csjKppMIYIDRwaKNW1OaElkBEUaR2yWONAEg4eiPVGupKjgJQsnRptM6EGE4oQjRGQ0
+6RD0Zs4QRHgW0am0BIYmCZJYmJEShwUcWDYo2LEBy468fykmAKFgA5G3GKhgwULlbQcfPp5gcYI4
+w44WDiiSiOJjg1fCG3bsoEAxSpK+fP32/bw3sFbCn59QbqqYsWPIVp5AaPrjb4srGg+Yzqt67wQc
+IJIrX868ufPn0KNLn069+nQcIrNr3849e8juBr9D/xR/kDz4g34L/+3bFwtr903x4VsQBF+QBS9e
+lHAC/yuO1HrZZUV/RxTmF2lNlHCaan65NgFoDsL2mgIUYSAfffbhpx9/FkQxgwsv5ERRBzIUFhpg
+e2FRRWvEsafACVGUEIUHT2yAQxZJxSjjCf+xt4MVWfTwUow2iNCaEzuqh8WLL/F3oo9IRnGCejsg
+WUIWsr2EZV4j4CjjkCeMEFpfVpzQQ4xo2uCEgQDudd6bcMYp55x01lleRXOaNxFcBX3wgQQC6Wln
+QTxQZChHAr1l6IiAFqToojRo0NFGGi3aQUKFLoooSHhy+lGii1JURKMDPbpoAwr9leKTERb21gRR
+gP/Q4whCNIEPYVjo0AQKJchaGA5HRCGlZ02EUAIDPaJA0X4+AtYfhM9SOKEUWsU6a623PrFDphhE
+QIVeWchII1/rpbiDks2ytm0TJHw55AQJoHAEf4VGAIJk62l0QauoIajgk8RFeyJrrL3ArrsyTvDD
+B2BdgAETRDBwpowNUMSAgSjuMMG5ADLYwlsqUIGDAkmw0BhFEDjgg5YKLCkCCy4ougCvJfRgQbTr
+IWiaj6gJ7BfBE25Q8slNpLzylYUl4QMJ+FCkAhM0H4HDmHkZp5ezrGK93tZad53111yD7XXYZI9t
+ttiscjzo2my37fbbcMct99x0u80DD5LKKehCERz/OulHe7sd+HaDIzR44XZyEOqmCDTALQwJOY5y
+BCUQ5BELEawFAeUJKa7p34F2OpDkTcFQuUEfZArBEJ9eRN4QTRSBKgITmNAED4Q2QcMEAk2wFu6h
+N6ED77SvBXlC5n0nHuyy92478AJ90IQUxEsABEUsJKTiBk8o0H33ODjh1bFEMHGwjAycIAEJTayA
+5RPmrwCmmRzwMAGWmr3UwwkMIEERV9/zngJwIILxMYAIVpDWgyzgFRtYwHztQp/62Oc+BUgrATVL
+HwiIMIET0EiA3avCYlZEHADtgDXEClWoomCBE2qFWaohQg96kAQF7oc4SyhNElrUIhTmBWgPkpYK
+/xcVhanhoGmLwoARcHCCNS0GNS3T2F5QQ8XPWGEDGoHVl3RkEyfsICcfAMEVnbU1K6bmJ02IQhZK
+6CMfEiuIVsyJFtHUFhGAy11EIAENhPcfclVtYxMwENVWE7QLFI0FWbCAExS5gCbkQAQ1uh5ZppaX
+zDQBB1aoght1loXUePKNoCEkHCf0g0MmcpFOaOQjFUAFirTgCeFLAgikBwFmeTKKgdwaFTPVBCP8
+SAFrCVUHiBArK/woBiJKIghKcAJQmggL/upke9oYtB9OiDU4qEIwLUVMEIxAAUjY5qJeECP+3NIv
+S2oWapygoxl1jwFKaacHBsQXBXhAWO6KURaS9qUSwqTmCSDQ53oYJLR+ThELWYiRGJOg0BopAJ42
+kSc9raCBdm6xBEYq4bk2lk42FscJSXACJc8VyyyIVDJUTE9JEdiyvijACSLAC3s2MAInrKljqXlp
+TFv0UpGey6YjDRBITToy9hSnpDdwQvcYRBxc3mWAsITqyHAQVapOtapYvapWpcpVq3Y1q1/dqlfH
+ClayirWsVbXABCxgnba69a1wjWt1AgIAOw==
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gfx/spacer.gif
+
+R0lGODlheAABAPcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgAQEBAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAMDAwP8AAAD/AP//AAAA//8A/wD//////yH5BAUAAAgALAAAAAB4AAEA
+QAgUABEIHEiwoMGDCBMqXMiwocOHAQEAOw==
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/tutorials/tut_button.jpg
+
+/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQEBAQIBAQECAgICAgQDAgICAgUEBAMEBgUGBgYF
+BgYGBwkIBgcJBwYGCAsICQoKCgoKBggLDAsKDAkKCgr/2wBDAQICAgICAgUDAwUKBwYHCgoKCgoK
+CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgr/wAARCACVAJYDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8Etb1
+rWV1q8C6tdD/AEqTpO394+9Vv7c1r/oMXX/gQ3+NGuf8hq8/6+pP/QjVWgC1/bmtf9Bi6/8AAhv8
+aP7c1r/oMXX/AIEN/jVWigC1/bmtf9Bi6/8AAhv8aP7c1r/oMXX/AIEN/jVWigC1/bmtf9Bi6/8A
+Ahv8aP7c1r/oMXX/AIEN/jVWur+C/wAF/iB8ffiBafDf4b6QLm/uQ0k00r7ILOBeZLieQ8RRIOWc
+9OgySAajGU5KMVdsUpKKu9ix8G/ht8Wfjz4+s/hx8OPtV1f3W55JJbto4LSBRmS4nkJxFEi8s56D
+1JAP0P8AFf8AZk+Gum+DrfwN8MPE+oXuqabGTd+LLieRBql1j59kRP7u3B+VAfmwNx5JFd4sHws/
+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
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-Location: http://www.flipcode.com/gl_line.jpg
+
+/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQEBAQIBAQECAgICAgQDAgICAgUEBAMEBgUGBgYF
+BgYGBwkIBgcJBwYGCAsICQoKCgoKBggLDAsKDAkKCgr/2wBDAQICAgICAgUDAwUKBwYHCgoKCgoK
+CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgr/wAARCAADAkQDASIA
+AhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAMCBAX/xABEEAAAAwQFBQwHBgcAAAAAAAAAAQID
+BAcIBQYRITFTYdHS0wkSF0JDUVJUYmOTlBMWGCMmJ0EVN1ZkcpIiMjZzgoOE/8QAFwEBAQEBAAAA
+AAAAAAAAAAAAAAECBv/EABkRAQEBAQEBAAAAAAAAAAAAAAABMUEhQv/aAAwDAQACEQMRAD8A81pu
+b0kKEEpMvlEkZ/mnnnPvRwL3OaSjfH8gKKu/NPOfvQAczNcdxMtzokqw4AaL8085u9GVbnVJXZ9w
+NF+aedqACHUl7ndJck7oB0XcfWnnP3ok33PGTFNhJgLRfmnnagATSJL3PSTOwj4BqL8y8bQTbbnv
+Jqky3sB6M8y8c39wACCS9z7k4sM+AmjPMvG0GGm5/wAnaUmaYF0YX/S8Zu8AAEVyASeEZ2QMozDr
+Lxm7wTVIJJ+SDMoHUbh1l4z94ABNEPYIlC9J9x9G49ZeNoMLkLlEKwigjRuHWXjaAAXV6kuQ2UZJ
+lZBKjb/zLxtBlch8o5GdkE6Nx6y8bQAEZuoNJFpTEnYmCtG49Yb7QTXIzKcSrCgtR3mG+0AAI5ly
+OypFhBmjvMN9oMLkglUJKjKDVHXJ6w32gANXVqS5I5ViNJFBuj/MN9oItJKJWkoMyg7R+GXb7QAE
+mlSOSuVyw/k/R+B8u32gkuS6V8kkZQgcP5i5dvtAADqKpMpYrbOCJwwy7bXGVSaSyEV0I3DDLts3
+bABbioKk4ln333SuHjttcYXJ3LSWEJnH68u2zdsAEiJKk7lpu+UzhgXLttcSOUGW5JmRQpcbiu98
+21wAIdSVKJLeTQzKFTj4zbP2xNUpEuZYQscfpyzbXABRhUpcupYQtcfpyzbXEmspsu6U2lC5y8Zr
+rgAQTXKhLyk7oYOXjNdcQVKlL2lRb2GDkV2Wa64AMqm1lXl+SSd7DNyK3H3zXP2xNtK1ABJ2pho5
+l/ua5+2ACs9SbStwBJNpQ1c7lHyzXN2xI5XoCEV0NnPxmubtgAfKzETlkgRYXy4c8Mq1z9sTaS0w
+MIyIodunitdYAFvh1NctkDiWZcHjp4rXN2hH2cII2J+Xzp4rTm/UACIwqXOCdpFwful/eNNYSVLt
+BYlH8AOl2HvGmsACE1L2eYMEZfATrjlGmsOdrL9BwjuqI64ZRprAAsVhUAYPWK+BXXDKNOf9QkqA
+kIPwM64ZRprAAHUjgPCP0Rn6kO1tuUaawmqBUJbS+CXbDKNNYACnUzgbCj8Fu2OUXrDnaQThYlZk
+VTXe7tr1gAIdTXBWFxGoiqe73WcdesJrgxDBOFUHfHpr1gAUia4OQyLCqLvj016wk0g7DQlHZVJ3
+w6a9YAEEjhBDZFyapu5f5L0jC4Rw4SiwqqO+PSXpAAVJcJodJ3xJqq74dJWkTXCmHt5eq7Cy0+Mr
+SABEmJnCyH6SMiqwwssPjK0jC4W1Ats9WWF2H8StIAE06i0hjUMriq2w+nGVpGFQyqJZ/TbH68ZW
+fOAAVFpDWoxFaVXWOPSVpGWkOKkEqwqvMf3K0gAsVNpDmpJGZFV5jhzq0jLSHtTLTP7AY/uVpAAR
+hcP6mlYZUCywLjK0jHqFU/0Zr+wmVt5W2q0gAK5G9R6qJbKJNCsiK3nVpAAGaxdf/9k=
+
+------=_NextPart_000_0000_01C46E30.0BC45BC0--
