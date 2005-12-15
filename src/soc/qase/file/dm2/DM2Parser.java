@@ -46,10 +46,6 @@ public class DM2Parser extends ServerMessageHandler
 	private boolean EOF = false;
 	private boolean fileOpen = false;
 
-	private Packet packet = null;
-	private int incomingDataIndex = 0;
-	private int incomingDataLength = 0;
-
 /*-------------------------------------------------------------------*/
 /**	Default constructor. Prepares the DM2Parser for file loading. */
 /*-------------------------------------------------------------------*/
@@ -147,17 +143,15 @@ public class DM2Parser extends ServerMessageHandler
 	
 			incomingData = new byte[Utils.intValue(blockLength, 0)];
 			bufIn.read(incomingData);
-	
-			incomingDataIndex = 0;
-			incomingDataLength = incomingData.length;
-	
-			while(incomingDataIndex != incomingDataLength)
+
+			int dataIndex = 0;
+
+			while(dataIndex != incomingData.length)
 			{
-				incomingData = Utils.removeBytes(incomingData, incomingDataIndex);
-				incomingDataLength = incomingData.length;
-				packet = new ServerPacket(incomingData);
-				processServerPacket((ServerPacket)packet);
-				incomingDataIndex = packet.getLength();
+				ServerPacket packet = new ServerPacket(incomingData, dataIndex);
+				processServerPacket(packet);
+
+				dataIndex += packet.getLength();
 			}
 		}
 		catch(IOException ioe)

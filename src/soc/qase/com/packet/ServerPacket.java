@@ -21,44 +21,38 @@ public class ServerPacket extends Packet
 /**	Constructor. Detect data type and create appropriate Message object.
  *	@param data source message data */
 /*-------------------------------------------------------------------*/
-	public ServerPacket(byte[] data)
+	public ServerPacket(byte[] data, int off)
 	{
-		byte[] type = null;
-		byte[] messageData = null;
-
 		int messageType = 0;
 		Message message = null;
 
-		type = Utils.extractBytes(data, 0, 1);
-		messageData = Utils.extractBytes(data, 1, data.length - 1);
+		messageType = (int)data[off];
 
-		messageType = (int)type[0];
-
-		if(messageType == 0) message = new ServerBad(messageData);
-		else if(messageType == 1) message = new ServerPlayerMuzzleFlash(messageData);
-		else if(messageType == 2) message = new ServerMonsterMuzzleFlash(messageData);
-		else if(messageType == 3) message = new ServerTemporaryEntity(messageData);
-		else if(messageType == 4) message = new ServerLayout(messageData);
-		else if(messageType == 5) message = new ServerInventory(messageData);
+		if(messageType == 0) message = new ServerBad(data, off + 1);
+		else if(messageType == 1) message = new ServerPlayerMuzzleFlash(data, off + 1);
+		else if(messageType == 2) message = new ServerMonsterMuzzleFlash(data, off + 1);
+		else if(messageType == 3) message = new ServerTemporaryEntity(data, off + 1);
+		else if(messageType == 4) message = new ServerLayout(data, off + 1);
+		else if(messageType == 5) message = new ServerInventory(data, off + 1);
 		else if(messageType == 6) message = new ServerNop();
 		else if(messageType == 7) message = new ServerDisconnect();
 		else if(messageType == 8) message = new ServerReconnect();
-		else if(messageType == 9) message = new ServerSound(messageData);
-		else if(messageType == 10) message = new ServerPrint(messageData);
-		else if(messageType == 11) message = new ServerStuffText(messageData);
-		else if(messageType == 12) message = new ServerData(messageData);
-		else if(messageType == 13) message = new ServerConfigString(messageData);
-		else if(messageType == 14) message = new ServerSpawnBaseline(messageData);
-		else if(messageType == 15) message = new ServerCenterPrint(messageData);
-		else if(messageType == 16) message = new ServerDownload(messageData);
-		else if(messageType == 17) message = new ServerPlayerInfo(messageData);
-		else if(messageType == 18) message = new ServerPacketEntities(messageData);
-		else if(messageType == 19) message = new ServerDeltaPacketEntities(messageData);
-		else if(messageType == 20) message = new ServerFrame(messageData);
+		else if(messageType == 9) message = new ServerSound(data, off + 1);
+		else if(messageType == 10) message = new ServerPrint(data, off + 1);
+		else if(messageType == 11) message = new ServerStuffText(data, off + 1);
+		else if(messageType == 12) message = new ServerData(data, off + 1);
+		else if(messageType == 13) message = new ServerConfigString(data, off + 1);
+		else if(messageType == 14) message = new ServerSpawnBaseline(data, off + 1);
+		else if(messageType == 15) message = new ServerCenterPrint(data, off + 1);
+		else if(messageType == 16) message = new ServerDownload(data, off + 1);
+		else if(messageType == 17) message = new ServerPlayerInfo(data, off + 1);
+		else if(messageType == 18) message = new ServerPacketEntities(data, off + 1);
+		else if(messageType == 19) message = new ServerDeltaPacketEntities(data, off + 1);
+		else if(messageType == 20) message = new ServerFrame(data, off + 1);
 		else if(messageType > 20)
 		{
 			messageType = 0;
-			message = new ServerBad(messageData);
+			message = new ServerBad(data, off + 1);
 		}
 
 		setMessage(message);

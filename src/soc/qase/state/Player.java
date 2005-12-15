@@ -352,24 +352,22 @@ public class Player
 /*-------------------------------------------------------------------*/
 	public void merge(Player player)
 	{
-		if(player != null) {
-			if(playerMove == null) playerMove = new PlayerMove();
-			if(playerView == null) playerView = new PlayerView();
-			if(playerGun == null) playerGun = new PlayerGun();
+		if(player == null)
+			return;
 
-			if(playerStatus == null)
-			{
-				playerStatus = player.getPlayerStatus();
-				playerGun.merge(player.getPlayerGun(), false);
-			}
-			else
-			{
-				playerGun.merge(player.getPlayerGun(), playerStatus.getStatus(PlayerStatus.AMMO) != -1 && playerStatus.getStatus(PlayerStatus.AMMO) < player.getPlayerStatus().getStatus(PlayerStatus.AMMO));
-				playerStatus.merge(player.getPlayerStatus());
-			}
+		if(playerMove == null) playerMove = player.playerMove; else playerMove.merge(player.playerMove);
+		if(playerView == null) playerView = player.playerView; else playerView.merge(player.playerView);
+		if(playerGun == null) playerGun = player.playerGun;
 
-			playerMove.merge(player.getPlayerMove());
-			playerView.merge(player.getPlayerView());
+		if(playerStatus == null)
+		{
+			playerStatus = player.playerStatus;
+			playerGun.merge(player.playerGun, false);
+		}
+		else
+		{
+			playerGun.merge(player.playerGun, playerStatus.getStatus(PlayerStatus.AMMO) != -1 && playerStatus.getStatus(PlayerStatus.AMMO) < player.getPlayerStatus().getStatus(PlayerStatus.AMMO));
+			playerStatus.merge(player.getPlayerStatus());
 		}
 	}
 }

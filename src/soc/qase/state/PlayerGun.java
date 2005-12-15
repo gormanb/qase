@@ -265,17 +265,14 @@ public class PlayerGun
 /*-------------------------------------------------------------------*/
 	public void merge(PlayerGun playerGun, boolean ammoReduced)
 	{
-		if(offset == null) offset = new Origin();
-		if(angles == null) angles = new Angles();
+		if(playerGun == null)
+			return;
+
+		if(index == -1) index = playerGun.getIndex();
+		if(frame == -1) frame = playerGun.getFrame();
+		if(offset == null) offset = playerGun.offset; else offset.merge(playerGun.offset);
+		if(angles == null) angles = playerGun.angles; else angles.merge(playerGun.angles);
 
 		this.isFiring = (ammoReduced && (index == -1 || playerGun.getIndex() == index)); // ammo changed, gun did not
-
-		if(playerGun != null)
-		{
-			if(index == -1) index = playerGun.getIndex();
-			if(frame == -1) frame = playerGun.getFrame();
-			offset.merge(playerGun.getOffset());
-			angles.merge(playerGun.getAngles());
-		}
 	}
 }

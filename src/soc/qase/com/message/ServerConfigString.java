@@ -24,13 +24,13 @@ public class ServerConfigString extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerConfigString(byte[] data)
+	public ServerConfigString(byte[] data, int off)
 	{
 		int length = 0;
 
-		index = Utils.shortValue(data, 0);
-		length = Utils.stringLength(data, 2);
-		configString = Utils.stringValue(data, 2, length);
+		index = Utils.shortValue(data, off);
+		length = Utils.stringLength(data, off + 2);
+		configString = Utils.stringValue(data, off + 2, length);
 
 		setLength(2 + length + 1);
 }

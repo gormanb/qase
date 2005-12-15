@@ -104,48 +104,17 @@ public class Angles
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get byte array representation of this object.
- *	@return byte array. */
+/**	Get byte array representation of object. Places the representation
+ *	at the appropriate offset in the argument array. Called by the Move
+ *	class when compiling a byte representation of the client's movement
+ *	for transmission to the server.
+ *	@see Move#getBytes */
 /*-------------------------------------------------------------------*/
-	public byte[] getBytes()
+	public void getBytes(byte[] moveBytes, int offset)
 	{
-		byte[] result = null;
-		byte[] pitchBytes = null;
-		byte[] yawBytes = null;
-		byte[] rollBytes = null;
-		int pitchInt = 0;
-		int yawInt = 0;
-		int rollInt = 0;
-
-		pitchBytes = new byte[2];
-		yawBytes = new byte[2];
-		rollBytes = new byte[2];
-		pitchInt = round(pitch * (float)(65535.0 / 360.0));
-		yawInt = round(yaw * (float)(65535.0 / 360.0));
-		rollInt = round(roll * (float)(65535.0 / 360.0));
-
-		for(int i = 0; i < 2; i++)
-		{
-			pitchBytes[i] = (byte)(pitchInt % 256);
-			pitchInt = pitchInt / 256;
-		}
-
-		for(int j = 0; j < 2; j++)
-		{
-			yawBytes[j] = (byte)(yawInt % 256);
-			yawInt = yawInt / 256;
-		}
-
-		for(int k = 0; k < 2; k++)
-		{
-			rollBytes[k] = (byte)(rollInt % 256);
-			rollInt = rollInt / 256;
-		}
-
-		result = Utils.concatBytes(pitchBytes, yawBytes);
-		result = Utils.concatBytes(result, rollBytes);
-
-		return result;
+		Utils.shortToByteArray((short)Math.round(pitch * (float)(65535.0f / 360.0f)), moveBytes, offset + 1);
+		Utils.shortToByteArray((short)Math.round(yaw * (float)(65535.0f / 360.0f)), moveBytes, offset + 3);
+		Utils.shortToByteArray((short)Math.round(roll * (float)(65535.0f / 360.0f)), moveBytes, offset + 5);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -202,17 +171,6 @@ public class Angles
 	public void setRoll(float roll)
 	{
 		this.roll = roll;
-	}
-
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-	private int round(float angle)
-	{
-		int result = 0;
-
-		if(angle > 0.0f) result = (int)(0.5f + angle);
-		else result = -(int)(0.5f - angle);
-		return result;
 	}
 
 /*-------------------------------------------------------------------*/

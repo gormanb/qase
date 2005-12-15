@@ -102,60 +102,17 @@ public class Velocity
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get byte array representation of this object.
- *	@return byte array. */
+/**	Get byte array representation of object. Places the representation
+ *	at the appropriate offset in the argument array. Called by the Move
+ *	class when compiling a byte representation of the client's movement
+ *	for transmission to the server.
+ *	@see Move#getBytes */
 /*-------------------------------------------------------------------*/
-	public byte[] getBytes()
+	public void getBytes(byte[] moveBytes, int offset)
 	{
-		byte[] result = null;
-		byte[] forwardBytes = new byte[2];
-		byte[] rightBytes = new byte[2];
-		byte[] upBytes = new byte[2];
-
-/*		int forwardInt = 0;
-		int rightInt = 0;
-		int upInt = 0;
-
-		forwardInt = Math.abs(forward);
-		rightInt = Math.abs(right);
-		upInt = Math.abs(up);
-
-		for(int i = 0; i < 2; i++) {
-			forwardBytes[i] = (byte)(forwardInt % 256);
-				forwardInt = forwardInt / 256;
-		}
-
-		for(int j = 0; j < 2; j++) {
-			rightBytes[j] = (byte)(rightInt % 256);
-			rightInt = rightInt / 256;
-		}
-
-		for(int k = 0; k < 2; k++) {
-			upBytes[k] = (byte)(upInt % 256);
-			upInt = upInt / 256;
-		}
-
-		if(forward < 0)
-			forwardBytes[1] |= 0x80;
-
-		if(right < 0)
-			rightBytes[1] |= 0x80;
-
-		if(up < 0)
-			upBytes[1] |= 0x80;
-*/
-
-		short forwardShort = (short)forward;
-		short rightShort = (short)right;
-		short upShort = (short)up;
-
-		Utils.shortToByteArray(forwardShort, forwardBytes, 0);
-		Utils.shortToByteArray(rightShort, rightBytes, 0);
-		Utils.shortToByteArray(upShort, upBytes, 0);
-
-		result = Utils.concatBytes(forwardBytes, rightBytes);
-		result = Utils.concatBytes(result, upBytes);
-		return result;
+		Utils.shortToByteArray((short)forward, moveBytes, offset + 7);
+		Utils.shortToByteArray((short)right, moveBytes, offset + 9);
+		Utils.shortToByteArray((short)up, moveBytes, offset + 11);
 	}
 
 /*-------------------------------------------------------------------*/

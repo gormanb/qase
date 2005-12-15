@@ -169,20 +169,15 @@ public class PlayerView
 /*-------------------------------------------------------------------*/
 	public void merge(PlayerView playerView)
 	{
-		if(viewOffset == null) viewOffset = new Origin();
-		if(viewAngles == null) viewAngles = new Angles();
-		if(kickAngles == null) kickAngles = new Angles();
+		if(playerView == null)
+			return;
 
-		if(playerView != null)
-		{
-			viewOffset.merge(playerView.getViewOffset());
-			viewAngles.merge(playerView.getViewAngles());
-			kickAngles.merge(playerView.getKickAngles());
-			
-			if(blend == null) blend = playerView.getBlend();
-			if(fov == -1) fov = playerView.getFOV();
-			if(render == -1) render = playerView.getRender();
-		}
+		if(blend == null) blend = playerView.getBlend();
+		if(fov == -1) fov = playerView.getFOV();
+		if(render == -1) render = playerView.getRender();
+
+		if(viewOffset == null) viewOffset = playerView.viewOffset; else viewOffset.merge(playerView.viewOffset);
+		if(viewAngles == null) viewAngles = playerView.viewAngles; else viewAngles.merge(playerView.viewAngles);
+		if(kickAngles == null) kickAngles = playerView.kickAngles; else kickAngles.merge(playerView.kickAngles);
 	}
-
 }

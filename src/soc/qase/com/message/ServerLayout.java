@@ -24,13 +24,13 @@ public class ServerLayout extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerLayout(byte[] data)
+	public ServerLayout(byte[] data, int off)
 	{
 		int length = 0;
 		String displayInfo = null;
 
-		length = Utils.stringLength(data, 0);
-		displayInfo = Utils.stringValue(data, 0, length);
+		length = Utils.stringLength(data, off);
+		displayInfo = Utils.stringValue(data, off, length);
 
 		layout = new Layout(displayInfo);
 

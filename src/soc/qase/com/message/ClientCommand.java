@@ -28,20 +28,4 @@ public class ClientCommand extends Message
 		setClientID(clientID);
 		setData((command + "\0").getBytes());
 	}
-
-/*-------------------------------------------------------------------*/
-/**	Get message bytes.
- *	@return byte array */
-/*-------------------------------------------------------------------*/
-	public byte[] getBytes()
-	{
-		byte[] result = super.getBytes();
-
-		if(getData() != null)
-			result = Utils.concatBytes(result, getData());
-
-		return result;
-	}
 }
-
-

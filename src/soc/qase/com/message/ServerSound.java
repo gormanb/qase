@@ -24,13 +24,13 @@ public class ServerSound extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source */
 /*-------------------------------------------------------------------*/
-	public ServerSound(byte[] data)
+	public ServerSound(byte[] data, int off)
 	{
 		int x = 0;
 		int y = 0;
 		int z = 0;
 		int bitmask = 0;
-		int offset = 0;
+		int offset = off;
 
 		sound = new Sound();
 		bitmask = (int)data[offset++];
@@ -72,7 +72,7 @@ public class ServerSound extends Message
 			offset += 6;
 		}
 
-		setLength(offset);
+		setLength(offset - off);
 	}
 
 /*-------------------------------------------------------------------*/

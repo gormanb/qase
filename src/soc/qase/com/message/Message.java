@@ -106,36 +106,19 @@ public class Message
 /*-------------------------------------------------------------------*/
 	public byte[] getBytes()
 	{
-		int id = 0;
-		byte[] type = null;
-		byte[] result = null;
-
 		if(getType() == -1)
-		{
-			if(getData() != null)
-				result = getData();
-		}
-		else
-		{
-			if(getClientID() != -1)
-			{
-				id = getClientID();
-				result = new byte[2];
-			
-				for(int i = 0; i < 2; i++)
-				{
-					result[i] = (byte)(id % 256);
-					id = id / 256;
-				}
-			}
+			return getData();
 
-			if(getType() != -1)
-			{
-				type = new byte[1];
-				type[0] = (byte)getType();
-				result = Utils.concatBytes(result, type);
-			}
-		}
+		byte[] result = new byte[(getData() == null ? 0 : getData().length) + 3];
+
+		if(getClientID() != -1)
+			Utils.shortToByteArray((short)getClientID(), result, 0);
+
+		if(getType() != -1)
+			result[2] = (byte)getType();
+
+		if(getData() != null)
+			Utils.copyArray(getData(), result, 0, 3, getData().length);
 
 		return result;
 	}
@@ -148,10 +131,10 @@ public class Message
 	{
 		String result = null;
 
-		if(getType() == -1)
+		if(getType() == -1) // Connectionless
 		{
 			if(getData() != null)
-				result = new String(getData());
+				result = new String(getData(), 4, getData().length - 4);
 		}
 		else
 		{

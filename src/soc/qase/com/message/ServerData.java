@@ -28,21 +28,21 @@ public class ServerData extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerData(byte[] data)
+	public ServerData(byte[] data, int off)
 	{
 		int str1_length = 0;
 		int str2_length = 0;
 
-		server_version = Utils.intValue(data, 0);
-		level_key = Utils.intValue(data, 4);
-		is_demo = (int)data[8];
+		server_version = Utils.intValue(data, off);
+		level_key = Utils.intValue(data, off + 4);
+		is_demo = (int)data[off + 8];
 
-		str1_length = Utils.stringLength(data, 9);
-		game_directory = Utils.stringValue(data, 9, str1_length);
+		str1_length = Utils.stringLength(data, off + 9);
+		game_directory = Utils.stringValue(data, off + 9, str1_length);
 
-		client_entity = Utils.shortValue(data, 10 + str1_length);
-		str2_length = Utils.stringLength(data, 12 + str1_length);
-		map_name = Utils.stringValue(data, 12 + str1_length, str2_length);
+		client_entity = Utils.shortValue(data, off + 10 + str1_length);
+		str2_length = Utils.stringLength(data, off + 12 + str1_length);
+		map_name = Utils.stringValue(data, off + 12 + str1_length, str2_length);
 
 		setLength(11 + str1_length + str2_length + 2);
 	}

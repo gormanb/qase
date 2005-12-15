@@ -641,17 +641,14 @@ public class Proxy extends ServerMessageHandler implements Runnable
 	{
 		Packet packet = null;
 		Sequence sequenceOne = new Sequence(incomingData);
-		int incomingDataIndex = 0, incomingDataLength = 0;
 
 		if(sequenceOne.intValue() == 0x7fffffff && sequenceOne.isReliable())
 		{
-			packet = new ConnectionlessPacket(Utils.removeBytes(incomingData, 4));
+			packet = new ConnectionlessPacket(incomingData);
 			processConnectionlessPacket((ConnectionlessPacket)packet);
 		}
 		else
 		{
-			incomingData = Utils.removeBytes(incomingData, 8);
-
 			if(inGame && dm2Recorder.isRecording())
 				dm2Recorder.addData(incomingData);
 			else if(!inGame && dm2Recorder.isRecording())
@@ -659,18 +656,14 @@ public class Proxy extends ServerMessageHandler implements Runnable
 
 			if(incomingData != null)
 			{
-				incomingDataIndex = 0;
-				incomingDataLength = incomingData.length;
+				int dataIndex = 8;
 
-				while(incomingDataIndex != incomingDataLength)
+				while(dataIndex != incomingData.length)
 				{
-					incomingData = Utils.removeBytes(incomingData, incomingDataIndex);
-					incomingDataLength = incomingData.length;
-
-					packet = new ServerPacket(incomingData);
+					packet = new ServerPacket(incomingData, dataIndex);
 					processServerPacket((ServerPacket)packet);
 
-					incomingDataIndex = packet.getLength();
+					dataIndex += packet.getLength();
 				}
 			}
 		}

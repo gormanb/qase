@@ -27,8 +27,9 @@ public class ServerPlayerInfo extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerPlayerInfo(byte[] data)
+	public ServerPlayerInfo(byte[] data, int off)
 	{
+		offset = off;
 		int value = 1;
 
 		this.data = data;
@@ -41,7 +42,7 @@ public class ServerPlayerInfo extends Message
 		processView();
 		processStatus();
 
-		setLength(offset);
+		setLength(offset - off);
 	}
 
 /*-------------------------------------------------------------------*/

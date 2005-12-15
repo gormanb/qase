@@ -31,8 +31,9 @@ public class ServerPacketEntities extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerPacketEntities(byte[] data)
+	public ServerPacketEntities(byte[] data, int off)
 	{
+		offset = off;
 		int number = 0;
 
 		this.data = data;
@@ -68,9 +69,9 @@ public class ServerPacketEntities extends Message
 			offset = data.length;
 		}
 
-		setLength(offset);
+		setLength(offset - off);
 	}
-	
+
 /*-------------------------------------------------------------------*/
 /**	Get entities information.
  *	@return entities. */

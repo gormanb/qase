@@ -35,27 +35,28 @@ public class Move
 	}
 	
 /*-------------------------------------------------------------------*/
-/**	Get byte array representation of this object.
+/**	Get byte array representation of object. Places the representation
+ *	at the appropriate offset in the argument array. Called by the Move
+ *	class when compiling a byte representation of the client's movement
+ *	for transmission to the server.
  *	@return byte array. */
 /*-------------------------------------------------------------------*/
-	public byte[] getBytes()
+	public byte[] getBytes(byte[] moveBytes, int offset)
 	{
-		byte[] result = null;
-		byte[] mask = null;
-		byte[] time = null;
-		byte[] light = null;
+		if(moveBytes == null)
+		{
+			offset = 0;
+			moveBytes = new byte[16];
+		}
 
-		mask = new byte[1];
-		time = new byte[1];
-		light = new byte[1];
-		mask[0] = (byte)0x7f;
-		time[0] = (byte)(deltaTime % 256);
-		light[0] = (byte)0x88;
-		result = Utils.concatBytes(mask, angles.getBytes());
-		result = Utils.concatBytes(result, velocity.getBytes());
-		result = Utils.concatBytes(result, action.getBytes());
-		result = Utils.concatBytes(result, time);
-		result = Utils.concatBytes(result, light);
-		return result;
+		moveBytes[offset + 0] = (byte)0x7f; // mask
+		moveBytes[offset + 14] = (byte)(deltaTime % 256); // time
+		moveBytes[offset + 15] = (byte)0x88; // light
+
+		angles.getBytes(moveBytes, offset);
+		velocity.getBytes(moveBytes, offset);
+		action.getBytes(moveBytes, offset);
+
+		return moveBytes;
 	}
 }

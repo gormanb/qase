@@ -253,13 +253,7 @@ public class Utils
 /*-------------------------------------------------------------------*/
 	public static String stringValue(byte[] data, int offset, int length)
 	{
-		String result = null;
-		byte[] stringData = null;
-
-		stringData = new byte[length];
-		for(int i = 0; i < length; i++) stringData[i] = data[i + offset];
-		result = new String(stringData);
-		return result;
+		return new String(data, offset, length);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -438,12 +432,49 @@ public class Utils
 /*-------------------------------------------------------------------*/
 /**	A utility function. Copies data from one integer array to another.
  *	@param fromArray the source array
+ *	@param toArray the target array
+ *	@param fromOffset the position in the source array to copy from
+ *	@param toOffset the position in the destination array to copy to
+ *	@param length the number of bytes to copy */
+/*-------------------------------------------------------------------*/
+	public static void copyArray(int[] fromArray, int[] toArray, int fromOffset, int toOffset, int length)
+	{
+		for(int i = 0; i < length; i++)
+			toArray[toOffset + i] = fromArray[fromOffset + i];
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience function. Copies all data from one integer array to another.
+ *	@param fromArray the source array
  *	@param toArray the target array */
 /*-------------------------------------------------------------------*/
 	public static void copyArray(int[] fromArray, int[] toArray)
 	{
-		for(int i = 0; i < fromArray.length; i++)
-			toArray[i] = fromArray[i];
+		copyArray(fromArray, toArray, 0, 0, fromArray.length);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	A utility function. Copies data from one byte array to another.
+ *	@param fromArray the source array
+ *	@param toArray the target array
+ *	@param fromOffset the position in the source array to copy from
+ *	@param toOffset the position in the destination array to copy to
+ *	@param length the number of bytes to copy */
+/*-------------------------------------------------------------------*/
+	public static void copyArray(byte[] fromArray, byte[] toArray, int fromOffset, int toOffset, int length)
+	{
+		for(int i = 0; i < length; i++)
+			toArray[toOffset + i] = fromArray[fromOffset + i];
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience function. Copies all data from one byte array to another.
+ *	@param fromArray the source array
+ *	@param toArray the target array */
+/*-------------------------------------------------------------------*/
+	public static void copyArray(byte[] fromArray, byte[] toArray)
+	{
+		copyArray(fromArray, toArray, 0, 0, fromArray.length);
 	}
 
 /*-------------------------------------------------------------------*/

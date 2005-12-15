@@ -29,10 +29,11 @@ public class ServerSpawnBaseline extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source */
 /*-------------------------------------------------------------------*/
-	public ServerSpawnBaseline(byte[] data)
+	public ServerSpawnBaseline(byte[] data, int off)
 	{
-		entity = new Entity();
+		offset = off;
 		this.data = data;
+		entity = new Entity();
 
 		bitmask = processBitmask();
 
@@ -47,7 +48,7 @@ public class ServerSpawnBaseline extends Message
 		entity.setEvents(processEvents());
 		entity.setSolid(processSolid());
 
-		setLength(offset);
+		setLength(offset - off);
 	}
 
 /*-------------------------------------------------------------------*/

@@ -20,9 +20,9 @@ public class ServerBad extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data the data contained within this message */
 /*-------------------------------------------------------------------*/
-	public ServerBad(byte[] data)
+	public ServerBad(byte[] data, int off)
 	{
-		setLength(data.length);
+		setLength(data.length - 1);
 	}
 }
 

@@ -25,15 +25,15 @@ public class ServerFrame extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerFrame(byte[] data)
+	public ServerFrame(byte[] data, int off)
 	{
 		int offset = 0;
 		int entityNumber = 0;
 
-		frame = Utils.intValue(data, 0);
-		deltaFrame = Utils.intValue(data, 4);
+		frame = Utils.intValue(data, off);
+		deltaFrame = Utils.intValue(data, off + 4);
 
-		count = (int)data[9];
+		count = (int)data[off + 9];
 
 		if(count < 0)
 			count = count + 256;

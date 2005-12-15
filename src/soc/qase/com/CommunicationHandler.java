@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerReconnect.java
+// Name:			CommunicationHandler.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------
@@ -130,7 +130,9 @@ public class CommunicationHandler
 		{
 			message = new Connectionless(command);
 			packet = new ConnectionlessPacket(message);
-			outgoingPacket = new DatagramPacket(packet.getBytes(), packet.getBytes().length);
+
+			byte[] outData = packet.getBytes();
+			outgoingPacket = new DatagramPacket(outData, outData.length);
 
 			socket.send(outgoingPacket);
 		}
@@ -161,18 +163,18 @@ public class CommunicationHandler
 		sendData(packet, true);
 	}
 
+	private byte[] incomingBuffer = new byte[2048];
+	private DatagramPacket incomingPacket = new DatagramPacket(incomingBuffer, incomingBuffer.length);
+
 /*-------------------------------------------------------------------*/
 /**	Receive data from connected server. This method call will not
- *	return until a reply has been received by this object
- *	(blocking).
+ *	return until a reply has been received by this object (blocking).
  *	@return data received from host. */
 /*-------------------------------------------------------------------*/
 	public byte[] receiveData()
 	{
-		DatagramPacket incomingPacket = null;
-		byte[] incomingData = null;
-		byte[] incomingBuffer = null;
 		long previousTime = 0;
+		byte[] incomingData = null;
 		
 		try
 		{
@@ -181,9 +183,6 @@ public class CommunicationHandler
 				reliableReceived = false;
 				return currentData;
 			}
-
-			incomingBuffer = new byte[2048];
-			incomingPacket = new DatagramPacket(incomingBuffer, incomingBuffer.length);
 
 			socket.receive(incomingPacket);
 
@@ -221,7 +220,8 @@ public class CommunicationHandler
 				((ClientPacket)packet).setFirstSequence(clientSequence);
 				((ClientPacket)packet).setSecondSequence(serverSequence);
 
-				outgoingPacket = new DatagramPacket(packet.getBytes(), packet.getBytes().length);
+				byte[] outData = packet.getBytes();
+				outgoingPacket = new DatagramPacket(outData, outData.length);
 
 				for(int i = 0; reliableReceived != true; i++)
 				{
@@ -241,7 +241,9 @@ public class CommunicationHandler
 				((ClientPacket)packet).setFirstSequence(clientSequence);
 				((ClientPacket)packet).setSecondSequence(serverSequence);
 
-				outgoingPacket = new DatagramPacket(packet.getBytes(), packet.getBytes().length);
+				byte[] outData = packet.getBytes();
+				outgoingPacket = new DatagramPacket(outData, outData.length);
+
 				socket.send(outgoingPacket);
 			}
 		}

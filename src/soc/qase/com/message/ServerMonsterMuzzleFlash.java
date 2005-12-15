@@ -25,10 +25,10 @@ public class ServerMonsterMuzzleFlash extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerMonsterMuzzleFlash(byte[] data)
+	public ServerMonsterMuzzleFlash(byte[] data, int off)
 	{
-		monsterEntity = Utils.shortValue(data, 0);
-		effect = (int)data[2];
+		monsterEntity = Utils.shortValue(data, off);
+		effect = (int)data[off + 2];
 		setLength(3);
 	}
 }

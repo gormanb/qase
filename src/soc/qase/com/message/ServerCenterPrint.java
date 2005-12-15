@@ -22,10 +22,10 @@ public class ServerCenterPrint extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source */
 /*-------------------------------------------------------------------*/
-	public ServerCenterPrint(byte[] data)
+	public ServerCenterPrint(byte[] data, int off)
 	{
-		int strLength = Utils.stringLength(data, 0);
-		text_message = Utils.stringValue(data, 0, strLength);
+		int strLength = Utils.stringLength(data, off);
+		text_message = Utils.stringValue(data, off, strLength);
 
 		setLength(strLength + 1);
 	}

@@ -24,14 +24,14 @@ public class ServerPrint extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source. */
 /*-------------------------------------------------------------------*/
-	public ServerPrint(byte[] data)
+	public ServerPrint(byte[] data, int off)
 	{
 		int length = 0;
 
-		printLevel = (int)data[0];
-		length = Utils.stringLength(data, 1);
+		printLevel = (int)data[off];
+		length = Utils.stringLength(data, off + 1);
 
-		printString = Utils.stringValue(data, 1, length - 1);		
+		printString = Utils.stringValue(data, off + 1, length - 1);		
 
 		setLength(1 + length + 1);
 	}

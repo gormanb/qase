@@ -51,12 +51,12 @@ public class Entity
 								TYPE_KEYS = "keys", TYPE_ARMOR = "armor", TYPE_HEALTH = "healing", TYPE_AMMO = "ammo", TYPE_MEGAHEALTH = "mega_h",
 								SUBTYPE_MEDIUM = "medium", SUBTYPE_LARGE = "large", SUBTYPE_STIMPACK = "stimpack";
 
-	public static final String	TYPE_BLASTER = Config.items[Inventory.BLASTER], TYPE_SHOTGUN = Config.items[Inventory.SHOTGUN],
-								TYPE_SUPERSHOTGUN = Config.items[Inventory.SUPER_SHOTGUN], TYPE_MACHINEGUN = Config.items[Inventory.MACHINEGUN],
-								TYPE_CHAINGUN = Config.items[Inventory.CHAINGUN], TYPE_GRENADES = Config.items[Inventory.GRENADES],
-								TYPE_GRENADELAUNCHER = Config.items[Inventory.GRENADE_LAUNCHER], TYPE_ROCKETLAUNCHER = Config.items[Inventory.ROCKET_LAUNCHER],
-								TYPE_HYPERBLASTER = Config.items[Inventory.HYPERBLASTER], TYPE_RAILGUN = Config.items[Inventory.HYPERBLASTER],
-								TYPE_BFG = Config.items[Inventory.BFG10K];
+	// note: 33 added to standard index to differentiate between models of weapon while on the ground versus while in the player's hand
+	public static final String	TYPE_SHOTGUN = Config.items[Inventory.SHOTGUN + 33], TYPE_SUPERSHOTGUN = Config.items[Inventory.SUPER_SHOTGUN + 33],
+								TYPE_MACHINEGUN = Config.items[Inventory.MACHINEGUN + 33], TYPE_CHAINGUN = Config.items[Inventory.CHAINGUN + 33],
+								TYPE_GRENADES = Config.items[Inventory.GRENADES + 33], TYPE_GRENADELAUNCHER = Config.items[Inventory.GRENADE_LAUNCHER + 33],
+								TYPE_ROCKETLAUNCHER = Config.items[Inventory.ROCKET_LAUNCHER + 33], TYPE_HYPERBLASTER = Config.items[Inventory.HYPERBLASTER + 33],
+								TYPE_RAILGUN = Config.items[Inventory.HYPERBLASTER + 33], TYPE_BFG = Config.items[Inventory.BFG10K + 33];
 
 	public static final String	TYPE_INVULNERABILITY = Config.items[Inventory.INVULNERABILITY], TYPE_AMMOPACK = Config.items[Inventory.AMMO_PACK],
 								TYPE_QUAD = Config.items[Inventory.QUAD_DAMAGE], TYPE_SILENCER = Config.items[Inventory.SILENCER], TYPE_ADRENALINE = Config.items[Inventory.ADRENALINE],
@@ -70,12 +70,34 @@ public class Entity
 								SUBTYPE_SHELLS = Config.items[Inventory.SHELLS], SUBTYPE_BULLETS = Config.items[Inventory.BULLETS], SUBTYPE_CELLS = Config.items[Inventory.CELLS], SUBTYPE_ROCKETS = Config.items[Inventory.ROCKETS],
 								SUBTYPE_SLUGS = Config.items[Inventory.SLUGS], SUBTYPE_POWERSCREEN = Config.items[Inventory.POWER_SCREEN], SUBTYPE_POWERSHIELD = Config.items[Inventory.POWER_SHIELD];
 
+	private static final String[] allItemStrings = enumerateItemStrings();
+
 /*-------------------------------------------------------------------*/
 /**	Default constructor. */
 /*-------------------------------------------------------------------*/
 	public Entity()
 	{	}
-	
+
+	private static String[] enumerateItemStrings()
+	{
+		String[] itemStrings = new String[51];
+
+		itemStrings[0] = CAT_ITEMS; itemStrings[1] = CAT_WEAPONS; itemStrings[2] = CAT_PLAYERS;
+		itemStrings[3] = CAT_OBJECTS; itemStrings[4] = TYPE_KEYS; itemStrings[5] = TYPE_ARMOR;
+		itemStrings[6] = TYPE_HEALTH; itemStrings[7] = TYPE_AMMO; itemStrings[8] = TYPE_MEGAHEALTH;
+		itemStrings[9] = SUBTYPE_MEDIUM; itemStrings[10] = SUBTYPE_LARGE; itemStrings[11] = SUBTYPE_STIMPACK;
+
+		int index = 12;
+
+		for(int i = 1 ; i < Config.items.length; i++)
+		{
+			if(i < 7 || i > 17)
+				itemStrings[index++] = Config.items[i];
+		}
+
+		return itemStrings;
+	}
+
 /*-------------------------------------------------------------------*/
 /**	Calculate entity family. */
 /*-------------------------------------------------------------------*/
@@ -101,14 +123,14 @@ public class Entity
 
 				if(currentString.equals("items") || currentString.equals("weapons") || currentString.equals("objects"))
 				{
-					category = currentString;
-					type = st.nextToken();
+					category = getStaticReference(currentString);
+					type = getStaticReference(st.nextToken());
 
 					if(st.hasMoreTokens())
 					{
 						currentString = st.nextToken();
 						if(currentString.equals("tris.md2"));
-						else subType = currentString;
+						else subType = getStaticReference(currentString);
 					}
 				}
 			}
@@ -119,7 +141,7 @@ public class Entity
 				if(entityNumber < players)
 				{
 					st = new StringTokenizer(modelString, "\\");
-					category = new String("player");
+					category = CAT_PLAYERS;;
 					name = st.nextToken();
 
 					if(st.countTokens() > 1)
@@ -129,14 +151,25 @@ public class Entity
 		}
 	}
 
+	private String getStaticReference(String currentString)
+	{
+		for(int i = 0; i < allItemStrings.length; i++)
+		{
+			if(allItemStrings[i].equals(currentString))
+				return allItemStrings[i];
+		}
+
+		return currentString;
+	}
+
 /*-------------------------------------------------------------------*/
 /**	Get model string.
  *	@return model string. */
 /*-------------------------------------------------------------------*/
-	public String getModelString()
+	private String getModelString()
 	{
 		if(modelString != null && modelString.length() > 0)
-			return new String(modelString);
+			return modelString;
 
 		String result = null;
 
@@ -173,7 +206,7 @@ public class Entity
 		if(name == null)
 			confirmFamily();
 
-		return (name == null ? "" : new String(name));
+		return (name == null ? "" : name);
 	}
 	
 /*-------------------------------------------------------------------*/
@@ -186,7 +219,7 @@ public class Entity
 		if(skin == null)
 			confirmFamily();
 
-		return (skin == null ? "" : new String(skin));
+		return (skin == null ? "" : skin);
 	}
 	
 /*-------------------------------------------------------------------*/
@@ -199,7 +232,7 @@ public class Entity
 		if(category == null)
 			confirmFamily();
 
-		return (category == null ? "" : new String(category));
+		return (category == null ? "" : category);
 	}
 	
 /*-------------------------------------------------------------------*/
@@ -211,7 +244,7 @@ public class Entity
 		if(type == null)
 			confirmFamily();
 
-		return (type == null ? "" : new String(type));
+		return (type == null ? "" : type);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -223,7 +256,7 @@ public class Entity
 		if(subType == null)
 			confirmFamily();
 
-		return (subType == null ? "" : new String(subType));
+		return (subType == null ? "" : subType);
 	}
 	
 /*-------------------------------------------------------------------*/
@@ -481,24 +514,24 @@ public class Entity
 	{
 		if(entity != null)
 		{
-			if(model == null) model = new Model();
-			if(effects == null) effects = new Effects();
-			if(origin == null) origin = new Origin();
-			if(angles == null) angles = new Angles();
-			if(oldOrigin == null) oldOrigin = new Origin();
-			if(sound == null) sound = new Sound();
-			if(events == null) events = new Events();
-			if(solid == null) solid = new Solid();
+			if(model == null) model = entity.model; else model.merge(entity.model);
+			if(effects == null) effects = entity.effects; else effects.merge(entity.effects);
+			if(origin == null) origin = entity.origin; else origin.merge(entity.origin);
+			if(angles == null) angles = entity.angles; else angles.merge(entity.angles);
+			if(oldOrigin == null) oldOrigin = entity.oldOrigin; else oldOrigin.merge(entity.oldOrigin);
+			if(sound == null) sound = entity.sound; else sound.merge(entity.sound);
+			if(events == null) events = entity.events; else events.merge(entity.events);
+			if(solid == null) solid = entity.solid; else solid.merge(entity.solid);
+
 			entityNumber = entity.getNumber();
-			model.merge(entity.getModel());
-			effects.merge(entity.getEffects());
-			origin.merge(entity.getOrigin());
-			angles.merge(entity.getAngles());
-			oldOrigin.merge(entity.getOldOrigin());
-			sound.merge(entity.getSound());
-			events.merge(entity.getEvents());
-			solid.merge(entity.getSolid());
 			inventoryIndex = entity.getInventoryIndex();
+
+			if(category == null) category = entity.category;
+			if(modelString == null) modelString = entity.modelString;
+			if(type == null) type = entity.type;
+			if(subType == null) subType = entity.subType;
+			if(name == null) name = entity.name;
+			if(skin == null) skin = entity.skin;
 		}
 	}
 
@@ -512,7 +545,7 @@ public class Entity
 
 		ent.setNumber(entityNumber);
 		ent.setActive(active);
-		ent.setModel((model == null ? null : model.deepCopy()));
+		ent.setModel(model);
 		ent.setEffects((effects == null ? null : effects.deepCopy()));
 		ent.setOrigin((origin == null ? null : origin.deepCopy()));
 		ent.setAngles((angles == null ? null : angles.deepCopy()));
@@ -521,6 +554,14 @@ public class Entity
 		ent.setEvents((events == null ? null : events.deepCopy()));
 		ent.setSolid((solid == null ? null : solid.deepCopy()));
 		ent.inventoryIndex = inventoryIndex;
+
+		ent.category = this.category;
+		ent.modelString = this.modelString;
+		ent.type = this.type;
+		ent.subType = this.subType;
+		ent.name = this.name;
+		ent.skin = this.skin;
+
 //		ent.setConfig((config == null ? null : config.deepCopy()));
 
 		return ent;

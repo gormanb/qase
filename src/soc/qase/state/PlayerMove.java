@@ -249,20 +249,16 @@ public class PlayerMove
 /*-------------------------------------------------------------------*/
 	public void merge(PlayerMove playerMove)
 	{
+		if(playerMove == null)
+			return;
+
 		if(type == -1) type = playerMove.getType();
 		if(flags == -1) flags = playerMove.getFlags();
 		if(time == -1) time = playerMove.getTime();
 		if(gravity == -1) gravity = playerMove.getGravity();
-		if(origin == null) origin = new Origin();
-		if(velocity == null) velocity = new Velocity();
-		if(deltaAngles == null) deltaAngles = new Angles();
-
-		if(playerMove != null)
-		{
-			origin.merge(playerMove.getOrigin());
-			velocity.merge(playerMove.getVelocity());
-			deltaAngles.merge(playerMove.getDeltaAngles());
-		}
+		if(origin == null) origin = playerMove.origin; else origin.merge(playerMove.origin);
+		if(velocity == null) velocity = playerMove.velocity; else velocity.merge(playerMove.velocity);
+		if(deltaAngles == null) deltaAngles = playerMove.deltaAngles; else deltaAngles.merge(playerMove.deltaAngles);
 	}
 }
 

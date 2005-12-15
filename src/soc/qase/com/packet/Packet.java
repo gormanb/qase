@@ -107,12 +107,16 @@ public class Packet
 /*-------------------------------------------------------------------*/
 	public byte[] getBytes()
 	{
-		byte[] result = getFirstSequence().getBytes();
+		byte[] result = new byte[(getMessage() instanceof ClientMove ? 56 : 0) + (getSecondSequence() == null ? 4 : 8)];
+
+		getFirstSequence().getBytes(result, 0);
 
 		if(getSecondSequence() != null)
-			result = Utils.concatBytes(result, getSecondSequence().getBytes());
+			getSecondSequence().getBytes(result, 4);
 
-		if(getMessage() != null)
+		if(getMessage() != null && getMessage() instanceof ClientMove)
+			Utils.copyArray(getMessage().getBytes(), result, 0, (getSecondSequence() == null ? 4 : 8), 56);
+		else if(getMessage() != null)
 			result = Utils.concatBytes(result, getMessage().getBytes());
 
 		return result;

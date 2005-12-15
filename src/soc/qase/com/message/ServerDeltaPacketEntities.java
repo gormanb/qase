@@ -21,9 +21,9 @@ public class ServerDeltaPacketEntities extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data the source data */
 /*-------------------------------------------------------------------*/
-	public ServerDeltaPacketEntities(byte[] data)
+	public ServerDeltaPacketEntities(byte[] data, int off)
 	{
-		setLength(data.length);
+		setLength(data.length - 1);
 	}
 }
 

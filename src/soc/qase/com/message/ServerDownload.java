@@ -27,10 +27,10 @@ public class ServerDownload extends Message
 /** Constructor. Parses the data and extracts message details.
  *	@param data the source data */
 /*-------------------------------------------------------------------*/
-	public ServerDownload(byte[] data)
+	public ServerDownload(byte[] data, int off)
 	{
-		size = (int)Utils.shortValue(data, 0);
-		percent = (int)data[2];
+		size = (int)Utils.shortValue(data, off);
+		percent = (int)data[off + 2];
 
 		if(size < 0)
 			return;
@@ -38,7 +38,7 @@ public class ServerDownload extends Message
 		this.data = new byte[size];
 
 		for(int i = 0; i < size; i++)
-			this.data[i] = data[3 + i];
+			this.data[i] = data[off + 3 + i];
 
 		setLength(size + 3);
 	}

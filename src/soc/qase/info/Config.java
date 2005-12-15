@@ -16,14 +16,18 @@ public class Config
 	private int configSize = 1569;
 	private String[] configStrings = null;
 
-	// weapons index: 0 = PlayerGun.index
-	public static final String[] items = { 	null, "body", "combat","jacket", "shard", "screen", "shield", "v_blast",
-											"v_shotg", "v_shotg2", "v_machn", "v_chain", "v_handgr", "v_launch",
-											"v_rocket", "v_hyperb", "v_rail", "v_bfg", "shells", "bullets",
-											"cells", "rockets", "slugs", "quaddama", "invulner", "silencer",
-											"breather", "enviro", "a_head", "adrenal", "band", "pack",
-											"data_cd", "power", "pyramid", "spinner", "pass", "key", "red_key",
-											"c_head", "target" };
+	public static final String[] items = { 
+											null, // to make inventory indices equal to this array's indices
+											"body", "combat","jacket", "shard", "screen", "shield", // armor
+											"v_blast", "v_shotg", "v_shotg2", "v_machn", "v_chain", "v_handgr",
+											"v_launch", "v_rocket", "v_hyperb", "v_rail", "v_bfg", // weapon view models
+											"shells", "bullets", "cells", "rockets", "slugs", // ammo
+											"quaddama", "invulner", "silencer", "breather", "enviro", "a_head",
+											"adrenal", "band", "pack", "data_cd", "power", "pyramid", "spinner",
+											"pass", "key", "red_key", "c_head", "target", // special items
+											"g_shotg", "g_shotg2", "g_machn", "g_chain", "grenades", "g_launch",
+											"g_rocket", "g_hyperb", "g_rail", "g_bfg" // weapon ground models (i-33)
+										 };
 
 	private static int[] itemsIndex = new int[items.length];
 
@@ -46,7 +50,9 @@ public class Config
 /*-------------------------------------------------------------------*/
 	public String getConfigString(int index)
 	{
-		if(index < 0) return new String();
+		if(index < 0 || index > configStrings.length)
+			return null;
+
 		return configStrings[index];
 	}
 
@@ -82,7 +88,7 @@ public class Config
 		for(int i = 1; i < itemsIndex.length; i++)
 		{
 			if(itemsIndex[i] == modelIndex)
-				return i;
+				return (i < 41 ? i : i - 33); // accommodates ground & carried weapons
 		}
 
 		return -1;
@@ -100,22 +106,11 @@ public class Config
 	{
 		if(modelString == null)
 			return -1;
-		else if(modelString.indexOf("grenades") != -1)
-			return 12;
-
-		String mString = "";
-		int g_index = modelString.indexOf("g_");
-
-		if(g_index != -1)
-		{
-			mString = modelString.substring(0, g_index) + "v_" + modelString.substring(g_index + 2);
-			modelString = mString;
-		}
 
 		for(int i = 1; i < items.length; i++)
 		{
 			if(modelString.indexOf(items[i]) != -1)
-				return i;
+				return (i < 41 ? i : i - 33); // accommodates ground & carried weapons
 		}
 
 		return -1;
@@ -123,14 +118,40 @@ public class Config
 
 /*-------------------------------------------------------------------*/
 /**	Resolves the inventory index of an item to the index of the config
- *	string associated with its in-game model. Called by PlayerGun.
+ *	string associated with its in-game model. In the case of weapons,
+ *	returns the config string of the model used while the player is
+ *	carrying the weapon; that is, this is equivalent of calling
+ *	getItemConfigIndex(itemInventoryIndex, false). Called by PlayerGun.
  *	@param itemInventoryIndex index of the item in the inventory
  *	@return the associated config string index, or -1 if not found
+ *	@see #getItemConfigIndex(int, boolean)
  *	@see soc.qase.state.PlayerGun#getGunConfigIndex(int) */
 /*-------------------------------------------------------------------*/
 	public static int getItemConfigIndex(int itemInventoryIndex)
 	{
-		return itemsIndex[itemInventoryIndex];
+		return getItemConfigIndex(itemInventoryIndex, false);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolves the inventory index of an item to the index of the config
+ *	string associated with its in-game model. In the case of a weapon,
+ *	optionally returns either the config string of the model as it
+ *	appears while the weapon is waiting to be picked up on the ground,
+ *	or as it appears while the player is carrying it.
+ *	@param itemInventoryIndex index of the item in the inventory
+ *	@param groundWeapon if true and the inventory index refers to a weapon,
+ *	returns the config string of the model used while the weapon is on the
+ *	ground. Otherwise, returns the config string of the model used while
+ *	the player is carrying the gun.
+ *	@return the associated config string index, or -1 if not found
+ *	@see soc.qase.state.PlayerGun#getGunConfigIndex(int) */
+/*-------------------------------------------------------------------*/
+	public static int getItemConfigIndex(int itemInventoryIndex, boolean groundWeapon)
+	{
+		if(groundWeapon && itemInventoryIndex >= 7 && itemInventoryIndex <= 17)
+			return itemsIndex[itemInventoryIndex + 33];
+		else
+			return itemsIndex[itemInventoryIndex];
 	}
 
 /*-------------------------------------------------------------------*/

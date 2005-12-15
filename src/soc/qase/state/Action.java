@@ -94,20 +94,21 @@ public class Action
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get byte array representation of object.
- *	@return byte array. */
+/**	Get byte array representation of object. Places the representation
+ *	at the appropriate offset in the argument array. Called by the Move
+ *	class when compiling a byte representation of the client's movement
+ *	for transmission to the server.
+ *	@see Move#getBytes */
 /*-------------------------------------------------------------------*/
-	public byte[] getBytes()
+	public void getBytes(byte[] moveBytes, int offset)
 	{
-		byte[] result = null;
 		int value = 0;
 
-		result = new byte[1];
 		if(attack) value = value | 0x01;
 		if(use) value = value | 0x02;
 		if(any) value = value | 0x80;
-		result[0] = (byte)value;
-		return result;
+
+		moveBytes[offset + 13] = (byte)value;
 	}
 
 /*-------------------------------------------------------------------*/

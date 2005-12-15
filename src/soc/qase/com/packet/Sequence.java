@@ -9,6 +9,7 @@ package soc.qase.com.packet;
 import java.io.*;
 import java.net.*;
 import java.lang.*;
+import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/
 /**	Sequence number wrapper used when sending packets to host. */
@@ -124,21 +125,14 @@ public class Sequence
 /**	Get sequence bytes.
  *	@return byte array. */
 /*-------------------------------------------------------------------*/
-	public byte[] getBytes()
+	public byte[] getBytes(byte[] seqBytes, int off)
 	{
-		byte[] result = null;
-		int currentValue = 0;
+		Utils.intToByteArray(sequence, seqBytes, off);
 
-		result = new byte[4];
-		currentValue = sequence;
-		for(int i = 0; i < 4; i++) {
-			result[i] = (byte)(currentValue % 256);
-			currentValue = currentValue / 256;
-		}
-		if(isReliable()) {
-			result[3] = (byte)(result[3] | 0x00000080);
-		}
-		return result;
+		if(isReliable())
+			seqBytes[off + 3] = (byte)(seqBytes[off + 3] | 0x00000080);
+
+		return seqBytes;
 	}
 
 /*-------------------------------------------------------------------*/

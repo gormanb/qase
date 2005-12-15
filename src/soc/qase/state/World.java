@@ -156,7 +156,7 @@ public class World
 		for(int i = 0; i < 1024; i++)
 		{
 			if(entities[mergeState][i] != null)
-				entities[currentState][i] = entities[mergeState][i].deepCopy();
+				entities[currentState][i] = entities[mergeState][i];
 		}
 
 		pickupEntityNum = -1;
@@ -578,8 +578,7 @@ public class World
 			{
 				currentEntity.setConfig(config);
 
-				if(currentEntity.getModelString() != null
-				&& (cat == null || currentEntity.getCategory().equalsIgnoreCase(cat))
+				if((cat == null || currentEntity.getCategory().equalsIgnoreCase(cat))
 				&& (type == null || currentEntity.getType().equalsIgnoreCase(type))
 				&& (subType == null || currentEntity.getSubType().equalsIgnoreCase(subType))
 				&& (currentEntity.getActive() || !onlyActive))

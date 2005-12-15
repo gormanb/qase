@@ -191,28 +191,24 @@ public class ClientMove extends Message
 /*-------------------------------------------------------------------*/
 	public byte[] getBytes()
 	{
-		byte[] result = null;
-		byte[] frame = new byte[4];
-		byte[] checksum = new byte[1];
+		byte[] moveBytes = new byte[56];
 
-		int currentValue = frame_number;
+		// client & message type
+		moveBytes[2] = (byte)getType();
+		Utils.shortToByteArray((short)getClientID(), moveBytes, 0);
 
-		for(int i = 0; i < 4; i++)
-		{
-			frame[i] = (byte)(currentValue % 256);
-			currentValue = currentValue / 256;
-		}
+		// checksum goes in index 3 later; next, frame number
+		Utils.intToByteArray(frame_number, moveBytes, 4);
 
-		result = Utils.concatBytes(frame, currentMove.getBytes());
-		result = Utils.concatBytes(result, previousMove.getBytes());
-		result = Utils.concatBytes(result, lastMove.getBytes());
+		// actual movement data
+		currentMove.getBytes(moveBytes, 8);
+		previousMove.getBytes(moveBytes, 24);
+		lastMove.getBytes(moveBytes, 40);
 
-		checksum[0] = (byte)(getChecksum(result) % 256);
+		// checksum on frame & movement data
+		moveBytes[3] = (byte)(getChecksum(moveBytes) % 256);
 
-		result = Utils.concatBytes(checksum, result);
-		result = Utils.concatBytes(super.getBytes(), result);
-
-		return result;
+		return moveBytes;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -246,14 +242,14 @@ public class ClientMove extends Message
 		int mask = 0;
 		int result = 0;
 
-		int length = Math.min(data.length, 60);
+		int length = Math.min(data.length, 52); // changed from 60; 52 should be constant length...?
 		int offset = sequence.intValue() % 1020;
 
 		byte[] buffer = null;
 		buffer = new byte[length + 4];
 
 		for(int i = 0; i < length; i++)
-			buffer[i] = data[i];
+			buffer[i] = data[4 + i]; // skip 4 bytes of header data
 
 		for(int j = 0; j < 4; j++)
 			buffer[j + length] = (byte)(checksum_table[j + offset]);

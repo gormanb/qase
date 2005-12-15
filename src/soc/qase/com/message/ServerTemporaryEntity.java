@@ -34,8 +34,9 @@ public class ServerTemporaryEntity extends Message
 /**	Constructor. Parses the data and extracts message details.
  *	@param data message source */
 /*-------------------------------------------------------------------*/
-	public ServerTemporaryEntity(byte[] data)
+	public ServerTemporaryEntity(byte[] data, int off)
 	{
+		offset = off;
 		this.data = data;
 		this.serverVersion = serverVersion;
 
@@ -58,7 +59,7 @@ public class ServerTemporaryEntity extends Message
 		else if(entityCategory == TemporaryEntity.BAD_ENTITY)
 			processBadEntity();
 
-		setLength(offset);
+		setLength(offset - off);
 	}
 
 	public TemporaryEntity getTemporaryEntity()

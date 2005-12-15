@@ -137,10 +137,6 @@ public class DM2Recorder
 		{	}
 	}
 
-	private Message msg = null;
-	private ServerPacket sPacket = null;
-	private int incomingDataIndex, incomingDataLength;
-
 	private byte[] filterData(byte[] incomingData)
 	{
 		byte[] temp = new byte[0];
@@ -149,43 +145,39 @@ public class DM2Recorder
 
 		if(incomingData != null)
 		{
-			incomingDataIndex = 0;
-			incomingDataLength = incomingData.length;
+			int dataIndex = 8;
 
-			while(incomingDataIndex != incomingDataLength)
+			while(dataIndex != incomingData.length)
 			{
-				incomingData = Utils.removeBytes(incomingData, 0, incomingDataIndex);
-				incomingDataLength = incomingData.length;
-
-				sPacket = new ServerPacket(incomingData);
-				msg = sPacket.getMessage();
+				ServerPacket sPacket = new ServerPacket(incomingData, dataIndex);
+				Message msg = sPacket.getMessage();
 
 				if(msg instanceof ServerStuffText)
 				{
-					String text = Utils.stringValue(incomingData, 1, Utils.stringLength(incomingData, 1));
+					String text = Utils.stringValue(incomingData, dataIndex + 1, Utils.stringLength(incomingData, dataIndex + 1));
 
 					if(text.indexOf("precache") != -1)
 						curData = new byte[]{11, 'p', 'r', 'e', 'c', 'a', 'c', 'h', 'e', '\n', '\0'};
 					else if(text.indexOf("cmd configstring") != -1 || text.indexOf("cmd baseline") != -1 || text.indexOf("record") != -1)
 						curData = null;
 					else
-						curData = Utils.extractBytes(incomingData, 0, sPacket.getLength());
+						curData = Utils.extractBytes(incomingData, dataIndex, sPacket.getLength());
 				}
 				else if(msg instanceof ServerData)
 				{
-					curData = Utils.extractBytes(incomingData, 0, sPacket.getLength());
+					curData = Utils.extractBytes(incomingData, dataIndex, sPacket.getLength());
 					Utils.intToByteArray(65578, curData, 5);
 					curData[9] = 1;
 				}
 				else if(msg instanceof ServerReconnect || msg instanceof ServerDownload)
 					curData = null;
 				else
-					curData = Utils.extractBytes(incomingData, 0, sPacket.getLength());
+					curData = Utils.extractBytes(incomingData, dataIndex, sPacket.getLength());
 
 				if(curData != null)
 					result = Utils.concatBytes(result, curData);
 
-				incomingDataIndex = sPacket.getLength();
+				dataIndex += sPacket.getLength();
 			}
 		}
 
