@@ -18,15 +18,15 @@ public class Config
 
 	public static final String[] items = { 
 											null, // to make inventory indices equal to this array's indices
-											"body", "combat","jacket", "shard", "screen", "shield", // armor
-											"v_blast", "v_shotg", "v_shotg2", "v_machn", "v_chain", "v_handgr",
-											"v_launch", "v_rocket", "v_hyperb", "v_rail", "v_bfg", // weapon view models
-											"shells", "bullets", "cells", "rockets", "slugs", // ammo
-											"quaddama", "invulner", "silencer", "breather", "enviro", "a_head",
-											"adrenal", "band", "pack", "data_cd", "power", "pyramid", "spinner",
-											"pass", "key", "red_key", "c_head", "target", // special items
-											"g_shotg", "g_shotg2", "g_machn", "g_chain", "grenades", "g_launch",
-											"g_rocket", "g_hyperb", "g_rail", "g_bfg" // weapon ground models (i-33)
+											"/body/", "/combat/","/jacket/", "/shard/", "/screen/", "/shield/", // armor
+											"/v_blast/", "/v_shotg/", "/v_shotg2/", "/v_machn/", "/v_chain/", "/v_handgr/",
+											"/v_launch/", "/v_rocket/", "/v_hyperb/", "/v_rail/", "/v_bfg/", // weapon view models
+											"/shells/", "/bullets/", "/cells/", "/rockets/", "/slugs/", // ammo
+											"/quaddama/", "/invulner/", "/silencer/", "/breather/", "/enviro/", "/a_head/",
+											"/adrenal/", "/band/", "/pack/", "/data_cd/", "/power/", "/pyramid/", "/spinner/",
+											"/pass/", "/key/", "/red_key/", "/c_head/", "/target/", // special items
+											"/g_shotg/", "/g_shotg2/", "/g_machn/", "/g_chain/", "/grenades/", "/g_launch/",
+											"/g_rocket/", "/g_hyperb/", "/g_rail/", "/g_bfg/" // weapon ground models (i-33)
 										 };
 
 	private static int[] itemsIndex = new int[items.length];

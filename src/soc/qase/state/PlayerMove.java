@@ -19,24 +19,27 @@ import soc.qase.tools.vecmath.Vector2f;
 public class PlayerMove
 {
 	private int type = -1;
-	private int flags = -1;
 	private int time = -1;
+	private int flags = -1;
 	private int gravity = -1;
-	private Velocity velocity = null;
+	private int walkState = -1;
+	private double velMagnitude = -1;
+
 	private Origin origin = null;
+	private Velocity velocity = null;
 	private Angles deltaAngles = null;
 	private Vector2f directionalVelocity = null;
 
+	public static final int WALK_STOPPED = 0, WALK_NORMAL = 1, WALK_RUN = 2;
+	public static final int STAND_DUCKED = -1, STAND_NORMAL = 0, STAND_JUMP = 1;
 	public static final int MOVE_NORMAL = 0, MOVE_SPECTATOR = 1, MOVE_DEAD = 2, MOVE_GIB = 3, MOVE_FREEZE = 4;
-	public static final int FLAG_DUCKED = 1, FLAG_JUMP = 2, FLAG_GROUND = 4, FLAG_TIME_WATER = 8, FLAG_TIME_LAND = 16, FLAG_TIME_TELEPORT = 32, FLAG_NO_PREDICTION = 64;
+	public static final int FLAG_DUCKED = 1, FLAG_JUMP = 2, FLAG_GROUND = 4, FLAG_TIME_WATER_JUMP = 8, FLAG_TIME_LAND = 16, FLAG_TIME_TELEPORT = 32, FLAG_NO_PREDICTION = 64;
 
 /*-------------------------------------------------------------------*/
 /**	Default constructor. */
 /*-------------------------------------------------------------------*/
 	public PlayerMove()
-	{
-		directionalVelocity = new Vector2f();
-	}
+	{	}
 	
 /*-------------------------------------------------------------------*/
 /**	Get player move type, as defined by the TYPE constants listed above.
@@ -105,7 +108,7 @@ public class PlayerMove
 		if((flags & FLAG_DUCKED) != 0) result += "ducked:";
 		if((flags & FLAG_JUMP) != 0) result += "jump:";
 		if((flags & FLAG_GROUND) != 0) result += "ground:";
-		if((flags & FLAG_TIME_WATER) != 0) result += "timeWater:";
+		if((flags & FLAG_TIME_WATER_JUMP) != 0) result += "timeWater:";
 		if((flags & FLAG_TIME_LAND) != 0) result += "timeLand:";
 		if((flags & FLAG_TIME_TELEPORT) != 0) result += "timeTeleport:";
 		if((flags & FLAG_NO_PREDICTION) != 0) result += "noPrediction:";
@@ -207,7 +210,6 @@ public class PlayerMove
 	public void setVelocity(Velocity velocity)
 	{
 		this.velocity = velocity;
-		directionalVelocity.set(velocity.getForward(), velocity.getRight());
 	}
 
 /*-------------------------------------------------------------------*/
@@ -217,7 +219,19 @@ public class PlayerMove
 /*-------------------------------------------------------------------*/
 	public Vector2f getDirectionalVelocity()
 	{
+		if(directionalVelocity == null)
+			directionalVelocity = new Vector2f(getVelocity().getForward(), getVelocity().getRight());
+
 		return directionalVelocity;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get current walk state, one of the WALK constants specified above.
+ *	@return a PlayerMove constant indicating the current walk state */
+/*-------------------------------------------------------------------*/
+	public int getWalkState()
+	{
+		return walkState;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -245,9 +259,11 @@ public class PlayerMove
  *	from the Quake 2 server into the gamestate.
  *	@param playerMove source PlayerMove whose attributes should be merged
  *	into the current PlayerMove
+ *	@param underWater specifies whether the player is currently submerged;
+ *	the character's walking and running speeds are reduced while in water
  *	@see soc.qase.state.World#setEntity(Entity, boolean) */
 /*-------------------------------------------------------------------*/
-	public void merge(PlayerMove playerMove)
+	public void merge(PlayerMove playerMove, boolean underWater)
 	{
 		if(playerMove == null)
 			return;
@@ -259,6 +275,8 @@ public class PlayerMove
 		if(origin == null) origin = playerMove.origin; else origin.merge(playerMove.origin);
 		if(velocity == null) velocity = playerMove.velocity; else velocity.merge(playerMove.velocity);
 		if(deltaAngles == null) deltaAngles = playerMove.deltaAngles; else deltaAngles.merge(playerMove.deltaAngles);
+
+		velMagnitude = getDirectionalVelocity().length();
+		walkState = (velMagnitude > (underWater ? 100 : 250) ? WALK_RUN : (velMagnitude > 0 ? WALK_NORMAL : WALK_STOPPED));
 	}
 }
-

@@ -104,10 +104,10 @@ public class PlayerGun
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Resolves the inventory index of a particular type of ammunition to
- *	the inventory indices of all weapons which use that ammo.
+/**	Resolves the inventory index of a particular type of gun to
+ *	the inventory index of the ammo used by that gun.
  *	@param inventoryGunIndex index of the gun in the inventory
- *	@return the inventory indices of the associated ammo
+ *	@return the inventory index of the associated ammo
 /*-------------------------------------------------------------------*/
 	public static int getAmmoInventoryIndexByGun(int inventoryGunIndex)
 	{

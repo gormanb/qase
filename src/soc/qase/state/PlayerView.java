@@ -18,6 +18,8 @@ public class PlayerView
 	private int fov = -1;
 	private int render = -1;
 
+	public static final int RDF_UNDERWATER = 1, RDF_NOWORLDMODEL = 2, RDF_IRGOGGLES	= 4, RDF_UVGOGGLES = 8;
+
 /*-------------------------------------------------------------------*/
 /**	Constructor. */
 /*-------------------------------------------------------------------*/
@@ -133,6 +135,19 @@ public class PlayerView
 	public int getRender()
 	{
 		return render;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check the current render FX type. Argument should be one of the
+ *	RDF constants defined in PlayerView.
+ *	@param renderType the type of render FX to check for. Should be
+ *	one of the RDF constants defined in PlayerView.
+ *	@return true if the render value matches the passed value, false
+ *	otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean checkRender(int renderType)
+	{
+		return (render == renderType);
 	}
 
 /*-------------------------------------------------------------------*/

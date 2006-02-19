@@ -12,6 +12,33 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.1.5 (19/02/2006)
+-
+**Notes:**
+
+An interim release designed to address a bug which
+sometimes caused use of the Shotgun weapon to throw an 
+exception. No significant changes otherwise. The next 
+major release will probably see the incorporation of an 
+integrated Quake3 client; however, given that I am working 
+on several other projects at present, this probably won't 
+be completed for some time.
+
+**Changes:**
+
+* Fixed a bug which sometimes caused selecting
+the Shotgun as the agent's current weapon (or reading 
+frames from a DM2 in which the human used the Shotgun)
+to throw an exception.
+
+* Minor alterations and additions to existing methods,
+  provision of some new convenience functions.
+
+* Facilitates reading and application of discrete walk
+  states (stop, normal, run) in addition to explicit
+  velocities. Accounts for changes in speed due to
+  submersion in water/other fluids.
+
 r2.1.0 (15/12/2005)
 -
 **Notes:**

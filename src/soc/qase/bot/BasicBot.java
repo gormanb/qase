@@ -64,7 +64,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot()
 	{
-		user = new User("QASE_Bot", "female/athena", 65535, 1, 120, 0, "");
+		user = new User("QASE_Bot", "female/athena", 65535, 1, 120, 2, "");
 		commonSetup(false, false);
 	}
 
@@ -76,7 +76,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 0, "");
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, "");
 		commonSetup(false, false);
 	}
 
@@ -89,7 +89,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 0, "");
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, "");
 		commonSetup(false, trackInv);
 	}
 
@@ -104,7 +104,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, boolean highThreadSafety, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 0, "");
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, "");
 		commonSetup(highThreadSafety, trackInv);
 	}
 
@@ -120,7 +120,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, String password, boolean highThreadSafety, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 0, password);
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, password);
 		commonSetup(highThreadSafety, trackInv);
 	}
 
@@ -202,9 +202,9 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether agent is currently in water.
  *	@return true if in water, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isInWater()
+	public boolean isUnderWater()
 	{
-		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isInWater();
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isUnderWater();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -459,7 +459,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param fireDir the direction in which to aim
  *	@param vel the agent's total velocity */
 /*-------------------------------------------------------------------*/
-	protected void setBotMovement(Vector3f moveDir, Vector3f fireDir, int vel)
+	protected void setBotMovement(Vector3f moveDir, Vector3f fireDir, float vel)
 	{
 		if(moveDir == null && fireDir == null)
 			return;
@@ -487,6 +487,37 @@ public abstract class BasicBot extends Thread implements Bot
 
 		angles.setYaw(botAngles[0]);
 		angles.setPitch(botAngles[1]);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience method to facilitate the separation of movement and
+ *	firing, and allow both to be specified in global co-ordinates.
+ *	Instead of providing an explicit velocity as above, the programmer
+ *	specifies the current walk state (stop, walk, run) using the
+ *	constants defined in the PlayerMove class. The method computes the
+ *	correct velocity based on whether the agent is on land or submerged,
+ *	and then passes the call to setBotMovement(Vector3f, Vector3f, float).
+ *	To account for the possibility of the programmer passing
+ *	an explicit velocity as an int rather than float, the call will be
+ *	passed directly to the above method if walkState exceeds the range
+ *	of the constant values (i.e. 0, 1, 2).
+ *	@param moveDir the direction in which to move
+ *	@param fireDir the direction in which to aim
+ *	@param walkState the discrete movement speed to use
+ *	@see soc.qase.state.PlayerMove */
+/*-------------------------------------------------------------------*/
+	protected void setBotMovement(Vector3f moveDir, Vector3f fireDir, int walkState)
+	{
+		float vel = 0f; // assume stopped
+
+		if(walkState == 0 || walkState > 2)
+			vel = (float)walkState;
+		else if(proxy.getWorld().getPlayer().isUnderWater()) // in water
+			vel = (walkState == 1 ? 110f : 300f);
+		else // moving, on land
+			vel = (walkState == 1 ? 200f : 300f);
+
+		setBotMovement(moveDir, fireDir, vel);
 	}
 
 /*-------------------------------------------------------------------*/

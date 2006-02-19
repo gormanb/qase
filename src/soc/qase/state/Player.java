@@ -334,12 +334,63 @@ public class Player
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Check whether agent is currently stopped.
+ *	@return true if stopped, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isStopped()
+	{
+		return getPlayerMove().getWalkState() == PlayerMove.WALK_STOPPED;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether agent is currently walking.
+ *	@return true if walking, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isWalking()
+	{
+		return getPlayerMove().getWalkState() == PlayerMove.WALK_NORMAL;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether agent is currently running.
+ *	@return true if running, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isRunning()
+	{
+		return getPlayerMove().getWalkState() == PlayerMove.WALK_RUN;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the agent's current standing state (jump, normal or ducked).
+ *	@return one of the STAND constants in PlayerMove */
+/*-------------------------------------------------------------------*/
+	public int getStandState()
+	{
+		if(isDucked())
+			return PlayerMove.STAND_DUCKED;
+		else if(isJumping())
+			return PlayerMove.STAND_JUMP;
+		else
+			return PlayerMove.STAND_NORMAL;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the agent's current walking state (stopped, normal or run).
+ *	@return one of the WALK constants in PlayerMove */
+/*-------------------------------------------------------------------*/
+	public int getWalkState()
+	{
+		return getPlayerMove().getWalkState();
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Check whether agent is currently in water.
  *	@return true if in water, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isInWater()
+	public boolean isUnderWater()
 	{
-		return getPlayerMove().checkFlags(PlayerMove.FLAG_TIME_WATER);
+		// return getPlayerMove().checkFlags(PlayerMove.FLAG_TIME_WATER);
+		return playerView.checkRender(PlayerView.RDF_UNDERWATER);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -355,8 +406,8 @@ public class Player
 		if(player == null)
 			return;
 
-		if(playerMove == null) playerMove = player.playerMove; else playerMove.merge(player.playerMove);
 		if(playerView == null) playerView = player.playerView; else playerView.merge(player.playerView);
+		if(playerMove == null) playerMove = player.playerMove; else playerMove.merge(player.playerMove, isUnderWater());
 		if(playerGun == null) playerGun = player.playerGun;
 
 		if(playerStatus == null)
