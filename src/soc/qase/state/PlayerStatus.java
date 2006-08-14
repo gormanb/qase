@@ -28,14 +28,16 @@ public class PlayerStatus
 	LAYOUTS = 13, FRAGS = 14, FLASHES = 15, CHASE = 16, SPECTATOR = 17;
 
 /*-------------------------------------------------------------------*/
-/**	Default constructor. */
+/**	Default constructor. Keys are initialised to Integer.MIN_VALUE,
+ *	since certain values (eg Health) can legitimately take the usual
+ *	default value of -1 */
 /*-------------------------------------------------------------------*/
 	public PlayerStatus()
 	{
 		stats = new int[32];
 
 		for(int i = 0; i < stats.length; i++)
-			stats[i] = -1;
+			stats[i] = Integer.MIN_VALUE;
 
 		stats[SELECTED_ITEM] = 7;
 	}
@@ -84,7 +86,7 @@ public class PlayerStatus
 		if(key >= 0 && key < 32)
 			return stats[key];
 		else
-			return -1;
+			return Integer.MIN_VALUE;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -117,7 +119,7 @@ public class PlayerStatus
 
 		for(int i = 0; i < stats.length; i++)
 		{
-			if(stats[i] == -1)
+			if(stats[i] == Integer.MIN_VALUE)
 				stats[i] = playerStatus.getStatus(i);
 		}
 	}

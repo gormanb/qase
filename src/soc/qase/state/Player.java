@@ -367,11 +367,11 @@ public class Player
 	public int getStandState()
 	{
 		if(isDucked())
-			return PlayerMove.STAND_DUCKED;
+			return PlayerMove.POSTURE_DUCKED;
 		else if(isJumping())
-			return PlayerMove.STAND_JUMP;
+			return PlayerMove.POSTURE_JUMP;
 		else
-			return PlayerMove.STAND_NORMAL;
+			return PlayerMove.POSTURE_NORMAL;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -417,7 +417,7 @@ public class Player
 		}
 		else
 		{
-			playerGun.merge(player.playerGun, playerStatus.getStatus(PlayerStatus.AMMO) != -1 && playerStatus.getStatus(PlayerStatus.AMMO) < player.getPlayerStatus().getStatus(PlayerStatus.AMMO));
+			playerGun.merge(player.playerGun, playerStatus.getStatus(PlayerStatus.AMMO) != Integer.MIN_VALUE && playerStatus.getStatus(PlayerStatus.AMMO) < player.getPlayerStatus().getStatus(PlayerStatus.AMMO));
 			playerStatus.merge(player.getPlayerStatus());
 		}
 	}

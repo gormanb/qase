@@ -65,7 +65,6 @@ public class World
 	public World(boolean trackInv)
 	{
 		commonSetup();
-		inventory.setCount(7, 1);
 		trackInventory = trackInv;
 	}
 
@@ -79,7 +78,7 @@ public class World
 		deactivatedEntities = new boolean[1024];
 
 		players = new Player[17];
-		inventory = new Inventory();
+		inventory = new Inventory(config);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -193,6 +192,8 @@ public class World
 
 		if(trackInventory && isPlayerActive())
 			updateInventoryAmmo();
+		else if(trackInventory && !players[currentState].isAlive())
+			inventory.resetCount();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -606,14 +607,35 @@ public class World
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get entity collection information on opposing players.
- *	@return entity collection containing only player entities. */
+/**	Get entity information on opposing players.
+ *	@param onlyActive specifies whether inactive entities
+ *	should be returned
+ *	@return entity collection containing only opposing player
+ *	entities. The entity corresponding to the local player is
+ *	automatically removed. */
 /*-------------------------------------------------------------------*/
 	public synchronized Vector getOpponents(boolean onlyActive)
 	{
-		return getEntities("players", null, null, onlyActive);
+		Vector playerEnts = getEntities("players", null, null, onlyActive);
+
+		for(int i = 0; i < playerEnts.size(); i++)
+		{
+			if(((Entity)playerEnts.elementAt(i)).getNumber() == playerEntityNum + 1)
+			{
+				playerEnts.removeElementAt(i);
+				break;
+			}
+		}
+
+		return playerEnts;
 	}
 
+/*-------------------------------------------------------------------*/
+/**	Get entity information on opposing players.
+ *	@return entity collection containing only opposing player
+ *	entities. The entity corresponding to the local player is
+ *	automatically removed. */
+/*-------------------------------------------------------------------*/
 	public synchronized Vector getOpponents()
 	{
 		return getOpponents(true);

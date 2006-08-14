@@ -205,7 +205,7 @@ public abstract class NoClipBot extends ObserverBot
 					sendConsoleCommand("noclip");
 				}
 				else
-					setBotMovement(pos, null, (pos.length() > 50 ? 400 : 10));
+					setBotMovement(pos, null, (pos.length() > 50 ? 400 : 10), PlayerMove.POSTURE_NORMAL);
 			}
 		}
 		else if(isNoClip)

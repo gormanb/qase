@@ -31,7 +31,7 @@ public class PlayerMove
 	private Vector2f directionalVelocity = null;
 
 	public static final int WALK_STOPPED = 0, WALK_NORMAL = 1, WALK_RUN = 2;
-	public static final int STAND_DUCKED = -1, STAND_NORMAL = 0, STAND_JUMP = 1;
+	public static final int POSTURE_DUCKED = -1, POSTURE_NORMAL = 0, POSTURE_JUMP = 1;
 	public static final int MOVE_NORMAL = 0, MOVE_SPECTATOR = 1, MOVE_DEAD = 2, MOVE_GIB = 3, MOVE_FREEZE = 4;
 	public static final int FLAG_DUCKED = 1, FLAG_JUMP = 2, FLAG_GROUND = 4, FLAG_TIME_WATER_JUMP = 8, FLAG_TIME_LAND = 16, FLAG_TIME_TELEPORT = 32, FLAG_NO_PREDICTION = 64;
 

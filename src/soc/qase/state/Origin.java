@@ -119,6 +119,18 @@ public class Origin
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Compare two Origin objects for equality.
+ *	@param o the Origin object against which this Origin is to
+ *	be compared
+ *	@return true if the Origin objects denote the same spatial
+ *	location, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean equals(Origin o)
+	{
+		return o.x == x && o.y == y && o.z == z;
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Merge Origin properties from an existing Origin object into the
  *	current Origin object. Used when assimilating cumulative updates
  *	from the Quake 2 server into the gamestate.

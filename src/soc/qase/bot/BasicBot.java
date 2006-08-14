@@ -64,7 +64,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot()
 	{
-		user = new User("QASE_Bot", "female/athena", 65535, 1, 120, 2, "");
+		user = new User("QASE_Bot", "female/athena", 65535, 1, 90, User.HAND_RIGHT, "");
 		commonSetup(false, false);
 	}
 
@@ -76,7 +76,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, "");
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 90, User.HAND_RIGHT, "");
 		commonSetup(false, false);
 	}
 
@@ -89,7 +89,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, "");
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 90, User.HAND_RIGHT, "");
 		commonSetup(false, trackInv);
 	}
 
@@ -104,7 +104,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, boolean highThreadSafety, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, "");
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 90, User.HAND_RIGHT, "");
 		commonSetup(highThreadSafety, trackInv);
 	}
 
@@ -120,7 +120,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, String password, boolean highThreadSafety, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 120, 2, password);
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 90, User.HAND_RIGHT, password);
 		commonSetup(highThreadSafety, trackInv);
 	}
 
@@ -142,7 +142,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public BasicBot(String botName, String botSkin, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, boolean trackInv)
 	{
-		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), (recvRate < 0 ? 65535 : recvRate), (msgLevel < 0 ? 1 : msgLevel), (fov < 0 ? 120 : fov), (hand < 0 ? 0 : hand), (password == null ? "" : password));
+		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), (recvRate < 0 ? 65535 : recvRate), (msgLevel < 0 ? 1 : msgLevel), (fov < 0 ? 90 : fov), (hand < 0 ? User.HAND_RIGHT : hand), (password == null ? "" : password));
 		commonSetup(highThreadSafety, trackInv);
 	}
 
@@ -170,6 +170,17 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param w a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
 	public abstract void runAI(World w);
+
+/*-------------------------------------------------------------------*/
+/**	Returns the Player object associated with this bot, which can then
+ *	be further queried for information.
+ *	@return the Player object containing full details of the bot's
+ *	current state, or null if no such object exists */
+/*-------------------------------------------------------------------*/
+	protected Player getPlayer()
+	{
+		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer());
+	}
 
 /*-------------------------------------------------------------------*/
 /**	Check whether the agent is currently alive and active in the game.
@@ -300,7 +311,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param angleType the angle to return
  *	@see soc.qase.state.Angles */
 /*-------------------------------------------------------------------*/
-	protected float getAngle(int angleType)
+	public float getAngle(int angleType)
 	{
 		return angles.get(angleType);
 	}
@@ -336,9 +347,20 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the magnitude of the agent's velocity in the given direction
  *	@see soc.qase.state.Velocity */
 /*-------------------------------------------------------------------*/
-	protected int getVelocity(int velocityType)
+	public int getVelocity(int velocityType)
 	{
 		return velocity.get(velocityType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the current walk state of the bot. This will be one of WALK_STOPPED,
+ *	WALK_NORMAL or WALK_RUN, as specified in the PlayerMove class.
+ *	@return the agent's current walk state
+ *	@see soc.qase.state.PlayerMove */
+/*-------------------------------------------------------------------*/
+	public int getWalkState()
+	{
+		return getPlayer().getWalkState();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -371,7 +393,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return true if the given action is active, false otherwise
  *	@see soc.qase.state.Action */
 /*-------------------------------------------------------------------*/
-	protected boolean getAction(int actionType)
+	public boolean getAction(int actionType)
 	{
 		return action.get(actionType);
 	}
@@ -398,6 +420,37 @@ public abstract class BasicBot extends Thread implements Bot
 	protected void setAction(int actionType, boolean value)
 	{
 		action.set(actionType, value);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Set the agent's posture to POSTURE_DUCKED, POSTURE_STAND or
+ *	POSTURE_JUMP; these constants are found in the PlayerMove class.
+ *	@param postureState specifies the bot's posture (crouch/stand/jump)
+ *	@see soc.qase.state.PlayerMove */
+/*-------------------------------------------------------------------*/
+	protected void setPosture(int postureState)
+	{
+		velocity.setUp(postureState * 300);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Specify whether the bot should jump. A value of 'true' causes the
+ *	bot to jump, while 'false' returns it to a normal standing posture.
+ *	@param jump indicates whether or not the agent should jump */
+/*-------------------------------------------------------------------*/
+	protected void setJump(boolean jump)
+	{
+		velocity.setUp(jump ? 300 : 0);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Specify whether the bot should crouch. A value of 'true' causes the
+ *	bot to crouch, while 'false' returns it to a normal standing posture.
+ *	@param crouch indicates whether or not the agent should crouch */
+/*-------------------------------------------------------------------*/
+	protected void setCrouch(boolean crouch)
+	{
+		velocity.setUp(crouch ? -300 : 0);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -450,40 +503,47 @@ public abstract class BasicBot extends Thread implements Bot
 
 	private float[] botAngles = new float[2];
 	private Vector2f perp = new Vector2f(0, 0);
-	private Vector2f moveDir2f = new Vector2f(0, 0), fireDir2f = new Vector2f(0, 0);
+	private Vector2f moveDir2f = new Vector2f(0, 0), aimDir2f = new Vector2f(0, 0);
 
 /*-------------------------------------------------------------------*/
 /**	Convenience method to facilitate the separation of movement and
- *	firing, and allow both to be specified in global co-ordinates.
+ *	aiming, and allow both to be specified in global co-ordinates. Also
+ *	allows the programmer to specify the bot's 'posture' - that is, whether
+ *	it is standing, crouching or jumping. The postureState parameter should
+ *	be one of the POSTURE_CROUCH, POSTURE_NORMAL or POSTURE_JUMP constants
+ *	from the PlayerMove class.
  *	@param moveDir the direction in which to move
- *	@param fireDir the direction in which to aim
- *	@param vel the agent's total velocity */
+ *	@param aimDir the direction in which to aim
+ *	@param vel the agent's total velocity
+ *	@param postureState indicates the bot's posture (crouch/stand/jump)
+ *	@see soc.qase.state.PlayerMove */
 /*-------------------------------------------------------------------*/
-	protected void setBotMovement(Vector3f moveDir, Vector3f fireDir, float vel)
+	protected void setBotMovement(Vector3f moveDir, Vector3f aimDir, float vel, int postureState)
 	{
-		if(moveDir == null && fireDir == null)
+		if(moveDir == null && aimDir == null)
 			return;
 		else if(moveDir == null)
-			moveDir = new Vector3f(fireDir);
-		else if(fireDir == null)
-			fireDir = new Vector3f(moveDir);
+			moveDir = new Vector3f(aimDir);
+		else if(aimDir == null)
+			aimDir = new Vector3f(moveDir);
 
 		moveDir2f.set(moveDir.x, moveDir.y);
-		fireDir2f.set(fireDir.x, fireDir.y);
+		aimDir2f.set(aimDir.x, aimDir.y);
 
 		if(vel < 0)
 			vel = (int)moveDir2f.length();
 
 		moveDir2f.normalize();
-		fireDir2f.normalize();
+		aimDir2f.normalize();
 
 		moveDir2f.scale(vel);
-		perp.set(fireDir2f.y, -fireDir2f.x);
+		perp.set(aimDir2f.y, -aimDir2f.x);
 
-		velocity.setForward((int)Math.round(fireDir2f.x * moveDir2f.x + fireDir2f.y * moveDir2f.y));
+		velocity.setForward((int)Math.round(aimDir2f.x * moveDir2f.x + aimDir2f.y * moveDir2f.y));
 		velocity.setRight((int)Math.round(perp.x * moveDir2f.x + perp.y * moveDir2f.y));
+		setPosture(postureState);
 
-		botAngles = Utils.calcAngles(fireDir);
+		botAngles = Utils.calcAngles(aimDir);
 
 		angles.setYaw(botAngles[0]);
 		angles.setPitch(botAngles[1]);
@@ -491,22 +551,28 @@ public abstract class BasicBot extends Thread implements Bot
 
 /*-------------------------------------------------------------------*/
 /**	Convenience method to facilitate the separation of movement and
- *	firing, and allow both to be specified in global co-ordinates.
+ *	aiming, and allow both to be specified in global co-ordinates. Also
+ *	allows the programmer to specify the bot's 'posture' - that is, whether
+ *	it is standing, crouching or jumping. The postureState parameter should
+ *	be one of the POSTURE_CROUCH, POSTURE_NORMAL or POSTURE_JUMP constants
+ *	from the PlayerMove class.<br>
+ *	<br>
  *	Instead of providing an explicit velocity as above, the programmer
- *	specifies the current walk state (stop, walk, run) using the
- *	constants defined in the PlayerMove class. The method computes the
- *	correct velocity based on whether the agent is on land or submerged,
+ *	specifies the current walk state (WALK_STOPPED, WALK_NORMAL, WALK_RUN)
+ *	using the constants defined in the PlayerMove class. The method computes
+ *	the correct velocity based on whether the agent is on land or submerged,
  *	and then passes the call to setBotMovement(Vector3f, Vector3f, float).
  *	To account for the possibility of the programmer passing
  *	an explicit velocity as an int rather than float, the call will be
  *	passed directly to the above method if walkState exceeds the range
  *	of the constant values (i.e. 0, 1, 2).
  *	@param moveDir the direction in which to move
- *	@param fireDir the direction in which to aim
+ *	@param aimDir the direction in which to aim
  *	@param walkState the discrete movement speed to use
+ *	@param postureState indicates the bot's posture (crouch/stand/jump)
  *	@see soc.qase.state.PlayerMove */
 /*-------------------------------------------------------------------*/
-	protected void setBotMovement(Vector3f moveDir, Vector3f fireDir, int walkState)
+	protected void setBotMovement(Vector3f moveDir, Vector3f aimDir, int walkState, int postureState)
 	{
 		float vel = 0f; // assume stopped
 
@@ -517,7 +583,7 @@ public abstract class BasicBot extends Thread implements Bot
 		else // moving, on land
 			vel = (walkState == 1 ? 200f : 300f);
 
-		setBotMovement(moveDir, fireDir, vel);
+		setBotMovement(moveDir, aimDir, vel, postureState);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -539,7 +605,7 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether the agent is using a global or local co-ordinate system.
  *	@return true if the agent is using global co-ordinates, false otherwise */
 /*-------------------------------------------------------------------*/
-	protected boolean getUseGlobalAngles()
+	public boolean getUseGlobalAngles()
 	{
 		return globalAngles;
 	}
@@ -718,7 +784,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the closest Waypoint at which a matching item exists
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Origin currentPos, int itemInventoryIndex)
+	protected Waypoint findClosestItem(Origin currentPos, int itemInventoryIndex)
 	{
 		if(wpMap == null)
 			return null;
@@ -737,7 +803,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the closest Waypoint at which a matching item exists
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Vector3f currentPos, int itemInventoryIndex)
+	protected Waypoint findClosestItem(Vector3f currentPos, int itemInventoryIndex)
 	{
 		if(wpMap == null)
 			return null;
@@ -757,7 +823,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the closest Waypoint at which a matching item exists
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Origin currentPos, String cat, String type, String subType)
+	protected Waypoint findClosestItem(Origin currentPos, String cat, String type, String subType)
 	{
 		if(wpMap == null)
 			return null;
@@ -777,7 +843,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the closest Waypoint at which a matching item exists
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Vector3f currentPos, String cat, String type, String subType)
+	protected Waypoint findClosestItem(Vector3f currentPos, String cat, String type, String subType)
 	{
 		if(wpMap == null)
 			return null;
@@ -794,7 +860,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path between the
  *	two Waypoints closest to the start and end positions */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPath(Origin from, Origin to)
+	protected Waypoint[] findShortestPath(Origin from, Origin to)
 	{
 		if(wpMap == null)
 			return null;
@@ -811,7 +877,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path between the
  *	two Waypoints closest to the start and end positions */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPath(Vector3f from, Vector3f to)
+	protected Waypoint[] findShortestPath(Vector3f from, Vector3f to)
 	{
 		if(wpMap == null)
 			return null;
@@ -831,7 +897,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Origin currentPos, int itemInventoryIndex)
+	protected Waypoint[] findShortestPathToItem(Origin currentPos, int itemInventoryIndex)
 	{
 		if(wpMap == null)
 			return null;
@@ -851,7 +917,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Vector3f currentPos, int itemInventoryIndex)
+	protected Waypoint[] findShortestPathToItem(Vector3f currentPos, int itemInventoryIndex)
 	{
 		if(wpMap == null)
 			return null;
@@ -872,7 +938,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Origin currentPos, String cat, String type, String subType)
+	protected Waypoint[] findShortestPathToItem(Origin currentPos, String cat, String type, String subType)
 	{
 		if(wpMap == null)
 			return null;
@@ -893,7 +959,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Vector3f currentPos, String cat, String type, String subType)
+	protected Waypoint[] findShortestPathToItem(Vector3f currentPos, String cat, String type, String subType)
 	{
 		if(wpMap == null)
 			return null;

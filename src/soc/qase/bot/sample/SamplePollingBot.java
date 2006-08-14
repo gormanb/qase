@@ -173,7 +173,7 @@ public final class SamplePollingBot extends PollingBot
 			entDir.sub(entPos, pos);
 			entDir.normalize();
 
-			setBotMovement(entDir, null, 200);
+			setBotMovement(entDir, null, 200, PlayerMove.POSTURE_NORMAL);
 		}
 	}
 }

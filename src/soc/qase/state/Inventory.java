@@ -6,6 +6,7 @@
 
 package soc.qase.state;
 
+import java.util.Arrays;
 import soc.qase.state.*;
 import soc.qase.info.*;
 import soc.qase.com.message.*;
@@ -35,11 +36,24 @@ public class Inventory
 	RED_KEY = 38, COMMANDERS_HEAD = 39, AIRSTRIKE_MARKER = 40, HEALTH = 41;
 
 /*-------------------------------------------------------------------*/
-/**	Constructor. */
+/**	Default constructor. */
 /*-------------------------------------------------------------------*/
 	public Inventory()
 	{
 		inventoryCount = new int[256];
+		setCount(7, 1);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Constructor. Accepts a Config object for use in later string-based
+ *	item searches.
+ *	@param con the Config item to be used */
+/*-------------------------------------------------------------------*/
+	public Inventory(Config con)
+	{
+		inventoryCount = new int[256];
+		setCount(7, 1);
+		config = con;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -61,6 +75,16 @@ public class Inventory
 		if(itemIndex < 0) return;
 		if(itemIndex > 255) return;
 		inventoryCount[itemIndex] = count;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Reset the inventory counts to initial values. Typically used when
+ *	a player dies. */
+/*-------------------------------------------------------------------*/
+	public void resetCount()
+	{
+		Arrays.fill(inventoryCount, 0);
+		setCount(7, 1);
 	}
 
 /*-------------------------------------------------------------------*/

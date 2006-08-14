@@ -179,7 +179,25 @@ public class PlayerGun
 	{
 		return index;
 	}
-	
+
+/*-------------------------------------------------------------------*/
+/**	Get inventory index of the current gun.
+ *	@return current gun inventory index. */
+/*-------------------------------------------------------------------*/
+	public int getInventoryIndex()
+	{
+		return getGunInventoryIndex(index);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get inventory index of the current gun's associated ammo.
+ *	@return inventory index of the ammo associated with the current gun. */
+/*-------------------------------------------------------------------*/
+	public int getAmmoInventoryIndex()
+	{
+		return getAmmoInventoryIndexByGun(getInventoryIndex());
+	}
+
 /*-------------------------------------------------------------------*/
 /**	Set player gun index.
  *	@param index player gun index. */

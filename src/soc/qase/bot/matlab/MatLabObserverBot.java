@@ -254,14 +254,44 @@ public abstract class MatLabObserverBot extends ObserverBot implements MatLabBot
 
 /*-------------------------------------------------------------------*/
 /**	Convenience method to facilitate the separation of movement and
- *	firing, and allow both to be specified in global co-ordinates.
+ *	firing, and allow both to be specified in global co-ordinates. Also allows the
+ *	programmer to specify the bot's 'posture' - that is, whether it is
+ *	standing, crouching or jumping. The postureState parameter should be one
+ *	of the POSTURE_CROUCH, POSTURE_NORMAL or POSTURE_JUMP constants from the
+ *	PlayerMove class.
  *	@param moveDir the direction in which to move
  *	@param fireDir the direction in which to aim
- *	@param vel the agent's total velocity */
+ *	@param vel the agent's total velocity
+ *	@param postureState the bot's current posture, as defined in PlayerMove constants
+ *	@see soc.qase.state.PlayerMove */
 /*-------------------------------------------------------------------*/
-	public void setBotMovement(Vector3f moveDir, Vector3f fireDir, int vel)
+	public void setBotMovement(Vector3f moveDir, Vector3f fireDir, float vel, int postureState)
 	{
-		super.setBotMovement(moveDir, fireDir, vel);
+		super.setBotMovement(moveDir, fireDir, vel, postureState);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience method to facilitate the separation of movement and
+ *	firing, and allow both to be specified in global co-ordinates.
+ *	Instead of providing an explicit velocity as above, the programmer
+ *	specifies the current walk state (WALK_STOPPED, WALK_NORMAL, WALK_RUN)
+ *	using the constants defined in the PlayerMove class. To account for the
+ *	possibility of the programmer passing an explicit velocity as an int
+ *	rather than float, the call will be passed directly to the above method
+ *	if walkState exceeds the range of the constant values (i.e. 0, 1, 2).
+ *	This method also allows the programmer to specify the bot's 'posture' -
+ *	that is, whether it is standing, crouching or jumping. The postureState
+ *	parameter should be one of the POSTURE_CROUCH, POSTURE_NORMAL or POSTURE_JUMP
+ *	constants from the PlayerMove class.
+ *	@param moveDir the direction in which to move
+ *	@param fireDir the direction in which to aim
+ *	@param walkState the agent's walk state, as defined in PlayerMove constants
+ *	@param postureState the agent's current posture, as defined in PlayerMove constants
+ *	@see soc.qase.state.PlayerMove */
+/*-------------------------------------------------------------------*/
+	public void setBotMovement(Vector3f moveDir, Vector3f fireDir, int walkState, int postureState)
+	{
+		super.setBotMovement(moveDir, fireDir, walkState, postureState);
 	}
 
 /*-------------------------------------------------------------------*/

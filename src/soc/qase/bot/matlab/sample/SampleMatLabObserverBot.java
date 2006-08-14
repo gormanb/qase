@@ -131,6 +131,6 @@ public final class SampleMatLabObserverBot extends MatLabObserverBot
 /*-------------------------------------------------------------------*/
 	protected void postMatLab(Object[] mlResults)	// apply the results which MatLab provided
 	{
-		setBotMovement(new Vector3f((float[])mlResults[0]), null, 200);
+		setBotMovement(new Vector3f((float[])mlResults[0]), null, 200, PlayerMove.POSTURE_NORMAL);
 	}
 }
