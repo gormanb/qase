@@ -1,8 +1,7 @@
 
-function [] = BotManagerTemplate(botTime, recordFile)
+function [] = BotManagerTemplate(botTime, recordFile) % botTime specifies the bot's lifetime in seconds (-1 for infinite)
 
     prepQASE;   % import the QASE library
-    botTime = botTime * 10; % botTime specifies the bot's lifetime in seconds (-1 for infinite)
 
     % Allocate a cell array to contain MatLab's results. A cell array
     % is used by default because it allows any type of item to be stored and
@@ -23,8 +22,10 @@ function [] = BotManagerTemplate(botTime, recordFile)
         matLabBot = SampleMatLabObserverBot('MatLabObserver','female/athena');
         matLabBot.connect('127.0.0.1',-1,recordFile);
 
+        tic;
+
         % loop for the specified amount of time
-        while(botTime >= 0)
+        while(toc < botTime)
             if(matLabBot.waitingForMatLab == 1)
                 mlParams = matLabBot.getMatLabParams;
 
@@ -34,7 +35,6 @@ function [] = BotManagerTemplate(botTime, recordFile)
                 matLabBot.setMatLabResults(mlResults);
 
                 matLabBot.releaseFromMatLab;
-                botTime = botTime - 1;
             end
 
             pause(0.01);

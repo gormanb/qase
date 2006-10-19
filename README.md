@@ -12,6 +12,35 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.2.0 (19-10-06)
+-
+**Notes:**
+
+A release which primarily addresses a recently-discovered bug,
+and which also implements a transparent (but conceptually important)
+architectural change in the API.
+
+**Changes:**
+
+* Fixed a bug which caused MatLabGeneralPollingBot
+  to freeze. Thanks to Du Xiaoqin for spotting it! This involved
+  updates to both QASE and the MatLab integration scripts, bringing
+  them in line with changes to the API.
+
+* Moved all mutator and accessor methods from MatLabBots
+  to MatLabGeneralBots, since allowing direct access to the
+  gamestate from within Hybrid agents broke paradigm.
+
+* Removed some of the MatLabGeneralPollingBot constructors,
+  since they were redundant for this bot category.
+
+* Added a basic test map in the QASE API archive, which
+  provides a useful testbed while learning how to use the API and
+  works well with the sample bots included.
+
+* Updated some sections of the Javadoc, as well as the
+  User's Guide.
+
 r2.1.9 (14/08/06)
 -
 **Notes:**
