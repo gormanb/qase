@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerMonsterMuzzleFlash.java
+// Name:			ServerNop.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------

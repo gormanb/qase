@@ -1,3 +1,7 @@
+//--------------------------------------------------
+// Name:			GANNManager.java
+// Author:			Bernard.Gorman@computing.dcu.ie
+//--------------------------------------------------
 
 package soc.qase.ai.gann;
 

@@ -13,7 +13,7 @@ import soc.qase.com.message.*;
 /*-------------------------------------------------------------------*/
 public class Config
 {
-	private int configSize = 1569;
+	private int configSize = 2048;
 	private String[] configStrings = null;
 
 	public static final String[] items = { 

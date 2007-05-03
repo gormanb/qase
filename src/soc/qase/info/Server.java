@@ -20,6 +20,11 @@ public class Server
 	private String gameDirectory = null;
 	private String mapName = null;
 
+	public static final int CTF_RED = 0;
+	public static final int CTF_BLUE = 1;
+	public static final int CTF_RANDOM = 2;
+	public static final String[] CTF_STRINGS = {"RED", "BLUE"};
+
 /*-------------------------------------------------------------------*/
 /**	Constructor.
  *	@param data server data source, consisting of version, level key,
@@ -78,6 +83,15 @@ public class Server
 	public String getGameDirectory() 
 	{
 		return gameDirectory;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determine whether the current server is running CTF.
+ *	@return true if the server is running CTF, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isCTFServer() 
+	{
+		return gameDirectory.equals("ctf");
 	}
 
 /*-------------------------------------------------------------------*/

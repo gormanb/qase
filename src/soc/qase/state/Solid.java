@@ -20,6 +20,15 @@ public class Solid
 	{	}
 	
 /*-------------------------------------------------------------------*/
+/**	Parameterised constructor.
+ *	@param solid indicates the solidity of an object. */
+/*-------------------------------------------------------------------*/
+	public Solid(int solid)
+	{
+		this.solid = solid;
+	}
+	
+/*-------------------------------------------------------------------*/
 /**	Set solid value.
  *	@param solid solid value. */
 /*-------------------------------------------------------------------*/

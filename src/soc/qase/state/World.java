@@ -182,7 +182,7 @@ public class World
 		players[currentState] = player;
 		players[currentState].getPlayerStatus().setConfig(config);
 		players[currentState].merge(players[mergeState]);
-		players[mergeState] = players[currentState];
+//		players[mergeState] = players[currentState];
 
 		for(int i = 0; i < players.length; i++)
 		{
@@ -248,6 +248,7 @@ public class World
 			if(entity.isRespawned())
 				respawnTimes[entity.getNumber()] = 0;
 
+			entity.setConfig(config);
 			entities[currentState][entity.getNumber()] = entity;
 			entities[currentState][entity.getNumber()].merge(entities[mergeState][entity.getNumber()]);
 		}

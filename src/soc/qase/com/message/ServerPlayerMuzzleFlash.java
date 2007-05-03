@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerPlayerInfo.java
+// Name:			ServerPlayerMuzzleFlash.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------

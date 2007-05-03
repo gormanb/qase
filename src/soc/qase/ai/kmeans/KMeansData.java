@@ -1,5 +1,5 @@
 //--------------------------------------------------
-// Name:			KMeansCalc.java
+// Name:			KMeansData.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 //--------------------------------------------------
 

@@ -202,6 +202,17 @@ public class Vector3f implements Serializable
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Add this vector to the argument and store the result locally.
+ *	@param o the Origin to be added to the current vector */
+/*-------------------------------------------------------------------*/
+	public final void add(Origin o)
+	{
+		x += o.getX();
+		y += o.getY();
+		z += o.getZ();
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Subtract the second vector from the first, and store the result in
  *	the current vector.
  *	@param v1 the vector to subtract from
@@ -224,6 +235,18 @@ public class Vector3f implements Serializable
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Subtract the argument Origin from the current vector, and store
+ *	the result locally.
+ *	@param o the Origin to subtract */
+/*-------------------------------------------------------------------*/
+	public final void sub(Origin o)
+	{
+		x -= o.getX();
+		y -= o.getY();
+		z -= o.getZ();
 	}
 
 /*-------------------------------------------------------------------*/

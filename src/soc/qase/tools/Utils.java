@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerReconnect.java
+// Name:			Utils.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------

@@ -111,15 +111,18 @@ public class ServerPacketEntities extends Message
 	{
 		int result = 0;
 
-		if((bitmask & 0x00000100) != 0) {
+		if((bitmask & 0x00000100) != 0)
+		{
 			result = Utils.shortValue(data, offset);
 			offset = offset + 2;
 		}
-		else {
+		else
+		{
 			result = (int)data[offset];
 			if(result < 0) result = result + 256;
 			offset = offset + 1;
 		}
+
 		return result;
 	}
 
@@ -127,275 +130,309 @@ public class ServerPacketEntities extends Message
 /*-------------------------------------------------------------------*/
 	private Model processModel()
 	{
-		Model result = null;
 		int value = 0;
 
-		result = new Model();
+		int mSkin = -1;
+		int mFrame = -1;
+
+		int mIndex = -1;
+		int mIndexVal = -1;
+
+		int prevOff = offset;
 
 		// process model index
-		if((bitmask & 0x00000800) != 0) {
+		if((bitmask & 0x00000800) != 0)
+		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			result.setIndex(0, value);
+			mIndex = 0;
+			mIndexVal = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(0, 0);
-		if((bitmask & 0x00100000) != 0) {	
+		if((bitmask & 0x00100000) != 0)
+		{	
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			result.setIndex(1, value);
+			mIndex = 1;
+			mIndexVal = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(1, 0);
-		if((bitmask & 0x00200000) != 0) {
+		if((bitmask & 0x00200000) != 0)
+		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			result.setIndex(2, value);
+			mIndex = 2;
+			mIndexVal = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(2, 0);
-		if((bitmask & 0x00400000) != 0) {
+		if((bitmask & 0x00400000) != 0)
+		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			result.setIndex(3, value);
+			mIndex = 3;
+			mIndexVal = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(3, 0);
 
 		// process model frame
-		result.setFrame(0);
-		if((bitmask & 0x00000010) != 0) {
+		if((bitmask & 0x00000010) != 0)
+		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			result.setFrame(value);
+			mFrame = value;
 			offset = offset + 1;
 		}
-		if((bitmask & 0x00020000) != 0) {
-			result.setFrame((int)(Utils.shortValue(data, offset)));
+
+		if((bitmask & 0x00020000) != 0)
+		{
+			mFrame = (int)(Utils.shortValue(data, offset));
 			offset = offset + 2;
 		}
 
 		// process model skin
-		if((bitmask & 0x00010000) != 0) {
-			if((bitmask & 0x02000000) != 0) {
-				result.setSkin((int)(Utils.intValue(data, offset)));
+		if((bitmask & 0x00010000) != 0)
+		{
+			if((bitmask & 0x02000000) != 0)
+			{
+				mSkin = (int)(Utils.intValue(data, offset));
 				offset = offset + 4;
 			}
-			else {
+			else
+			{
 				value = (int)data[offset];
 				if(value < 0) value = value + 256;
-				result.setSkin(value);
+				mSkin = value;
 				offset = offset + 1;
 			}
 		}
-		else if((bitmask & 0x02000000) != 0) {
-			result.setSkin((int)(Utils.shortValue(data, offset)));
+		else if((bitmask & 0x02000000) != 0)
+		{
+			mSkin = (int)(Utils.shortValue(data, offset));
 			offset = offset + 2;
 		}
-		return result;
+
+		return (offset > prevOff ? new Model(mIndex, mIndexVal, mFrame, mSkin) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Effects processEffects()
 	{
-		Effects result = null;
 		int effect = 0;
 
-		result = new Effects();
+		int nEffect = -1;
+		int rEffect = 0;
+
+		int prevOff = offset;
 		
 		// process entity effects
-		if((bitmask & 0x00004000) != 0) {
-			if((bitmask & 0x00080000) != 0) {
-				result.setEffects((int)(Utils.intValue(data, offset)));
+		if((bitmask & 0x00004000) != 0)
+		{
+			if((bitmask & 0x00080000) != 0)
+			{
+				nEffect = (int)(Utils.intValue(data, offset));
 				offset = offset + 4;
 			}
-			else {
+			else
+			{
 				effect = (int)data[offset];
 				if(effect < 0) effect = effect + 256;
-				result.setEffects(effect);
+				nEffect = effect;
 				offset = offset + 1;
 			}
 		}
-		else if((bitmask & 0x00080000) != 0) {
-			result.setEffects((int)(Utils.shortValue(data, offset)));
+		else if((bitmask & 0x00080000) != 0)
+		{
+			nEffect = (int)(Utils.shortValue(data, offset));
 			offset = offset + 2;
 		}		
 
 		// process render effects
-		if((bitmask & 0x00001000) != 0) {
-			if((bitmask & 0x00040000) != 0) {
-				result.setRenderEffects((int)(Utils.intValue(data, offset)));
+		if((bitmask & 0x00001000) != 0)
+		{
+			if((bitmask & 0x00040000) != 0)
+			{
+				rEffect = (int)(Utils.intValue(data, offset));
 				offset = offset + 4;
 			}
-			else {
+			else
+			{
 				effect = (int)data[offset];
 				if(effect < 0) effect = effect + 256;
-				result.setRenderEffects(effect);
+				rEffect = effect;
 				offset = offset + 1;
 			}
 		}
-		else if((bitmask & 0x00040000) != 0) {
-			result.setRenderEffects((int)(Utils.shortValue(data, offset)));
+		else if((bitmask & 0x00040000) != 0)
+		{
+			rEffect = (int)(Utils.shortValue(data, offset));
 			offset = offset + 2;
 		}
-		else result.setRenderEffects(0);
-		return result;
+
+		return (offset > prevOff ? new Effects(nEffect, rEffect) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Origin processOrigin()
 	{
-		Origin result = null;
-		int x = 0;
-		int y = 0;
-		int z = 0;
+		int x = -1;
+		int y = -1;
+		int z = -1;
 
-		result = new Origin();
+		int prevOff = offset;
 
 		// process origin 
-		if((bitmask & 0x00000001) != 0) {
+		if((bitmask & 0x00000001) != 0)
+		{
 			x = (int)(Utils.shortValue(data, offset));
 			x = (int)(0.125 * x);
-			result.setX(x);
 			offset = offset + 2;
 		}
 		//else result.setX(0);
-		if((bitmask & 0x00000002) != 0) {
+		if((bitmask & 0x00000002) != 0)
+		{
 			y = (int)(Utils.shortValue(data, offset));
 			y = (int)(0.125 * y);
-			result.setY(y);
 			offset = offset + 2;
 		}
 		//else result.setY(0);
-		if((bitmask & 0x00000200) != 0) {
+		if((bitmask & 0x00000200) != 0)
+		{
 			z = (int)(Utils.shortValue(data, offset));
 			z = (int)(0.125 * z);
-			result.setZ(z);
 			offset = offset + 2;
 		}
 		//else result.setZ(0);
-		return result;
+
+		return (offset > prevOff ? new Origin(x, y, z) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Angles processAngles()
 	{
-		Angles result = null;
 		int angle = 0;
 
-		result = new Angles();
+		int yaw = -1;
+		int roll = -1;
+		int pitch = -1;
+
+		int prevOff = offset;
 
 		// process angles 
-		if((bitmask & 0x00000004) != 0) {
+		if((bitmask & 0x00000004) != 0)
+		{
 			angle = data[offset];
 			if(angle < 0) angle = angle + 256;
-			result.setPitch((int)(PI / 128.0 * (float)angle));
+			pitch = (int)(PI / 128.0 * (float)angle);
 			offset = offset + 1;
 		}
 //		else result.setPitch(0);
-		if((bitmask & 0x00000400) != 0) {
+		if((bitmask & 0x00000400) != 0)
+		{
 			angle = data[offset];
 			if(angle < 0) angle = angle + 256;
-			result.setYaw((int)(PI / 128.0 * (float)angle));
+			yaw = (int)(PI / 128.0 * (float)angle);
 			offset = offset + 1;
 		}
 //		else result.setYaw(0);
-		if((bitmask & 0x00000008) != 0) {
+		if((bitmask & 0x00000008) != 0)
+		{
 			angle = data[offset];
 			if(angle < 0) angle = angle + 256;
-			result.setRoll((int)(PI / 128.0 * (float)angle));
+			roll = (int)(PI / 128.0 * (float)angle);
 			offset = offset + 1;
 		}
 //		else result.setRoll(0);
-		return result;
+		return (offset > prevOff ? new Angles(pitch, yaw, roll) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Origin processOldOrigin()
 	{
-		Origin result = null;
 		int x = 0;
 		int y = 0;
 		int z = 0;
 
-		result = new Origin();
+		int prevOff = offset;
 
 		// process old origin 
-		if((bitmask & 0x01000000) != 0) {
+		if((bitmask & 0x01000000) != 0)
+		{
 			x = (int)(Utils.shortValue(data, offset));
 			x = (int)(0.125 * x);
-			result.setX(x);
+
 			offset = offset + 2;
 			y = (int)(Utils.shortValue(data, offset));
 			y = (int)(0.125 * y);
-			result.setY(y);
+
 			offset = offset + 2;
 			z = (int)(Utils.shortValue(data, offset));
 			z = (int)(0.125 * z);
-			result.setZ(z);
+
 			offset = offset + 2;
 		}
-		return result;
+
+		return (offset > prevOff ? new Origin(x, y, z) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Sound processSound()
 	{
-		Sound result = null;
-		int sound = 0;
-
-		result = new Sound();
+		int sound = -1;
+		int prevOff = offset;
 
 		// process sound 
-		if((bitmask & 0x04000000) != 0) {
+		if((bitmask & 0x04000000) != 0)
+		{
 			sound = (int)data[offset];
 			if(sound < 0) sound = sound + 256;
-			result.setLoop(sound);
 			offset = offset + 1;
 		}
-		return result;
+
+		return (offset > prevOff ? new Sound(sound) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Events processEvents()
 	{
-		Events result = null;
 		int event = 0;
-
-		result = new Events();
+		int prevOff = offset;
 
 		// process events 
-		if((bitmask & 0x00000020) != 0) {
+		if((bitmask & 0x00000020) != 0)
+		{
 			event = (int)data[offset];
 			if(event < 0) event = event + 256;
-			result.setEvents(event);
 			offset = offset + 1;
 		}
-		return result;
+
+		return (offset > prevOff ? new Events(event) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Solid processSolid()
 	{
-		Solid result = null;
-
-		result = new Solid();
+		int solid = -1;
+		int prevOff = offset;
 
 		// process solid 
-		if((bitmask & 0x08000000) != 0) {
-			result.setSolid((int)(Utils.shortValue(data, offset)));
+		if((bitmask & 0x08000000) != 0)
+		{
+			solid = (int)(Utils.shortValue(data, offset));
 			offset = offset + 2;
 		}
-		return result;
+
+		return (offset > prevOff ? new Solid(solid) : null);
 	}
-
 }
-
 

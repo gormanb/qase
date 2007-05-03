@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			Effects.java
+// Name:			Entity.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------
@@ -103,9 +103,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public void confirmFamily()
 	{
-		if(modelString != null)
-			return;
-
 		StringTokenizer st = null;
 		String currentString = null;
 		int players = 0;
@@ -136,7 +133,7 @@ public class Entity
 			}
 			else
 			{
-				players = (new Integer(config.getConfigString(30))).intValue();
+				players = Integer.parseInt(config.getConfigString(30));
 
 				if(entityNumber < players)
 				{
@@ -144,7 +141,7 @@ public class Entity
 					category = CAT_PLAYERS;;
 					name = st.nextToken();
 
-					if(st.countTokens() > 1)
+					if(st.hasMoreTokens())
 						skin = st.nextToken();
 				}
 			}
@@ -168,34 +165,55 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	private String getModelString()
 	{
-		if(modelString != null && modelString.length() > 0)
-			return modelString;
-
-		String result = null;
-
 		int index = 0;
 		int players = 0;
 
-		try
-		{
-			index = getModel().getIndex(0);
-			if(index == 0) index = getModel().getIndex(1);
-			if(index == 0) index = getModel().getIndex(2);
-			if(index == 0) index = getModel().getIndex(3);
+		index = model.getIndex(0);
+		if(index == 0) index = model.getIndex(1);
+		if(index == 0) index = model.getIndex(2);
+		if(index == 0) index = model.getIndex(3);
 
-			players = (new Integer(config.getConfigString(30))).intValue();
+		players = Integer.parseInt(config.getConfigString(30));
 
-			if(entityNumber > players)
-				result = config.getConfigString(32 + index);
-			else
-				result = config.getConfigString(1312 + entityNumber - 1);
-		}
-		catch(Exception e)
-		{	}
+		if(entityNumber > players)
+			modelString = config.getConfigString(32 + index);
+		else
+			modelString = config.getConfigString(1312 + entityNumber - 1);
 
-		return result;
+		return modelString;
 	}
-	
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team number of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team number of the local agent; 0 = RED, 1 = BLUE */
+/*-------------------------------------------------------------------*/
+	public int getCTFTeamNumber()
+	{
+		if(!getCategory().equals("players")) return Integer.MIN_VALUE;
+
+		if(getSkin().indexOf("/ctf_r") > 0) return 0;
+		if(getSkin().indexOf("/ctf_b") > 0) return 1;
+
+		return Integer.MIN_VALUE;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team name of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team name of the local agent; either RED, BLUE or null
+ *	if the agent is not currently on a team. */
+/*-------------------------------------------------------------------*/
+	public String getCTFTeamString()
+	{
+		int ctfTeamIndex = getCTFTeamNumber();
+		
+		if(ctfTeamIndex >= 0)
+			return Server.CTF_STRINGS[ctfTeamIndex];
+		else
+			return null;
+	}
+
 /*-------------------------------------------------------------------*/
 /**	Get entity name. If entity category corresponds to 'player'
  *	this method will return the name of the entity.
@@ -336,7 +354,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Model getModel()
 	{
-		if(model == null) model = new Model();
 		return model;
 	}
 	
@@ -355,7 +372,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Effects getEffects()
 	{
-		if(effects == null) effects = new Effects();
 		return effects;
 	}
 	
@@ -374,7 +390,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Origin getOrigin()
 	{
-		if(origin == null) origin = new Origin();
 		return origin;
 	}
 	
@@ -393,7 +408,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Angles getAngles()
 	{
-		if(angles == null) angles = new Angles();
 		return angles;
 	}
 	
@@ -412,7 +426,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Origin getOldOrigin()
 	{
-		if(oldOrigin == null) oldOrigin = new Origin();
 		return oldOrigin;
 	}
 	
@@ -431,7 +444,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Sound getSound()
 	{
-		if(sound == null) sound = new Sound();
 		return sound;
 	}
 	
@@ -450,7 +462,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Events getEvents()
 	{
-		if(events == null) events = new Events();
 		return events;
 	}
 
@@ -461,7 +472,7 @@ public class Entity
 	public void setEvents(Events events)
 	{
 		this.events = events;
-		respawned = events.checkEvent(Events.ITEM_RESPAWN);
+		respawned = (events == null ? false : events.checkEvent(Events.ITEM_RESPAWN));
 	}
 
 /*-------------------------------------------------------------------*/
@@ -480,7 +491,6 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public Solid getSolid()
 	{
-		if(solid == null) solid = new Solid();
 		return solid;
 	}
 	
@@ -523,15 +533,22 @@ public class Entity
 			if(events == null) events = entity.events; else events.merge(entity.events);
 			if(solid == null) solid = entity.solid; else solid.merge(entity.solid);
 
+			modelString = getModelString();
 			entityNumber = entity.getNumber();
-			inventoryIndex = entity.getInventoryIndex();
 
-			if(category == null) category = entity.category;
-			if(modelString == null) modelString = entity.modelString;
-			if(type == null) type = entity.type;
-			if(subType == null) subType = entity.subType;
-			if(name == null) name = entity.name;
-			if(skin == null) skin = entity.skin;
+			name = entity.name;
+			skin = entity.skin;
+
+			type = entity.type;
+			subType = entity.subType;
+			category = entity.category;
+
+			if(modelString != null && category == CAT_PLAYERS && (name == null || skin == null || !modelString.equals(name + "\\" + skin)))
+			{
+				StringTokenizer st = new StringTokenizer(modelString, "\\");
+				name = st.nextToken();
+				skin = st.nextToken();
+			}
 		}
 	}
 

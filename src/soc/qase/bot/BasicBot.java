@@ -47,6 +47,9 @@ public abstract class BasicBot extends Thread implements Bot
 
 	private boolean connected = false;
 	private boolean threadSafe = false;
+	private boolean traceFromView = false;
+
+	protected boolean ctfTeamAssigned = false;
 
 	private boolean mapNotFound = false;
 	private static String q2HomeDir = null;
@@ -164,6 +167,60 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param port the port on which the game server is running */
 /*-------------------------------------------------------------------*/
 	public abstract boolean connect(String host, int port);
+
+/*-------------------------------------------------------------------*/
+/**	Connect to a CTF game server. To be implemented by derived classes.
+ *	@param host a String representation of the host machine's IP address
+ *	@param port the port on which the game server is running
+ *	@param ctfTeam the team to join; one of the CTF constants found in
+ *	soc.qase.info.Server */
+/*-------------------------------------------------------------------*/
+	public abstract boolean connect(String host, int port, int ctfTeam);
+
+/*-------------------------------------------------------------------*/
+/**	Switch the agent to a specified team during a CTF match (assuming in-game
+ *	team switching is enabled).
+ *	@param ctfTeam the team to join; one of the CTF constants found in
+ *	soc.qase.info.Server */
+/*-------------------------------------------------------------------*/
+	protected void setCTFTeam(int ctfTeam)
+	{
+		ctfTeamAssigned = true;
+		sendConsoleCommand("team " + Server.CTF_STRINGS[(Math.abs(ctfTeam) < 2 ? Math.abs(ctfTeam) : (int)Math.round(Math.random()))]);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team number of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team number of the local agent; 0 = RED, 1 = BLUE */
+/*-------------------------------------------------------------------*/
+	protected int getCTFTeamNumber()
+	{
+		return (proxy == null ? Integer.MIN_VALUE : proxy.getCTFTeamNumber());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team name of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team name of the local agent; either RED, BLUE or null
+ *	if the agent is not currently on a team. */
+/*-------------------------------------------------------------------*/
+	protected String getCTFTeamString()
+	{
+		return (proxy == null ? null : proxy.getCTFTeamString());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determined whether the given player Entity is on the same CTF team
+ *	as the local agent.
+ *	@param otherPlayer the Entity representing the player to be checked
+ *	@return true if otherPlayer is on the same CTF team as the local agent,
+ *	false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean isOnSameCTFTeam(Entity otherPlayer)
+	{
+		return (getCTFTeamNumber() >= 0 && getCTFTeamNumber() == otherPlayer.getCTFTeamNumber());
+	}
 
 /*-------------------------------------------------------------------*/
 /**	The core AI routine. To be implemented by derived classes.
@@ -974,7 +1031,61 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected BSPParser getBSPParser()
 	{
-		return bsp;
+		if(isBotAlive() && (bsp.isMapLoaded() || readMap()))
+			return bsp;
+		else
+			return null;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Indicate whether visibility-checking functions should simply start
+ *	from the actual location of the player entity, or from its point-of-view
+ *	(i.e. the "camera" position). Defaults to FALSE.
+ *	@param useVO if true, checks visibility of other points in the game
+ *	environment from the bot's POV; if false, from the bot's location in
+ *	the game world (i.e. the centre of the agent model) */
+/*-------------------------------------------------------------------*/
+	protected void useViewOffset(boolean useVO)
+	{
+		traceFromView = useVO;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether a particular entity is visible from the player's
+ *	current position.
+ *	@param e the entity whose visibility will be checked
+ *	@return true if visible, false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean isVisible(Entity e)
+	{
+		return (e != null && isVisible(e.getOrigin()));
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether a particular point in the environment is visible from
+ *	the player's current position.
+ *	@param o the point whose visibility will be checked
+ *	@return true if visible, false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean isVisible(Origin o)
+	{
+		return (o != null && isVisible(new Vector3f(o)));
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether a particular point in the environment is visible from
+ *	the player's current position.
+ *	@param v the point whose visibility will be checked
+ *	@return true if visible, false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean isVisible(Vector3f v)
+	{
+		if(v == null || proxy == null || (visWorld = proxy.getWorld()) == null) return false;
+
+		pos.set(visWorld.getPlayer().getPlayerMove().getOrigin());
+		if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
+
+		return bsp.isVisible(pos, v);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1002,10 +1113,10 @@ public abstract class BasicBot extends Thread implements Bot
 
 		if(nearEnemy != null)
 		{
-			tempOrigin = nearEnemy.getOrigin();
-			enemyPos.set(tempOrigin.getX(), tempOrigin.getY(), tempOrigin.getZ());
+			enemyPos.set(nearEnemy.getOrigin());
 			dir.sub(enemyPos, pos);
 
+			if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
 			return (withinFOV ? Utils.calcAngles(dir)[0] <= visWorld.getPlayer().getPlayerView().getFOV() / 2.0 && bsp.isVisible(pos, enemyPos) : bsp.isVisible(pos, enemyPos));
 		}
 		else
@@ -1075,17 +1186,17 @@ public abstract class BasicBot extends Thread implements Bot
 		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
 			return null;
 
-		Origin origin = proxy.getWorld().getPlayer().getPlayerMove().getOrigin();
-		Vector3f playerPos = new Vector3f(origin.getX(), origin.getY(), origin.getZ());
+		pos.set(proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
+		if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
 
 		bsp.setBrushType(brushType);
 
 		if(traceType == BSPParser.TRACE_LINE)
-			return bsp.getObstacleLocation(playerPos, dir, maxDist);
+			return bsp.getObstacleLocation(pos, dir, maxDist);
 		else if(traceType == BSPParser.TRACE_SPHERE)
-			return bsp.getObstacleLocation(playerPos, dir, sphereRadius, maxDist);
+			return bsp.getObstacleLocation(pos, dir, sphereRadius, maxDist);
 		else if(traceType == BSPParser.TRACE_BOX)
-			return bsp.getObstacleLocation(playerPos, dir, BOUNDING_MIN, BOUNDING_MAX, maxDist);
+			return bsp.getObstacleLocation(pos, dir, BOUNDING_MIN, BOUNDING_MAX, maxDist);
 		else
 			return null;
 	}
@@ -1127,17 +1238,17 @@ public abstract class BasicBot extends Thread implements Bot
 		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
 			return Float.NaN;
 
-		Origin origin = proxy.getWorld().getPlayer().getPlayerMove().getOrigin();
-		Vector3f playerPos = new Vector3f(origin.getX(), origin.getY(), origin.getZ());
+		pos.set(proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
+		if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
 
 		bsp.setBrushType(brushType);
 
 		if(traceType == BSPParser.TRACE_LINE)
-			return bsp.getObstacleDistance(playerPos, dir, maxDist);
+			return bsp.getObstacleDistance(pos, dir, maxDist);
 		else if(traceType == BSPParser.TRACE_SPHERE)
-			return bsp.getObstacleDistance(playerPos, dir, sphereRadius, maxDist);
+			return bsp.getObstacleDistance(pos, dir, sphereRadius, maxDist);
 		else if(traceType == BSPParser.TRACE_BOX)
-			return bsp.getObstacleDistance(playerPos, dir, BOUNDING_MIN, BOUNDING_MAX, maxDist);
+			return bsp.getObstacleDistance(pos, dir, BOUNDING_MIN, BOUNDING_MAX, maxDist);
 		else
 			return Float.NaN;
 	}

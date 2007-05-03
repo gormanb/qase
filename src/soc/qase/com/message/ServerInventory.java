@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerFrame.java
+// Name:			ServerInventory.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------

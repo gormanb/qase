@@ -106,10 +106,19 @@ public abstract class PollingBot extends BasicBot
 /*-------------------------------------------------------------------*/
 	public boolean connect(String host, int port)
 	{
-		if(!proxy.connect(host, (port <= 0 ? 27910 : port)))
-			return false;
+		return connect(host, port, Integer.MIN_VALUE, null);
+	}
 
-		return waitForConnection();
+/*-------------------------------------------------------------------*/
+/**	Connect to a CTF game server.
+ *	@param host a String representation of the host machine's IP address
+ *	@param port the port on which the game server is running
+ *	@param ctfTeam the team to join; one of the CTF constants found in
+ *	soc.qase.info.Server */
+/*-------------------------------------------------------------------*/
+	public boolean connect(String host, int port, int ctfTeam)
+	{
+		return connect(host, port, ctfTeam, null);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -122,16 +131,26 @@ public abstract class PollingBot extends BasicBot
 /*-------------------------------------------------------------------*/
 	public boolean connect(String host, int port, String recordDM2File)
 	{
+		return connect(host, port, Integer.MIN_VALUE, recordDM2File);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Connect the agent to a CTF game server, and start recording to a
+ *	DM2 file.
+ *	@param host a String representation of the server's IP address
+ *	@param port the port on which the game server is running
+ *	@param recordDM2File the filename under which to start recording
+ *	the game session
+ *	@param ctfTeam the team to join; one of the CTF constants found in
+ *	soc.qase.info.Server */
+/*-------------------------------------------------------------------*/
+	public boolean connect(String host, int port, int ctfTeam, String recordDM2File)
+	{
 		if(!proxy.connect(host, (port <= 0 ? 27910 : port), recordDM2File))
 			return false;
 
-		return waitForConnection();
-	}
-
-	private boolean waitForConnection()
-	{
-		while(!isBotAlive())
-			Thread.yield();
+		if(ctfTeam != Integer.MIN_VALUE)
+			setCTFTeam(Math.abs(ctfTeam) < 2 ? Math.abs(ctfTeam) : (int)Math.round(Math.random()));
 
 		setConnected(true);
 		this.start();
@@ -176,6 +195,9 @@ public abstract class PollingBot extends BasicBot
 					respawn();
 				else
 				{
+					if(!ctfTeamAssigned && proxy.isCTFServer())
+						setCTFTeam(Server.CTF_RANDOM);
+
 					if(getHighThreadSafety())
 					{
 						synchronized(world)

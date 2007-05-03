@@ -91,6 +91,18 @@ public class Effects
 	{	}
 	
 /*-------------------------------------------------------------------*/
+/**	Parameterised constructor.
+ *	@param effects OR'd integer value indicating the visual effects currently
+ *	in operation
+ *	@param renderEffects lighting effects and similar */
+/*-------------------------------------------------------------------*/
+	public Effects(int effects, int renderEffects)
+	{
+		this.effects = effects;
+		this.renderEffects = renderEffects;
+	}
+	
+/*-------------------------------------------------------------------*/
 /**	Set effects bitmask.
  *	@param effects effects bitmask. */
 /*-------------------------------------------------------------------*/

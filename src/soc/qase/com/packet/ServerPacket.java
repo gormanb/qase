@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerReconnect.java
+// Name:			ServerPacket.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author:			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------

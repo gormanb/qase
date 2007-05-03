@@ -27,6 +27,15 @@ public class Sound
 	{	}
 	
 /*-------------------------------------------------------------------*/
+/**	Parameterised constructor.
+ *	@param loop indicates whether the sound should play on a continual loop. */
+/*-------------------------------------------------------------------*/
+	public Sound(int loop)
+	{
+		this.loop = loop;
+	}
+	
+/*-------------------------------------------------------------------*/
 /**	Get sound index.
  *	@return sound index. */
 /*-------------------------------------------------------------------*/
@@ -202,7 +211,6 @@ public class Sound
 /*-------------------------------------------------------------------*/
 	public Origin getOrigin()
 	{
-		if(origin == null) origin = new Origin();
 		return origin;
 	}
 
@@ -228,9 +236,8 @@ public class Sound
 			if(timeOffset == -1) timeOffset = sound.getTimeOffset();
 			if(entityNumber == -1) entityNumber = sound.getEntityNumber();
 			if(soundChannel == -1) soundChannel = sound.getSoundChannel();
-			if(origin == null) origin = new Origin();
+			if(origin == null) origin = sound.origin; else origin.merge(sound.origin);
 			if(loop == -1) loop = sound.getLoop();
-			origin.merge(sound.getOrigin());
 		}
 	}
 

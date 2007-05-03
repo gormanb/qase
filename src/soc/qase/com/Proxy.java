@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Name:			ServerReconnect.java
+// Name:			Proxy.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 // Author			Martin.Fredriksson@bth.se
 //---------------------------------------------------------------------
@@ -53,6 +53,8 @@ public class Proxy extends ServerMessageHandler implements Runnable
 	// game information
 	private boolean inGame = false;
 	private DM2Recorder dm2Recorder = null;
+
+	private int currentCTFTeam = Integer.MIN_VALUE;
 
 	// connection information
 	private boolean reconnect = false;
@@ -176,6 +178,8 @@ public class Proxy extends ServerMessageHandler implements Runnable
 		catch(Exception e)
 		{	}
 
+		waitForSpawn();
+
 		return result;
 	}
 
@@ -184,13 +188,13 @@ public class Proxy extends ServerMessageHandler implements Runnable
  *	@param host hostname of server
  *	@param port portnumber of server; -1 for default (27920)
  *	@param recordDM2File the filename to which the game session should
- *	be recorded
+ *	be recorded, or null if none
  *	@return true if the connect call was successful, otherwise
  *	false. */
 /*-------------------------------------------------------------------*/
 	public synchronized boolean connect(String host, int port, String recordDM2File)
 	{
-		dm2Recorder.startRecording(recordDM2File);
+		if(recordDM2File != null) dm2Recorder.startRecording(recordDM2File);
 		return connect(host, port);
 	}
 
@@ -225,6 +229,37 @@ public class Proxy extends ServerMessageHandler implements Runnable
 			communicator.disconnect();
 			connected = false;
 		}
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Suspends the thread until such time as the agent is spawned into the
+ *	game environment. */
+/*-------------------------------------------------------------------*/
+	protected void waitForSpawn()
+	{
+		while(!(inGame() && getWorld().getPlayer().isAlive()))
+			Thread.yield();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team number of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team number of the local agent; 0 = RED, 1 = BLUE */
+/*-------------------------------------------------------------------*/
+	public int getCTFTeamNumber()
+	{
+		return currentCTFTeam;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team name of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team name of the local agent; either RED, BLUE or null
+ *	if the agent is not currently on a team. */
+/*-------------------------------------------------------------------*/
+	public String getCTFTeamString()
+	{
+		return (currentCTFTeam >= 0 ? Server.CTF_STRINGS[currentCTFTeam] : null);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -267,6 +302,15 @@ public class Proxy extends ServerMessageHandler implements Runnable
 	public boolean isRecording()
 	{
 		return dm2Recorder.isRecording();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determine whether the current server is running CTF.
+ *	@return true if the server is running CTF, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isCTFServer() 
+	{
+		return server != null && server.isCTFServer();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -556,6 +600,27 @@ public class Proxy extends ServerMessageHandler implements Runnable
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Processes the ServerPrint message by extracting and storing
+ *	the message data. Also checks to see whether the local agent has
+ *	switched teams in a CTF game.
+ *	@param message the ServerPrint message for processing
+ */
+/*-------------------------------------------------------------------*/
+	protected void processServerPrint(ServerPrint message)
+	{
+		super.processServerPrint(message);
+
+		for(int i = 0; i < 2; i++)
+		{
+			if(message.getPrintString().equals(user.getName() + " joined the " + Server.CTF_STRINGS[i] + " team."))
+			{
+				currentCTFTeam = i;
+				break;
+			}
+		}
+	}
+
+/*-------------------------------------------------------------------*/
 /**	The main loop of the Proxy thread. Controls server synchronisation,
  *	data processing, map changes, etc. */
 /*-------------------------------------------------------------------*/
@@ -608,12 +673,14 @@ public class Proxy extends ServerMessageHandler implements Runnable
 		if(reconnect)
 		{
 			try
-			{	Thread.sleep(5000);	}	// pause to allow server to restart
+			{	Thread.sleep(8000 + (int)(Math.round(Math.random() * 10000)));	}	// pause to allow server to restart
 			catch(InterruptedException ie)
 			{	}
 
 			reconnect = false;
 			dm2Recorder.newMap();
+
+			final boolean ctf = isCTFServer();
 
 			server = null;
 			world = new World(trackInventory);
@@ -623,6 +690,12 @@ public class Proxy extends ServerMessageHandler implements Runnable
 					public void run()
 					{
 						connect(host, port);
+
+						if(ctf)
+						{
+							waitForSpawn();
+							sendConsoleCommand("team " + Server.CTF_STRINGS[(currentCTFTeam >= 0 ? currentCTFTeam : (int)Math.round(Math.random()))]);
+						}
 					}
 				}
 			).start();

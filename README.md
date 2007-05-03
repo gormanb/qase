@@ -12,6 +12,37 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.3.0 (03-05-07)
+-
+**Notes:**
+
+A significant update. This release incorporates full support
+for Threewave's team-based Capture-the-Flag mod, including
+new connect methods in BasicBot, team-switching functions, and
+the ability to easily determine whether a particular player is
+on your team or the opposing.
+
+**Changes:**
+
+* Added support for the Threewave CTF mod.
+
+* Calling getBSPParser in BasicBot will now transparently
+  find and load the map, rather than returning null if no map has
+  yet been loaded.
+
+* New BSP-related functions in BasicBot, including a
+  general-purpose visibility check; this should reduce the need
+  to delve into the BSPParser class itself in most cases.
+
+* Visibility methods can now start from either the agent's
+  actual in-game position, or from the offset position of the
+  viewing platform (i.e. the game "camera").
+
+* The demonstration agents in BotManager will now connect
+  for 90 seconds and then automatically disconnect themselves.
+
+* Some noticeable performance improvements.
+
 r2.2.0 (19-10-06)
 -
 **Notes:**

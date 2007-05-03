@@ -27,6 +27,20 @@ public class Model
 	{	}
 	
 /*-------------------------------------------------------------------*/
+/**	Parameterised constructor.
+ *	@param modelIndex the specified model index number
+ *	@param modelValue the index within the config array of the model string
+ *	@param modelFrame the model frame number
+ *	@param modelSkin the index to the model skin */
+/*-------------------------------------------------------------------*/
+	public Model(int modelIndex, int modelValue, int modelFrame, int modelSkin)
+	{
+		setSkin(modelSkin);
+		setFrame(modelFrame);
+		setIndex(modelIndex, modelValue);
+	}
+	
+/*-------------------------------------------------------------------*/
 /**	Set model skin.
  *	@param modelSkin model skin. */
 /*-------------------------------------------------------------------*/

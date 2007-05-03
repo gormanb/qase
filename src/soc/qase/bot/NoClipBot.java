@@ -1,5 +1,5 @@
 //--------------------------------------------------
-// Name:			BasicBot.java
+// Name:			NoClipBot.java
 // Author:			Bernard.Gorman@computing.dcu.ie
 //--------------------------------------------------
 
