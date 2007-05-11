@@ -1038,6 +1038,202 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
+/** Returns all Item entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getItems(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getItems(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all entities which possess in-game models.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getModels(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getModels(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Weapon entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getWeapons(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getWeapons(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Monster entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getMonsters(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getMonsters(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Door entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getDoors(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getDoors(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Lift entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getLifts(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getLifts(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Button entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getButtons(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getButtons(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Illusory entities (i.e. visible but non-interactive).
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getIllusion(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getIllusion(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Conveyor belts or trains.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getConveyors(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getConveyors(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Teleport entities, both single-player and DeathMatch.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getTeleports(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getTeleports(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all single-player teleporters.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getNormalTeleports(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getNormalTeleports(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns DeathMatch teleporter entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getDMTeleports(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getDMTeleports(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Secret Door entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getSecretDoors(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getSecretDoors(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all path corner entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getPathCorners(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getPathCorners(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all walkover-button entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getWalkovers(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getWalkovers(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Teleport destination entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getTeleportDestinations(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getTeleportDestinations(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Misc object entities (exploding barrels, etc).
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getMiscObjects(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getMiscObjects(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all spawn points, regardless of single or multi-player.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getStartPositions(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getStartPositions(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all single-player spawn points.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getPlayerStartPositions(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getPlayerStartPositions(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all deathmatch spawn points.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getDMStartPositions(Vector vect)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getDMStartPositions(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all entities of the specified type. The supplied entity ID
+ *	should match one of the integer constants found in BSPEntity.
+ *	@param vect the Vector into which the entities will be added
+ *	@param entID the type of entity to find and return; should be one
+ *	of the integer constants from BSPEntity
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getEntityType(Vector vect, int entID)
+	{	return bsp.getEntityType(vect, entID);	}
+
+	private Origin o = null;
+	private Vector3f bbmin = null, bbmax = null;
+
+	public BSPEntity isOnLift()
+	{
+		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
+			return null;
+
+		o = proxy.getWorld().getPlayer().getPlayerMove().getOrigin();
+
+		for(int i = 0; i < bsp.entitiesLump.entities.length; i++)
+		{
+			if(bsp.entitiesLump.entities[i].isLift)
+			{
+				bbmin = bsp.entitiesLump.entities[i].model.bboxMin;
+				bbmax = bsp.entitiesLump.entities[i].model.bboxMax;
+
+				if(o.getX() >= bbmin.x && o.getX() <= bbmax.x && o.getY() >= bbmin.y && o.getY() <= bbmax.y && o.getZ() >= bbmin.z && o.getZ() <= bbmax.z + 50)
+					return bsp.entitiesLump.entities[i];
+			}
+		}
+
+		return null;
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Indicate whether visibility-checking functions should simply start
  *	from the actual location of the player entity, or from its point-of-view
  *	(i.e. the "camera" position). Defaults to FALSE.
@@ -1287,7 +1483,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@see #setQuake2HomeDirectory
  *	@see #findQuake2HomeDirectory */
 /*-------------------------------------------------------------------*/
-	protected boolean readMap(String filename)
+	public boolean readMap(String filename)
 	{
 		if(filename.substring(0, 6).equalsIgnoreCase("Q2HOME"))
 		{
@@ -1315,70 +1511,75 @@ public abstract class BasicBot extends Thread implements Bot
 		if(!isBotAlive() || mapNotFound)
 			return false;
 
-		String pathAndFileName = null;
-		String gameDir = proxy.getServer().getGameDirectory();
-		String mapName = proxy.getServer().getMapName();
-
-		if(gameDir == null || gameDir.length() == 0)
-			gameDir = "baseq2";
-
-		if(q2HomeDir == null || q2HomeDir.length() == 0)
-			findQuake2HomeDirectory();
-
-		// try to load BSP assuming filename == mapName
-		if(!bsp.load(q2HomeDir + "/" + gameDir + "/maps/" + mapName + ".bsp"))
-		{
-			String pakBSPFilename = null;
-			String pakDir = q2HomeDir + "/" + gameDir + "/";
-
-			// search PAKs assuming filename == mapName
-			for(int i = 0; i < 10; i++)
+		try
+		{	String pathAndFileName = null;
+			String gameDir = proxy.getServer().getGameDirectory();
+			String mapName = proxy.getServer().getMapName();
+	
+			if(gameDir == null || gameDir.length() == 0)
+				gameDir = "baseq2";
+	
+			if(q2HomeDir == null || q2HomeDir.length() == 0)
+				findQuake2HomeDirectory();
+	
+			// try to load BSP assuming filename == mapName
+			if(!bsp.load(q2HomeDir + "/" + gameDir + "/maps/" + mapName + ".bsp"))
 			{
-				pakBSPFilename = PAKParser.findFileFromPAK(pakDir + "pak" + i + ".pak", mapName + ".bsp");
-
-				if(pakBSPFilename != null)
+				String pakBSPFilename = null;
+				String pakDir = q2HomeDir + "/" + gameDir + "/";
+	
+				// search PAKs assuming filename == mapName
+				for(int i = 0; i < 10; i++)
 				{
-					bsp.load(pakDir + "pak" + i + ".pak#" + pakBSPFilename);
-					break;
+					pakBSPFilename = PAKParser.findFileFromPAK(pakDir + "pak" + i + ".pak", mapName + ".bsp");
+	
+					if(pakBSPFilename != null)
+					{
+						bsp.load(pakDir + "pak" + i + ".pak#" + pakBSPFilename);
+						break;
+					}
 				}
 			}
-		}
-
-		// search in BSP files for map name
-		if(!bsp.isMapLoaded())
-		{
-			File bspDir = new File(q2HomeDir + "/" + gameDir + "/maps");
-			String[] fileList = bspDir.list();
-
-			for(int i = 0; i < fileList.length; i++)
+	
+			// search in BSP files for map name
+			if(!bsp.isMapLoaded())
 			{
-				if(fileList[i].toLowerCase().indexOf(".bsp") != -1 && BSPParser.isMapNameInFile(q2HomeDir + "/" + gameDir + "/maps/" + fileList[i], mapName))
+				File bspDir = new File(q2HomeDir + "/" + gameDir + "/maps");
+				String[] fileList = bspDir.list();
+	
+				for(int i = 0; i < fileList.length; i++)
 				{
-					bsp.load(q2HomeDir + "/" + gameDir + "/maps/" + fileList[i]);
-					break;
+					if(fileList[i].toLowerCase().indexOf(".bsp") != -1 && BSPParser.isMapNameInFile(q2HomeDir + "/" + gameDir + "/maps/" + fileList[i], mapName))
+					{
+						bsp.load(q2HomeDir + "/" + gameDir + "/maps/" + fileList[i]);
+						break;
+					}
 				}
 			}
-		}
-
-		// search in PAK files for map name
-		if(!bsp.isMapLoaded())
-		{
-			String foundFile = null;
-			String pakDir = q2HomeDir + "/" + gameDir + "/";
-
-			for(int i = 0; i < 10; i++)
+	
+			// search in PAK files for map name
+			if(!bsp.isMapLoaded())
 			{
-				foundFile = PAKParser.findBSPFileFromPAK(pakDir + "pak" + i + ".pak", mapName);
-
-				if(foundFile != null)
+				String foundFile = null;
+				String pakDir = q2HomeDir + "/" + gameDir + "/";
+	
+				for(int i = 0; i < 10; i++)
 				{
-					bsp.load(pakDir + "pak" + i + ".pak#" + foundFile);
-					break;
+					foundFile = PAKParser.findBSPFileFromPAK(pakDir + "pak" + i + ".pak", mapName);
+	
+					if(foundFile != null)
+					{
+						bsp.load(pakDir + "pak" + i + ".pak#" + foundFile);
+						break;
+					}
 				}
 			}
+	
+			mapNotFound = !bsp.isMapLoaded();
 		}
+		catch(Exception e)
+		{	}
 
-		mapNotFound = !bsp.isMapLoaded();
 		return bsp.isMapLoaded();
 	}
 

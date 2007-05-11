@@ -16,6 +16,12 @@ public abstract class BSPLump
 	protected byte[] lumpData = null;
 
 /*-------------------------------------------------------------------*/
+/** Default constructor. */
+/*-------------------------------------------------------------------*/
+	public BSPLump()
+	{	}
+
+/*-------------------------------------------------------------------*/
 /** Constructor. Process lump data.
  *	@param inData the BSP file data
  *	@param off the offset of the lump in the byte array

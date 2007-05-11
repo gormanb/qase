@@ -7,10 +7,12 @@ package soc.qase.file.bsp;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Vector;
 import java.util.StringTokenizer;
+
+import soc.qase.tools.Utils;
 import soc.qase.file.pak.PAKParser;
 import soc.qase.tools.vecmath.Vector3f;
-import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/
 /**	A class which enables QASE to parse BSP files, which are used by
@@ -39,17 +41,19 @@ public class BSPParser
 	private BSPLump[] bspLumps = null;
 	private BSPHeader bspHeader = null;
 
-	private BSPPlaneLump planeLump = null;
-	private BSPVertexLump vertexLump = null;
-	private BSPNodeLump nodeLump = null;
-	private BSPLeafLump leafLump = null;
-	private BSPLeafFaceLump leafFaceLump = null;
-	private BSPFaceEdgeLump faceEdgeLump = null;
-	private BSPEdgeLump edgeLump = null;
-	private BSPModelLump modelLump = null;
-	private BSPBrushLump brushLump = null;
-	private BSPBrushSideLump brushSideLump = null;
-	private BSPLeafBrushLump leafBrushLump = null;
+	public BSPPlaneLump planeLump = null;
+	public BSPVertexLump vertexLump = null;
+	public BSPNodeLump nodeLump = null;
+	public BSPLeafLump leafLump = null;
+	public BSPLeafFaceLump leafFaceLump = null;
+	public BSPFaceEdgeLump faceEdgeLump = null;
+	public BSPEdgeLump edgeLump = null;
+	public BSPModelLump modelLump = null;
+	public BSPBrushLump brushLump = null;
+	public BSPBrushSideLump brushSideLump = null;
+	public BSPLeafBrushLump leafBrushLump = null;
+
+	public BSPEntityLump entitiesLump = null;
 
 	public static final float EPSILON = 0.03125f;
 	public static final int TRACE_LINE = 0, TRACE_SPHERE = 1, TRACE_BOX = 2;
@@ -187,6 +191,8 @@ public class BSPParser
 		bspLumps[BSPHeader.BRUSH_SIDES] = brushSideLump = new BSPBrushSideLump(lumpData, bspHeader.getOffset(BSPHeader.BRUSH_SIDES), bspHeader.getLength(BSPHeader.BRUSH_SIDES));
 		bspLumps[BSPHeader.LEAF_BRUSH_TABLE] = leafBrushLump = new BSPLeafBrushLump(lumpData, bspHeader.getOffset(BSPHeader.LEAF_BRUSH_TABLE), bspHeader.getLength(BSPHeader.LEAF_BRUSH_TABLE));
 
+		bspLumps[BSPHeader.ENTITIES] = entitiesLump = new BSPEntityLump(lumpData, bspHeader.getOffset(BSPHeader.ENTITIES), bspHeader.getLength(BSPHeader.ENTITIES), modelLump.models);
+
 		return true;
 	}
 
@@ -212,13 +218,13 @@ public class BSPParser
 
 			try
 			{
-				RandomAccessFile mapRead = new RandomAccessFile(bspMapCheck, "r");
+				RandomAccessFile mapReader = new RandomAccessFile(bspMapCheck, "r");
 
-				mapRead.seek(8); // skip ID & version info
-				mapRead.read(entityBlockOffset);
-				mapRead.seek(Utils.intValue(entityBlockOffset, 0));
+				mapReader.seek(8); // skip ID & version info
+				mapReader.read(entityBlockOffset);
+				mapReader.seek(Utils.intValue(entityBlockOffset, 0));
 
-				while((currentLine = mapRead.readLine()) != null)
+				while((currentLine = mapReader.readLine()) != null)
 				{
 					entityBlock += currentLine;
 
@@ -226,7 +232,7 @@ public class BSPParser
 						break;
 				}
 
-				mapRead.close();
+				mapReader.close();
 			}
 			catch(IOException ioe)
 			{	}
@@ -245,6 +251,185 @@ public class BSPParser
 	public BSPLump getLump(int lumpNum)
 	{
 		return bspLumps[lumpNum];
+	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Item entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getItems(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_ITEM);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all entities which possess in-game models.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getModels(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_MODEL);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Weapon entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getWeapons(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_WEAPON);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Monster entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getMonsters(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_MONSTER);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Door entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getDoors(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_DOOR);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Lift entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getLifts(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_LIFT);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Button entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getButtons(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_BUTTON);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Illusory entities (i.e. can be seen but not interactive).
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getIllusion(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_ILLUSION);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Conveyor belt and train entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getConveyors(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_CONVEYOR);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Teleporter entities, both single-player and DeathMatch.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getTeleports(Vector vect)
+	{	return getDMTeleports(getNormalTeleports(vect));	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all DeathMatch teleporter entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getDMTeleports(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_DM_TELEPORT);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all single-player teleporter entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getNormalTeleports(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_NORMAL_TELEPORT);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all secret door entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getSecretDoors(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_SECRET_DOOR);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all path corner entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getPathCorners(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_CORNER);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all walkover-button entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getWalkovers(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_WALKOVER);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all Teleport destination entities.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getTeleportDestinations(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_DESTINATION);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all miscellaneous object entities (exploding barrels, etc).
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getMiscObjects(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_MISC_OBJECT);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all spawn points, regardless of single or multi-player.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getStartPositions(Vector vect)
+	{	return getDMStartPositions(getPlayerStartPositions(vect));	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all single-player spawn points.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getPlayerStartPositions(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_PLAYER_START);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all DeathMatch spawn points.
+ *	@param vect the Vector into which the entities will be added
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getDMStartPositions(Vector vect)
+	{	return getEntityType(vect, BSPEntity.BSP_DM_START);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns all entities of the specified type. The supplied entity ID
+ *	should match one of the integer constants found in BSPEntity.
+ *	@param vect the Vector into which the entities will be added
+ *	@param entID the type of entity to find and return; should be one
+ *	of the integer constants from BSPEntity
+ *	@return a reference to the newly-populated vect for convenience */
+/*-------------------------------------------------------------------*/
+	public Vector getEntityType(Vector vect, int entID)
+	{
+		for(int i = 0; i < entitiesLump.entities.length; i++)
+		{
+			if((entID == BSPEntity.BSP_MODEL ? entitiesLump.entities[i].isModel : entitiesLump.entities[i].entityType == entID))
+				vect.add(entitiesLump.entities[i]);
+		}
+
+		return vect;
 	}
 
 /*-------------------------------------------------------------------*/

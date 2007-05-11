@@ -12,6 +12,26 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.4.0 (11-05-07)
+-
+**Notes:**
+
+Another significant update. This release allows the Entity
+blocks of each map's BSP file to be parsed; these blocks
+describe environmental effects such as doors, buttons,
+lifts, teleporters, etc. QASE also performs some additional
+processing to allow this data to be queried from high-level
+contexts - for instance, a new method in BasicBot lets the player
+easily determine whether he is currently riding on a lift,
+while the links between teleporter locations are inferred by
+the library and presented to the user as edges in a graph.
+
+**Changes:**
+
+* Full parsing support for BSP Entities, including methods
+in BasicBot and other classes which allow the Entity data to be
+easily queried.
+
 r2.3.0 (03-05-07)
 -
 **Notes:**
