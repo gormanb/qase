@@ -147,7 +147,12 @@ public abstract class NoClipBot extends ObserverBot
 	public void update(Observable o, Object a)
 	{
 		if(!isBotAlive())
-			respawnNeeded = true;
+		{
+			if(getAction(Action.ATTACK))
+				pacifyNeeded = true;
+			else
+				respawnNeeded = true;
+		}
 		else if(a != null && !respawnNeeded)
 		{
 			if(checkNoClip((World)a))

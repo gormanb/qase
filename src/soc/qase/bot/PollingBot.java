@@ -192,7 +192,12 @@ public abstract class PollingBot extends BasicBot
 				curFrameNum = world.getFrame();
 
 				if(!isBotAlive())
-					respawn();
+				{
+					if(getAction(Action.ATTACK))
+						pacify();
+					else
+						respawn();
+				}
 				else
 				{
 					if(!ctfTeamAssigned && proxy.isCTFServer())

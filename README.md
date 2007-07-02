@@ -12,6 +12,32 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.4.1 (02-07-07)
+-
+**Notes:**
+
+A release which fixes a small recently-discovered bug, and 
+adds some extra convenience functions.
+
+**Changes:**
+
+* Fixed a bug which caused bots not to auto-respawn if
+  they died while firing. Thanks to Modesto Castrillon and his
+  students for spotting it!
+
+* QASE now allows the user to determine whether a weapon
+  is actively firing on the current frame, or whether it is
+  "cooling down" (i.e. the period after a weapon discharge during
+  which another round cannot be fired). Previously, cooldowns
+  were not distinguished from active discharges.
+
+* New setAttack and setUse convenience methods in
+  BasicBot, allowing these common actions to be set individually
+  rather than simultaneously via the setActions methods.
+
+* Updated the JavaDoc with information for the isOnLift
+method in BasicBot.
+
 r2.4.0 (11-05-07)
 -
 **Notes:**

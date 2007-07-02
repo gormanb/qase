@@ -27,6 +27,7 @@ import java.util.Observable;
 /*-------------------------------------------------------------------*/
 public abstract class ObserverBot extends BasicBot implements Observer
 {
+	protected boolean pacifyNeeded = false;
 	protected boolean respawnNeeded = false;
 
 /*-------------------------------------------------------------------*/
@@ -184,7 +185,12 @@ public abstract class ObserverBot extends BasicBot implements Observer
 	public void update(Observable o, Object a)
 	{
 		if(!isBotAlive())
-			respawnNeeded = true;
+		{
+			if(getAction(Action.ATTACK))
+				pacifyNeeded = true;
+			else
+				respawnNeeded = true;
+		}
 		else if(a != null && !respawnNeeded)
 		{
 			if(!ctfTeamAssigned && proxy.isCTFServer())
@@ -220,6 +226,11 @@ public abstract class ObserverBot extends BasicBot implements Observer
 			{
 				respawn();
 				respawnNeeded = false;
+			}
+			else if(pacifyNeeded)
+			{
+				pacify();
+				pacifyNeeded = false;
 			}
 
 			Thread.yield();

@@ -480,6 +480,26 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Specify whether the agent should fire its weapon on the next frame.
+ *	@param attack true if the agent should fire, false otherwise
+ *	@see soc.qase.state.Action */
+/*-------------------------------------------------------------------*/
+	protected void setAttack(boolean attack)
+	{
+		action.setAttack(attack);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Specify whether the agent should use the current item
+ *	@param use true if the agent should use the item, false otherwise
+ *	@see soc.qase.state.Action */
+/*-------------------------------------------------------------------*/
+	protected void setUse(boolean use)
+	{
+		action.setUse(use);
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Set the agent's posture to POSTURE_DUCKED, POSTURE_STAND or
  *	POSTURE_JUMP; these constants are found in the PlayerMove class.
  *	@param postureState specifies the bot's posture (crouch/stand/jump)
@@ -1211,6 +1231,12 @@ public abstract class BasicBot extends Thread implements Bot
 	private Origin o = null;
 	private Vector3f bbmin = null, bbmax = null;
 
+/*-------------------------------------------------------------------*/
+/** Determines whether the agent is currently riding one of the lift
+ *	entities specified in the BSP file of the map.
+ *	@return a reference to the BSPEntity describing the lift if the
+ *	agent is on one, null otherwise. */
+/*-------------------------------------------------------------------*/
 	public BSPEntity isOnLift()
 	{
 		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))

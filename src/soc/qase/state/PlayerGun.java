@@ -17,6 +17,7 @@ import soc.qase.info.Config;
 /*-------------------------------------------------------------------*/
 public class PlayerGun
 {
+	private int gunCD = 0;
 	private int index = -1;
 	private int frame = -1;
 	private Origin offset = null;
@@ -28,6 +29,9 @@ public class PlayerGun
 	MACHINEGUN = 10, CHAINGUN = 11, GRENADES = 12, GRENADE_LAUNCHER = 13,
 	ROCKET_LAUNCHER = 14, HYPERBLASTER = 15, RAILGUN = 16, BFG10K = 17,
 	SHELLS = 18, BULLETS = 19, CELLS = 20, ROCKETS = 21, SLUGS = 22;
+
+	// duration of "cooldown" before next shot while firing continuously
+	private static final int[] WEAPON_CDS = { 4, 11, 11, 0, 0, 13, 11, 8, 0, 15, 24 };
 
 /*-------------------------------------------------------------------*/
 /**	Default constructor. */
@@ -199,7 +203,8 @@ public class PlayerGun
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Set player gun index.
+/**	Set player gun index. Only for internal use by the API; use the
+ *	changeWeapon methods in BasicBot to switch guns in-game.
  *	@param index player gun index. */
 /*-------------------------------------------------------------------*/
 	public void setIndex(int index)
@@ -217,7 +222,7 @@ public class PlayerGun
 	}
 	
 /*-------------------------------------------------------------------*/
-/**	Set player gun frame.
+/**	Set player gun frame. Only for internal use.
  *	@param frame player gun frame. */
 /*-------------------------------------------------------------------*/
 	public void setFrame(int frame)
@@ -226,12 +231,32 @@ public class PlayerGun
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Setermine whether the player/agent is firing his weapon.
+/**	Determine whether the player/agent is firing his weapon.
  *	@return true if the player is firing, false otherwise */
 /*-------------------------------------------------------------------*/
 	public boolean isFiring()
 	{
 		return isFiring;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determine whether the weapon is "cooling down", i.e. the period
+ *	after a discharge during which the gun cannot fire again.
+ *	@return true if the gun is cooling down, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isCoolingDown()
+	{
+		return (gunCD > 0);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	A convenience method to determine whether the gun is either actively
+ *	firing OR is mid-cooldown.
+ *	@return true if the gun is firing or cooling down, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isFiringOrCoolingDown()
+	{
+		return (isFiring || gunCD > 0);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -245,7 +270,7 @@ public class PlayerGun
 	}
 	
 /*-------------------------------------------------------------------*/
-/**	Set player gun offset.
+/**	Set player gun offset. Only for internal use.
  *	@param offset player gun offset. */
 /*-------------------------------------------------------------------*/
 	public void setOffset(Origin offset)
@@ -264,7 +289,7 @@ public class PlayerGun
 	}
 	
 /*-------------------------------------------------------------------*/
-/**	Set player gun angles.
+/**	Set player gun angles. Only for internal use.
  *	@param angles player gun angles. */
 /*-------------------------------------------------------------------*/
 	public void setAngles(Angles angles)
@@ -288,9 +313,14 @@ public class PlayerGun
 
 		if(index == -1) index = playerGun.getIndex();
 		if(frame == -1) frame = playerGun.getFrame();
+		if(playerGun.gunCD > 0) gunCD = playerGun.gunCD - 1;
 		if(offset == null) offset = playerGun.offset; else offset.merge(playerGun.offset);
 		if(angles == null) angles = playerGun.angles; else angles.merge(playerGun.angles);
 
-		this.isFiring = (ammoReduced && (index == -1 || playerGun.getIndex() == index)); // ammo changed, gun did not
+		if((getInventoryIndex() == 7 && frame == 6) || (ammoReduced && index == playerGun.getIndex())) // ammo changed, gun did not
+		{
+			this.isFiring = true;
+			gunCD = WEAPON_CDS[getInventoryIndex() - 7];
+		}
 	}
 }
