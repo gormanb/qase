@@ -56,7 +56,7 @@ public class Entity
 								TYPE_MACHINEGUN = Config.items[Inventory.MACHINEGUN + 33], TYPE_CHAINGUN = Config.items[Inventory.CHAINGUN + 33],
 								TYPE_GRENADES = Config.items[Inventory.GRENADES + 33], TYPE_GRENADELAUNCHER = Config.items[Inventory.GRENADE_LAUNCHER + 33],
 								TYPE_ROCKETLAUNCHER = Config.items[Inventory.ROCKET_LAUNCHER + 33], TYPE_HYPERBLASTER = Config.items[Inventory.HYPERBLASTER + 33],
-								TYPE_RAILGUN = Config.items[Inventory.HYPERBLASTER + 33], TYPE_BFG = Config.items[Inventory.BFG10K + 33];
+								TYPE_RAILGUN = Config.items[Inventory.RAILGUN + 33], TYPE_BFG = Config.items[Inventory.BFG10K + 33];
 
 	public static final String	TYPE_INVULNERABILITY = Config.items[Inventory.INVULNERABILITY], TYPE_AMMOPACK = Config.items[Inventory.AMMO_PACK],
 								TYPE_QUAD = Config.items[Inventory.QUAD_DAMAGE], TYPE_SILENCER = Config.items[Inventory.SILENCER], TYPE_ADRENALINE = Config.items[Inventory.ADRENALINE],

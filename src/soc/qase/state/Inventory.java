@@ -88,8 +88,9 @@ public class Inventory
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get count for specified index.
- *	@param itemIndex item index.
+/**	Get count for specified inventory item.
+ *	@param itemIndex item index. Should be one of the constants defined
+ *	in the Inventory class.
  *	@return item index count. */
 /*-------------------------------------------------------------------*/
 	public int getCount(int itemIndex)
@@ -103,9 +104,11 @@ public class Inventory
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get count for specified range of indices.
- *	@param startIndex item index at which to start
- *	@param endIndex item index at which to end, inclusive
+/**	Get count for specified range of inventory items.
+ *	@param startIndex item index at which to start. Should be one of
+ *	the constants defined in the Inventory class.
+ *	@param endIndex item index at which to end, inclusive. Should be
+ *	one of the constants defined in the Inventory class.
  *	@return an array giving a count of each item in the range */
 /*-------------------------------------------------------------------*/
 	public int[] getCount(int startIndex, int endIndex)
@@ -122,8 +125,10 @@ public class Inventory
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get count for specified item.
- *	@param item item.
+/**	Get count for specified inventory item. Note that this string-matching
+ *	method is somewhat slower that the index methods above.
+ *	@param item plain english string of the item as seen in-game, e.g.
+ *	rocket launcher, hyperblaster, chaingun.
  *	@return item count. */
 /*-------------------------------------------------------------------*/
 	public int getCount(String item)
@@ -161,7 +166,8 @@ public class Inventory
 
 /*-------------------------------------------------------------------*/
 /**	Get item string for specified index.
- *	@param itemIndex item index.
+ *	@param itemIndex item index. Should be one of the constants defined
+ *	in the Inventory class.
  *	@return item string. */
 /*-------------------------------------------------------------------*/
 	public String getItemString(int itemIndex)

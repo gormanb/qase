@@ -158,10 +158,6 @@ public abstract class BasicBot extends Thread implements Bot
 // all abstract methods to be supplied by derived classes
 // custom bots should synchronize on World if high thread safety is enabled
 /*-------------------------------------------------------------------*/
-/**	Disconnect from the server. To be implemented by derived classes.*/
-/*-------------------------------------------------------------------*/
-	public abstract void disconnect();
-/*-------------------------------------------------------------------*/
 /**	Connect to a game server. To be implemented by derived classes.
  *	@param host a String representation of the host machine's IP address
  *	@param port the port on which the game server is running */
@@ -178,129 +174,15 @@ public abstract class BasicBot extends Thread implements Bot
 	public abstract boolean connect(String host, int port, int ctfTeam);
 
 /*-------------------------------------------------------------------*/
-/**	Switch the agent to a specified team during a CTF match (assuming in-game
- *	team switching is enabled).
- *	@param ctfTeam the team to join; one of the CTF constants found in
- *	soc.qase.info.Server */
+/**	Disconnect from the server. To be implemented by derived classes.*/
 /*-------------------------------------------------------------------*/
-	protected void setCTFTeam(int ctfTeam)
-	{
-		ctfTeamAssigned = true;
-		sendConsoleCommand("team " + Server.CTF_STRINGS[(Math.abs(ctfTeam) < 2 ? Math.abs(ctfTeam) : (int)Math.round(Math.random()))]);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Resolve the CTF team number of the local agent, if the current server
- *	is running the CTF mod.
- *	@return the team number of the local agent; 0 = RED, 1 = BLUE */
-/*-------------------------------------------------------------------*/
-	protected int getCTFTeamNumber()
-	{
-		return (proxy == null ? Integer.MIN_VALUE : proxy.getCTFTeamNumber());
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Resolve the CTF team name of the local agent, if the current server
- *	is running the CTF mod.
- *	@return the team name of the local agent; either RED, BLUE or null
- *	if the agent is not currently on a team. */
-/*-------------------------------------------------------------------*/
-	protected String getCTFTeamString()
-	{
-		return (proxy == null ? null : proxy.getCTFTeamString());
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Determined whether the given player Entity is on the same CTF team
- *	as the local agent.
- *	@param otherPlayer the Entity representing the player to be checked
- *	@return true if otherPlayer is on the same CTF team as the local agent,
- *	false otherwise */
-/*-------------------------------------------------------------------*/
-	protected boolean isOnSameCTFTeam(Entity otherPlayer)
-	{
-		return (getCTFTeamNumber() >= 0 && getCTFTeamNumber() == otherPlayer.getCTFTeamNumber());
-	}
+	public abstract void disconnect();
 
 /*-------------------------------------------------------------------*/
 /**	The core AI routine. To be implemented by derived classes.
  *	@param w a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
 	public abstract void runAI(World w);
-
-/*-------------------------------------------------------------------*/
-/**	Returns the Player object associated with this bot, which can then
- *	be further queried for information.
- *	@return the Player object containing full details of the bot's
- *	current state, or null if no such object exists */
-/*-------------------------------------------------------------------*/
-	protected Player getPlayer()
-	{
-		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer());
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Check whether the agent is currently alive and active in the game.
- *	@return true if the agent is active and alive, false otherwise */
-/*-------------------------------------------------------------------*/
-	public boolean isBotAlive()
-	{
-		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isAlive();
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Check whether agent is currently jumping.
- *	@return true if jumping, false otherwise */
-/*-------------------------------------------------------------------*/
-	public boolean isJumping()
-	{
-		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isJumping();
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Check whether agent is currently ducking.
- *	@return true if ducking, false otherwise */
-/*-------------------------------------------------------------------*/
-	public boolean isDucked()
-	{
-		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isDucked();
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Check whether agent is currently in water.
- *	@return true if in water, false otherwise */
-/*-------------------------------------------------------------------*/
-	public boolean isUnderWater()
-	{
-		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isUnderWater();
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the agent's current health.
- *	@return the agent's health value */
-/*-------------------------------------------------------------------*/
-	public int getHealth()
-	{
-		return proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.HEALTH);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the amount of ammo the agent has for the current weapon.
- *	@return the current ammo */
-/*-------------------------------------------------------------------*/
-	public int getAmmo()
-	{
-		return proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.AMMO);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the amount of armor currently held by the agent.
- *	@return the current armor value */
-/*-------------------------------------------------------------------*/
-	public int getArmor()
-	{
-		return proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.ARMOR);
-	}
 
 /*-------------------------------------------------------------------*/
 /**	Flag the agent as being connected to or disconnected from the game server.
@@ -352,14 +234,142 @@ public abstract class BasicBot extends Thread implements Bot
 
 /*-------------------------------------------------------------------*/
 /**	Specifies whether the agent should automatically request a full
- *	listing of the agent's inventory on each frame. This can be used in
- *	place of manual inventory tracking - it ensures greater accuracy, at
+ *	listing of its inventory on each frame. This can be used in place
+ *	of manual inventory tracking - it ensures complete accuracy, at
  *	the cost of increasing the amount of network traffic per update.
+ *	Also note that recorded DM2 files of agents using this approach
+ *	will display an inventory window every second frame.
  *	@param refresh turn auto inventory refresh on/off */
 /*-------------------------------------------------------------------*/
 	public void setAutoInventoryRefresh(boolean refresh)
 	{
 		proxy.setAutoInventoryRefresh(refresh);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Returns the Player object associated with this bot, which can then
+ *	be further queried for information.
+ *	@return the Player object containing full details of the bot's
+ *	current state, or null if no such object exists */
+/*-------------------------------------------------------------------*/
+	protected Player getPlayer()
+	{
+		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether the agent is currently alive and active in the game.
+ *	@return true if the agent is active and alive, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isBotAlive()
+	{
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isAlive();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the agent's current position.
+ *	@return the current position, or null if the agent is not
+ *	currently connected */
+/*-------------------------------------------------------------------*/
+	public Origin getPosition()
+	{
+		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the agent's current orientation.
+ *	@return the current orientation, or null if the agent is not
+ *	currently connected */
+/*-------------------------------------------------------------------*/
+	public Angles getOrientation()
+	{
+		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPlayerView().getViewAngles());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the agent's current health.
+ *	@return the agent's health value, or Integer.MIN_VALUE if the agent
+ *	is not currently connected */
+/*-------------------------------------------------------------------*/
+	public int getHealth()
+	{
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.HEALTH) : Integer.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the inventory index of the current weapon.
+ *	@return the index of the current weapon as indicated by the constants
+ *	in the Inventory class, or Integer.MIN_VALUE if the agent is not
+ *	currently connected */
+/*-------------------------------------------------------------------*/
+	public int getWeaponIndex()
+	{
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerGun().getInventoryIndex() : Integer.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the amount of ammo the agent has for the current weapon.
+ *	@return the current ammo, or Integer.MIN_VALUE if the agent
+ *	is not currently connected */
+/*-------------------------------------------------------------------*/
+	public int getAmmo()
+	{
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.AMMO) : Integer.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the amount of armor currently held by the agent.
+ *	@return the current armor value, or Integer.MIN_VALUE if the agent
+ *	is not currently connected */
+/*-------------------------------------------------------------------*/
+	public int getArmor()
+	{
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.ARMOR) : Integer.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Switch the agent to a specified team during a CTF match (assuming in-game
+ *	team switching is enabled).
+ *	@param ctfTeam the team to join; one of the CTF constants found in
+ *	soc.qase.info.Server */
+/*-------------------------------------------------------------------*/
+	protected void setCTFTeam(int ctfTeam)
+	{
+		ctfTeamAssigned = true;
+		sendConsoleCommand("team " + Server.CTF_STRINGS[(Math.abs(ctfTeam) < 2 ? Math.abs(ctfTeam) : (int)Math.round(Math.random()))]);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team number of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team number of the local agent; 0 = RED, 1 = BLUE */
+/*-------------------------------------------------------------------*/
+	protected int getCTFTeamNumber()
+	{
+		return (proxy == null ? Integer.MIN_VALUE : proxy.getCTFTeamNumber());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Resolve the CTF team name of the local agent, if the current server
+ *	is running the CTF mod.
+ *	@return the team name of the local agent; either RED, BLUE or null
+ *	if the agent is not currently on a team. */
+/*-------------------------------------------------------------------*/
+	protected String getCTFTeamString()
+	{
+		return (proxy == null ? null : proxy.getCTFTeamString());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determined whether the given player Entity is on the same CTF team
+ *	as the local agent.
+ *	@param otherPlayer the Entity representing the player to be checked
+ *	@return true if otherPlayer is on the same CTF team as the local agent,
+ *	false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean isOnSameCTFTeam(Entity otherPlayer)
+	{
+		return (getCTFTeamNumber() >= 0 && getCTFTeamNumber() == otherPlayer.getCTFTeamNumber());
 	}
 
 /*-------------------------------------------------------------------*/
@@ -500,7 +510,7 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Set the agent's posture to POSTURE_DUCKED, POSTURE_STAND or
+/**	Set the agent's posture to POSTURE_CROUCH, POSTURE_STAND or
  *	POSTURE_JUMP; these constants are found in the PlayerMove class.
  *	@param postureState specifies the bot's posture (crouch/stand/jump)
  *	@see soc.qase.state.PlayerMove */
@@ -528,6 +538,33 @@ public abstract class BasicBot extends Thread implements Bot
 	protected void setCrouch(boolean crouch)
 	{
 		velocity.setUp(crouch ? -300 : 0);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether agent is currently jumping.
+ *	@return true if jumping, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isJumping()
+	{
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isJumping();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether agent is currently crouching.
+ *	@return true if crouching, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isCrouching()
+	{
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isCrouching();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether agent is currently in water.
+ *	@return true if in water, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isUnderWater()
+	{
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isUnderWater();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -755,6 +792,87 @@ public abstract class BasicBot extends Thread implements Bot
 	protected void refreshInventory()
 	{
 		proxy.refreshInventory();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get count for specified inventory item.
+ *	@param itemIndex item index. Should be one of the constants defined
+ *	in the Inventory class.
+ *	@return item index count. */
+/*-------------------------------------------------------------------*/
+	protected int getInventoryItemCount(int itemIndex)
+	{
+		World w;
+		Inventory inv;
+
+		if(proxy == null || (w = proxy.getWorld()) == null || (inv = w.getInventory()) == null)
+			return -1;
+
+		return inv.getCount(itemIndex);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get count for specified range of inventory items.
+ *	@param startItemIndex item index at which to start. Should be one of
+ *	the constants defined in the Inventory class.
+ *	@param endItemIndex item index at which to end, inclusive. Should be
+ *	one of the constants defined in the Inventory class.
+ *	@return an array giving a count of each item in the range, or
+ *	null if the inventory does not exist. */
+/*-------------------------------------------------------------------*/
+	protected int[] getInventoryItemCount(int startItemIndex, int endItemIndex)
+	{
+		World w;
+		Inventory inv;
+
+		if(proxy == null || (w = proxy.getWorld()) == null || (inv = w.getInventory()) == null)
+			return null;
+
+		return inv.getCount(startItemIndex, endItemIndex);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get count for specified inventory item. Note that this string-matching
+ *	method is somewhat slower that the index methods above.
+ *	@param item plain english string of the item as seen in-game, e.g.
+ *	rocket launcher, hyperblaster, chaingun.
+ *	@return item count. */
+/*-------------------------------------------------------------------*/
+	protected int getInventoryItemCount(String item)
+	{
+		World w;
+		Inventory inv;
+
+		if(proxy == null || (w = proxy.getWorld()) == null || (inv = w.getInventory()) == null)
+			return -1;
+
+		return inv.getCount(item);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determines whether the agent is in possession of the specified item.
+ *	@param itemIndex item index. Should be one of the constants defined
+ *	in the Inventory class.
+ *	@return true if the agents possesses one or more of the specified
+ *	item, false otherwise. */
+/*-------------------------------------------------------------------*/
+	protected boolean hasItem(int itemIndex)
+	{
+		return getInventoryItemCount(itemIndex) > 0;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determines whether the agent is in possession of the specified item.
+ *	Note that this string-matching method is somewhat slower that the
+ *	index method above.
+ *	@param item plain english string of the item as seen in-game, e.g.
+ *	rocket launcher, hyperblaster, chaingun.
+ *	@return true if the agents possesses one or more of the specified
+ *	item, false otherwise. */
+/*-------------------------------------------------------------------*/
+	protected boolean hasItem(String item)
+	{
+		return getInventoryItemCount(item) > 0;
 	}
 
 /*-------------------------------------------------------------------*/

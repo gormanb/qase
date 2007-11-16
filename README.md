@@ -12,6 +12,37 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.4.2 (16-11-07)
+-
+**Notes:**
+
+A(nother) release which fixes a small recently-discovered bug,
+and adds some extra convenience functions.
+
+**Changes:**
+
+* Fixed a bug which caused the model for the Railgun while
+  lying on the ground to be confused with that of the Hyperblaster.
+  Thanks to Johan Hagelbock for spotting it!
+
+* Added new passthrough methods to the BasicBot class
+  (namely getInventoryItemCount and hasItem), allowing the inventory
+  to be queried directly rather than requiring the programmer to
+  obtain and access the Inventory object.
+
+* Added getPosition, getOrientation and getWeaponIndex
+  convenience methods to the BasicBot class, allowing the programmer
+  to obtain these values directly rather than via the Player
+  object.
+
+* Changed the names of the FLAG\_DUCKED and POSTURE\_DUCKED
+  constants in the PlayerMove class, as well as the isDucked() method
+  in the Player class, to FLAG\_CROUCH, POSTURE\_CROUCH and isCrouching().
+  This is to conform to naming conventions elsewhere.
+
+* Updated the JavaDoc with better descriptions of the Inventory
+  access methods, and info on the new BasicBot functions.
+
 r2.4.1 (02-07-07)
 -
 **Notes:**

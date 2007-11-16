@@ -325,12 +325,12 @@ public class Player
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Check whether agent is currently ducking.
- *	@return true if ducking, false otherwise */
+/**	Check whether agent is currently crouching.
+ *	@return true if crouching, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isDucked()
+	public boolean isCrouching()
 	{
-		return getPlayerMove().checkFlags(PlayerMove.FLAG_DUCKED);
+		return getPlayerMove().checkFlags(PlayerMove.FLAG_CROUCH);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -361,13 +361,13 @@ public class Player
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the agent's current standing state (jump, normal or ducked).
+/**	Get the agent's current standing state (jump, normal or crouched).
  *	@return one of the STAND constants in PlayerMove */
 /*-------------------------------------------------------------------*/
 	public int getStandState()
 	{
-		if(isDucked())
-			return PlayerMove.POSTURE_DUCKED;
+		if(isCrouching())
+			return PlayerMove.POSTURE_CROUCH;
 		else if(isJumping())
 			return PlayerMove.POSTURE_JUMP;
 		else

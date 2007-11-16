@@ -11,7 +11,7 @@ import soc.qase.tools.vecmath.Vector2f;
 /*-------------------------------------------------------------------*/
 /**	Wrapper class for player move attributes. Contains two forms of
  *	information about the player's movement; the MOVE (normal, spectator,
- *	dead, gib, freeze) and the FLAGs (jump, duck, etc). Also includes
+ *	dead, gib, freeze) and the FLAGs (jump, crouch, etc). Also includes
  *	the agent's current position in the environment (coordinates),
  *	its current angles (heading), and the agent's current velocity
  *	(speed along the X, Y, and Z axis). */
@@ -31,9 +31,9 @@ public class PlayerMove
 	private Vector2f directionalVelocity = null;
 
 	public static final int WALK_STOPPED = 0, WALK_NORMAL = 1, WALK_RUN = 2;
-	public static final int POSTURE_DUCKED = -1, POSTURE_NORMAL = 0, POSTURE_JUMP = 1;
+	public static final int POSTURE_CROUCH = -1, POSTURE_NORMAL = 0, POSTURE_JUMP = 1;
 	public static final int MOVE_NORMAL = 0, MOVE_SPECTATOR = 1, MOVE_DEAD = 2, MOVE_GIB = 3, MOVE_FREEZE = 4;
-	public static final int FLAG_DUCKED = 1, FLAG_JUMP = 2, FLAG_GROUND = 4, FLAG_TIME_WATER_JUMP = 8, FLAG_TIME_LAND = 16, FLAG_TIME_TELEPORT = 32, FLAG_NO_PREDICTION = 64;
+	public static final int FLAG_CROUCH = 1, FLAG_JUMP = 2, FLAG_GROUND = 4, FLAG_TIME_WATER_JUMP = 8, FLAG_TIME_LAND = 16, FLAG_TIME_TELEPORT = 32, FLAG_NO_PREDICTION = 64;
 
 /*-------------------------------------------------------------------*/
 /**	Default constructor. */
@@ -105,7 +105,7 @@ public class PlayerMove
 	{
 		String result = "";
 
-		if((flags & FLAG_DUCKED) != 0) result += "ducked:";
+		if((flags & FLAG_CROUCH) != 0) result += "crouch:";
 		if((flags & FLAG_JUMP) != 0) result += "jump:";
 		if((flags & FLAG_GROUND) != 0) result += "ground:";
 		if((flags & FLAG_TIME_WATER_JUMP) != 0) result += "timeWater:";
