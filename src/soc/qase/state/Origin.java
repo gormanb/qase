@@ -27,6 +27,19 @@ public class Origin
 	{	}
 	
 /*-------------------------------------------------------------------*/
+/**	Constructs the Origin using the XYZ components from the argument
+ *	Origin.
+ *	@param o the Origin whose XYZ components will be copied to the new
+ *	Origin object. */
+/*-------------------------------------------------------------------*/
+	public Origin(Origin o)
+	{
+		this.x = o.x;
+		this.y = o.y;
+		this.z = o.z;
+	}
+	
+/*-------------------------------------------------------------------*/
 /**	Basic constructor.
  *	@param x X coordinate.
  *	@param y Y coordinate.
@@ -119,6 +132,16 @@ public class Origin
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Compute and return the distance between this point and the argument
+ *	point.
+ *	@param o the point to which to find the distance */
+/*-------------------------------------------------------------------*/
+	public final float distance(Origin o)
+	{
+		return (float)Math.sqrt((x - o.x) * (x - o.x) + (y - o.y) * (y - o.y) + (z - o.z) * (z - o.z));
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Compare two Origin objects for equality.
  *	@param o the Origin object against which this Origin is to
  *	be compared
@@ -154,6 +177,16 @@ public class Origin
 	public Origin deepCopy()
 	{
 		return new Origin(x, y, z);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Creates a Vector3f using the XYZ of this Origin as the components
+ *	of the vector.
+ *	@return a Vector3f with xyz set to this.xyz */
+/*-------------------------------------------------------------------*/
+	public Vector3f toVector3f()
+	{
+		return new Vector3f(this);
 	}
 
 /*-------------------------------------------------------------------*/

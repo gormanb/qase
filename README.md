@@ -12,6 +12,56 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.4.5 (22-11-07)
+-
+**Notes:**
+
+A release which makes an important change to the way in which
+the default BasicBot constructors work, as well as changes to
+the BasicBot and WaypointMap interfaces to maintain consistency
+and more accurately describe certain methods. Further convenience
+functions have also been added, which facilitate easier querying
+of the Inventory and WaypointMap objects from within BasicBot.
+
+**Changes:**
+
+* By default, BasicBot constructors will now enable QASE's
+  local inventory-tracking mechanism rather than requiring the
+  programmer to explicitly enable it. QASE provides two approaches
+  to tracking the agent's inventory, which Quake 2 maintains on the
+  server side during game sessions and which is therefore not
+  always available to the client; local tracking and automatic
+  refreshing. Local tracking involves detecting each item pickup
+  and weapon discharge on the client side, building up an inventory
+  representation from each frame to the next. Automatic refreshing,
+  which can be enabled by calling setAutoInventoryRefresh(true),
+  requests an inventory listing from the server on each update.
+  Programmers should choose ONE of these two approaches - that is,
+  either allow local inventory tracking to be enabled, or disable
+  it and call setAutoInventoryRefresh.
+
+* Changed the findClosest and findShortestPath methods in
+  BasicBot such that the programmer need no longer specify a
+  starting position; the agent's current location is used.
+
+* findClosestItem(cat,type,subtype) renamed findClosestEntity
+  in both BasicBot and WaypointMap, to reflect the fact that the methods
+  can search for entities of categories other than Item. The methods
+  findShortestPathToItem(cat,type,subtype) in both classes have been
+  renamed findShortestPathToEntity for the same reason.
+
+* Separate findClosestEntity, findClosestEnemy, findClosestItem,
+  findClosestWeapon, findClosestObject, findShortestPathToEntity,
+  findShortestPathToEnemy, findShortestPathToItem, findShortestPathToWeapon,
+  and findShortestPathToObject methods in BasicBot.
+
+* Added getNearestEntity, getNearestItem, getNearestWeapon
+  and getNearestObject methods to BasicBot.
+
+* Added a distance method in the Origin class.
+
+* Updated the Sample bots to use the new methods mentioned above.
+
 r2.4.2 (16-11-07)
 -
 **Notes:**

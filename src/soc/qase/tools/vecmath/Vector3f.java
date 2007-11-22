@@ -572,6 +572,16 @@ public class Vector3f implements Serializable
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Creates an Origin using the XYZ of this Vector3f as the points
+ *	of the Origin.
+ *	@return an Origin with xyz set to this.xyz */
+/*-------------------------------------------------------------------*/
+	public Origin toOrigin()
+	{
+		return new Origin(this);
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Return a string representation of the vector.
  *	@return a string representation of the vector */
 /*-------------------------------------------------------------------*/

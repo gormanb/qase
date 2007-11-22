@@ -10,7 +10,6 @@ import soc.qase.info.*;
 import soc.qase.state.*;
 import soc.qase.tools.vecmath.*;
 
-import java.util.Vector;
 import soc.qase.bot.ObserverBot;
 
 /*-------------------------------------------------------------------*/
@@ -20,21 +19,6 @@ import soc.qase.bot.ObserverBot;
 /*-------------------------------------------------------------------*/
 public final class SampleObserverBot extends ObserverBot
 {
-	private World world = null;
-	private Player player = null;
-	private Vector entities = null;
-
-	private Vector3f pos = null;
-	private Vector3f dir = null;
-
-	private Entity tempEntity = null;
-	private Entity nearestEntity = null;
-	private float entDist = Float.MAX_VALUE;
-
-	private Origin tempOrigin = null;
-	private Vector3f entPos = new Vector3f(0, 0, 0);
-	private Vector3f entDir = new Vector3f(0, 0, 0);
-
 /*-------------------------------------------------------------------*/
 /**	Constructor allowing the user to specify a name and skin (appearance)
  *	for the agent.
@@ -44,7 +28,6 @@ public final class SampleObserverBot extends ObserverBot
 	public SampleObserverBot(String botName, String botSkin)
 	{
 		super((botName == null ? "SampleObserverBot" : botName), botSkin);
-		initBot();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -57,7 +40,6 @@ public final class SampleObserverBot extends ObserverBot
 	public SampleObserverBot(String botName, String botSkin, boolean trackInv)
 	{
 		super((botName == null ? "SampleObserverBot" : botName), botSkin, trackInv);
-		initBot();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -72,7 +54,6 @@ public final class SampleObserverBot extends ObserverBot
 	public SampleObserverBot(String botName, String botSkin, boolean highThreadSafety, boolean trackInv)
 	{
 		super((botName == null ? "SampleObserverBot" : botName), botSkin, highThreadSafety, trackInv);
-		initBot();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -88,7 +69,6 @@ public final class SampleObserverBot extends ObserverBot
 	public SampleObserverBot(String botName, String botSkin, String password, boolean highThreadSafety, boolean trackInv)
 	{
 		super((botName == null ? "SampleObserverBot" : botName), botSkin, password, highThreadSafety, trackInv);
-		initBot();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -110,67 +90,30 @@ public final class SampleObserverBot extends ObserverBot
 	public SampleObserverBot(String botName, String botSkin, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, boolean trackInv)
 	{
 		super((botName == null ? "SampleObserverBot" : botName), botSkin, recvRate, msgLevel, fov, hand, password, highThreadSafety, trackInv);
-		initBot();
 	}
 
-	private void initBot()
-	{
-		pos = new Vector3f(0, 0, 0);
-		dir = new Vector3f(0, 0, 0);
-	}
+	private Vector3f pos = new Vector3f(0, 0, 0);
+	private Vector3f itemPos = new Vector3f(0, 0, 0);
+	private Vector3f itemDir = new Vector3f(0, 0, 0);
 
 /*-------------------------------------------------------------------*/
 /**	The agent's core AI routine.
- *	@param w a World object representing the current gamestate */
+ *	@param world a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
-	public void runAI(World w)
+	public void runAI(World world)
 	{
-		world = w;
-
-		tempEntity = null;
-		nearestEntity = null;
-		entDist = Float.MAX_VALUE;
-
-		tempOrigin = null;
-		entPos.set(0, 0, 0);
-		entDir.set(0, 0, 0);
-
-		player = world.getPlayer();
-		entities = world.getItems();
-
 		setAction(Action.ATTACK, false);
 
-		for(int i = 0; i < entities.size(); i++)
+		// get the nearest item of any kind
+		Entity nearestItem = getNearestItem(null, null);
+
+		if(nearestItem != null)
 		{
-			tempEntity = (Entity)entities.elementAt(i);
+			pos.set(getPosition());
+			itemPos.set(nearestItem.getOrigin());
 
-			tempOrigin = tempEntity.getOrigin();
-			entPos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-			
-			tempOrigin = player.getPlayerMove().getOrigin();
-			pos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-
-			entDir.sub(entPos, pos);
-
-			if((nearestEntity == null || entDir.length() < entDist) && entDir.length() > 0)
-			{
-				nearestEntity = tempEntity;
-				entDist = entDir.length();
-			}
-		}
-
-		if(nearestEntity != null)
-		{
-			tempOrigin = nearestEntity.getOrigin();
-			entPos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-
-			tempOrigin = player.getPlayerMove().getOrigin();
-			pos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-
-			entDir.sub(entPos, pos);
-			entDir.normalize();
-
-			setBotMovement(entDir, null, 200, PlayerMove.POSTURE_NORMAL);
+			itemDir.sub(itemPos, pos);
+			setBotMovement(itemDir, null, 200, PlayerMove.POSTURE_NORMAL);
 		}
 	}
 }

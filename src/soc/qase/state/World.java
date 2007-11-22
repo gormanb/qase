@@ -594,14 +594,21 @@ public class World
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get entity collection information.
- *	@return entity collection information. */
+/**	Get entity information.
+ *	@param onlyActive if true, returns only those entities which are
+ *	currently marked as active; if false, returns all entities
+ *	regardless of whether they are marked active or inactive.
+ *	@return entity list. */
 /*-------------------------------------------------------------------*/
 	public synchronized Vector getEntities(boolean onlyActive)
 	{
 		return getEntities(null, null, null, onlyActive);
 	}
 
+/*-------------------------------------------------------------------*/
+/**	Get entity information. Returns only entities which are currently active.
+ *	@return entity list. */
+/*-------------------------------------------------------------------*/
 	public synchronized Vector getEntities()
 	{
 		return getEntities(true);
@@ -617,7 +624,7 @@ public class World
 /*-------------------------------------------------------------------*/
 	public synchronized Vector getOpponents(boolean onlyActive)
 	{
-		Vector playerEnts = getEntities("players", null, null, onlyActive);
+		Vector playerEnts = getEntities(Entity.CAT_PLAYERS, null, null, onlyActive);
 
 		for(int i = 0; i < playerEnts.size(); i++)
 		{
@@ -632,7 +639,8 @@ public class World
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get entity information on opposing players.
+/**	Get entity information on opposing players. Returns only entities
+ *	which are currently active.
  *	@return entity collection containing only opposing player
  *	entities. The entity corresponding to the local player is
  *	automatically removed. */
@@ -643,14 +651,18 @@ public class World
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get item collection information.
+/**	Get item information.
  *	@return entity collection containing only item entities. */
 /*-------------------------------------------------------------------*/
 	public synchronized Vector getItems(boolean onlyActive)
 	{
-		return getEntities("items", null, null, onlyActive);
+		return getEntities(Entity.CAT_ITEMS, null, null, onlyActive);
 	}
 
+/*-------------------------------------------------------------------*/
+/**	Get item information. Returns only entities which are currently active.
+ *	@return entity collection containing only item entities. */
+/*-------------------------------------------------------------------*/
 	public synchronized Vector getItems()
 	{
 		return getItems(true);
@@ -662,9 +674,14 @@ public class World
 /*-------------------------------------------------------------------*/
 	public synchronized Vector getWeapons(boolean onlyActive)
 	{
-		return getEntities("weapons", null, null, onlyActive);
+		return getEntities(Entity.CAT_WEAPONS, null, null, onlyActive);
 	}
 
+/*-------------------------------------------------------------------*/
+/**	Get weapon collection information. Returns only entities which are
+ *	currently active.
+ *	@return entity collection containing only weapon entities. */
+/*-------------------------------------------------------------------*/
 	public synchronized Vector getWeapons()
 	{
 		return getWeapons(true);
@@ -676,9 +693,14 @@ public class World
 /*-------------------------------------------------------------------*/
 	public synchronized Vector getObjects(boolean onlyActive)
 	{
-		return getEntities("objects", null, null, onlyActive);
+		return getEntities(Entity.CAT_OBJECTS, null, null, onlyActive);
 	}
 
+/*-------------------------------------------------------------------*/
+/**	Get object collection information. Returns only entities which are
+ *	currently active.
+ *	@return entity collection containing only object entities. */
+/*-------------------------------------------------------------------*/
 	public synchronized Vector getObjects()
 	{
 		return getObjects(true);

@@ -68,7 +68,7 @@ public abstract class BasicBot extends Thread implements Bot
 	public BasicBot()
 	{
 		user = new User("QASE_Bot", "female/athena", 65535, 1, 90, User.HAND_RIGHT, "");
-		commonSetup(false, false);
+		commonSetup(false, true);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -80,7 +80,7 @@ public abstract class BasicBot extends Thread implements Bot
 	public BasicBot(String botName, String botSkin)
 	{
 		user = new User((botName == null ? "QASE_BasicBot" : botName), (botSkin == null ? "female/athena" : botSkin), 65535, 1, 90, User.HAND_RIGHT, "");
-		commonSetup(false, false);
+		commonSetup(false, true);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -885,35 +885,137 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Find the nearest enemy in the game world.
- *	@return nearest enemy */
+/**	Find the nearest entity in the game world. Returns only entities
+ *	which are currently active.
+ *	@return nearest entity */
 /*-------------------------------------------------------------------*/
-	protected Entity getNearestEnemy()
+	protected Entity getNearestEntity()
 	{
-		if(proxy == null || (visWorld = proxy.getWorld()) == null)
+		if(proxy == null || proxy.getWorld() == null)
 			return null;
 
-		opp = visWorld.getOpponents();
-		tempOrigin = visWorld.getPlayer().getPlayerMove().getOrigin();
-		pos.set(tempOrigin.getX(), tempOrigin.getY(), tempOrigin.getZ());
+		return getNearestEntity(proxy.getWorld().getEntities());
+	}
 
+/*-------------------------------------------------------------------*/
+/**	Find the nearest entity in the game world. Returns only entities
+ *	which are currently active.
+ *	@param cat the category of entity to search for. Should be one of
+ *	the CAT_ constants in the Entity class, or null to search for all
+ *	entity categories.
+ *	@param type the type of entity to search for. Should be one of the
+ *	TYPE_ constants in the Entity class, or null to search for all
+ *	entity types.
+ *	@param subType the subtype of entity to search for. Should be one
+ *	of the SUBTYPE_ constants in the Entity class, or null to search
+ *	for all entity subtypes.
+ *	@return nearest entity */
+/*-------------------------------------------------------------------*/
+	protected Entity getNearestEntity(String cat, String type, String subType)
+	{
+		if(proxy == null || proxy.getWorld() == null)
+			return null;
+
+		return getNearestEntity(proxy.getWorld().getEntities(cat, type, subType, true));
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Find the nearest entity in the game world from those contained in
+ *	the argument Vector.
+ *	@param filteredEntities a Vector containing a selection of entities
+ *	from the gamestate.
+ *	@return nearest entity */
+/*-------------------------------------------------------------------*/
+	protected Entity getNearestEntity(Vector filteredEntities)
+	{
+		Entity tempEntity = null;
 		Entity nearestEnemy = null;
+
+		Origin currentPos = getPosition();
+
+		float tempDistance = 0;
 		float distance = Float.MAX_VALUE;
 
-		for(int i = 0; i < opp.size(); i++)
+		for(int i = 0; i < filteredEntities.size(); i++)
 		{
-			tempOrigin = ((Entity)opp.elementAt(i)).getOrigin();
-			enemyPos.set(tempOrigin.getX(), tempOrigin.getY(), tempOrigin.getZ());
-			enemyPos.sub(pos);
+			tempEntity = (Entity)filteredEntities.elementAt(i);
+			tempDistance = currentPos.distance(tempEntity.getOrigin());
 
-			if(enemyPos.length() < distance && enemyPos.length() > 0)
+			if(tempDistance < distance && tempDistance > 0)
 			{
-				distance = enemyPos.length();
-				nearestEnemy = (Entity)opp.elementAt(i);
+				distance = tempDistance;
+				nearestEnemy = tempEntity;
 			}
 		}
 
 		return nearestEnemy;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Find the nearest enemy in the game world. Returns only entities
+ *	which are currently active.
+ *	@return nearest enemy */
+/*-------------------------------------------------------------------*/
+	protected Entity getNearestEnemy()
+	{
+		if(proxy == null || proxy.getWorld() == null)
+			return null;
+
+		return getNearestEntity(proxy.getWorld().getOpponents());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Find the nearest item in the game world. Returns only entities
+ *	which are currently active.
+ *	@param type the type of item to search for. Should be one of the
+ *	TYPE_ constants in the Entity class, or null to search for all
+ *	item types.
+ *	@param subType the subtype of item to search for. Should be one of
+ *	the SUBTYPE_ constants in the Entity class, or null to search for all
+ *	item subtypes.
+ *	@return nearest item */
+/*-------------------------------------------------------------------*/
+	protected Entity getNearestItem(String type, String subType)
+	{
+		if(proxy == null || proxy.getWorld() == null)
+			return null;
+
+		return getNearestEntity(proxy.getWorld().getEntities(Entity.CAT_ITEMS, type, subType, true));
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Find the nearest item in the game world. Returns only entities
+ *	which are currently active.
+ *	@param type the type of weapon to search for. Should be one of the
+ *	TYPE_ constants in the Entity class, or null to search for all
+ *	weapon types.
+ *	@return nearest weapon */
+/*-------------------------------------------------------------------*/
+	protected Entity getNearestWeapon(String type)
+	{
+		if(proxy == null || proxy.getWorld() == null)
+			return null;
+
+		return getNearestEntity(proxy.getWorld().getEntities(Entity.CAT_WEAPONS, type, null, true));
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Find the nearest object in the game world. Returns only entities
+ *	which are currently active.
+ *	@param type the type of object to search for. Should be one of the
+ *	TYPE_ constants in the Entity class, or null to search for all
+ *	object types.
+ *	@param subType the subtype of object to search for. Should be one of
+ *	the SUBTYPE_ constants in the Entity class, or null to search for all
+ *	object subtypes.
+ *	@return nearest item */
+/*-------------------------------------------------------------------*/
+	protected Entity getNearestObject(String type, String subType)
+	{
+		if(proxy == null || proxy.getWorld() == null)
+			return null;
+
+		return getNearestEntity(proxy.getWorld().getEntities(Entity.CAT_OBJECTS, type, subType, true));
 	}
 
 /*-------------------------------------------------------------------*/
@@ -969,115 +1071,155 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
- *	of the the given type resides. The item type is specified by inventory
- *	index; see the Inventory class for a list of inventory constants
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
+/**	Get the closest Waypoint to the agent's current position at which
+ *	an item of the the specified type resides. The category, type and
+ *	subtype are typically passed using the constants found in the Entity
+ *	class.
+ *	@param cat the category of item to search for, or null to search for
+ *	entities of any category
+ *	@param type the type of item to search for, or null to search for
+ *	entities of any type
+ *	@param subType the subtype of item to search for, or null to search
+ *	for entities of any subtype
+ *	@return the closest Waypoint at which a matching item exists
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	protected Waypoint findClosestEntity(String cat, String type, String subType)
+	{
+		if(wpMap == null)
+			return null;
+
+		return wpMap.findClosestEntity(getPosition(), cat, type, subType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the closest Waypoint to the agent's current position at which
+ *	the closest enemy player is located.
+ *	@return the closest Waypoint to the nearest enemy player
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	protected Waypoint findClosestEnemy()
+	{
+		Entity tempEnemy = getNearestEnemy();
+
+		if(wpMap == null || tempEnemy == null)
+			return null;
+
+		return wpMap.findClosestWaypoint(tempEnemy.getOrigin());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the closest Waypoint to the agent's current position at which
+ *	an item of the the given type resides. The item type is specified
+ *	by inventory index; see the Inventory class for a list of inventory
+ *	constants.
  *	@param itemInventoryIndex the inventory index corresponding to the
  *	item to search for
  *	@return the closest Waypoint at which a matching item exists
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
-	protected Waypoint findClosestItem(Origin currentPos, int itemInventoryIndex)
+	protected Waypoint findClosestItem(int itemInventoryIndex)
 	{
 		if(wpMap == null)
 			return null;
 
-		return wpMap.findClosestItem(currentPos, itemInventoryIndex);
+		return wpMap.findClosestItem(getPosition(), itemInventoryIndex);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
- *	of the the given type resides. The item type is specified by inventory
- *	index; see the Inventory class for a list of inventory constants
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param itemInventoryIndex the inventory index corresponding to the
- *	item to search for
- *	@return the closest Waypoint at which a matching item exists
- *	@see soc.qase.state.Inventory */
-/*-------------------------------------------------------------------*/
-	protected Waypoint findClosestItem(Vector3f currentPos, int itemInventoryIndex)
-	{
-		if(wpMap == null)
-			return null;
-
-		return wpMap.findClosestItem(currentPos, itemInventoryIndex);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
- *	of the the specified type resides. The category, type and subtype
- *	are typically passed using the constants found in the Entity class.
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
+/**	Get the closest Waypoint to the agent's current position at which
+ *	an item of the the specified type resides. The type and subtype are
+ *	typically passed using the constants found in the Entity class.
+ *	@param type the type of item to search for, or null to search for
+ *	items of any type
+ *	@param subType the subtype of item to search for, or null to search
+ *	for items of any subtype
  *	@return the closest Waypoint at which a matching item exists
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint findClosestItem(Origin currentPos, String cat, String type, String subType)
+	protected Waypoint findClosestItem(String type, String subType)
 	{
-		if(wpMap == null)
-			return null;
-
-		return wpMap.findClosestItem(currentPos, cat, type, subType);
+		return findClosestEntity(Entity.CAT_ITEMS, type, subType);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
- *	of the the specified type resides. The category, type and subtype
- *	are typically passed using the constants found in the Entity class.
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
- *	@return the closest Waypoint at which a matching item exists
+/**	Get the closest Waypoint to the agent's current position at which
+ *	a weapon of the the specified type resides. The type is typically
+ *	passed using the constants found in the Entity class.
+ *	@param type the type of weapon to search for, or null to search for
+ *	weapons of any type
+ *	@return the closest Waypoint at which a matching weapon exists
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint findClosestItem(Vector3f currentPos, String cat, String type, String subType)
+	protected Waypoint findClosestWeapon(String type)
 	{
-		if(wpMap == null)
-			return null;
-
-		return wpMap.findClosestItem(currentPos, cat, type, subType);
+		return findClosestEntity(Entity.CAT_WEAPONS, type, null);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Find the shortest path between the closest Waypoints to the specified
- *	locations. This uses the previously-generated cost and predecessor
- *	matrices.
- *	@param from the starting position, usually the agent's current location
+/**	Get the closest Waypoint to the agent's current position at which
+ *	an object of the the specified type resides. The type and subtype are
+ *	typically passed using the constants found in the Entity class.
+ *	@param type the type of object to search for, or null to search for
+ *	objects of any type
+ *	@param subType the subtype of object to search for, or null to search
+ *	for objects of any subtype
+ *	@return the closest Waypoint at which a matching object exists
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	protected Waypoint findClosestObject(String type, String subType)
+	{
+		return findClosestEntity(Entity.CAT_OBJECTS, type, subType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Find the shortest path between the Waypoints closest to the agent's
+ *	current position and the specified location. This uses the
+ *	previously-generated cost and predecessor matrices.
  *	@param to the position to which we need a path
  *	@return a Waypoint array indicating the shortest path between the
  *	two Waypoints closest to the start and end positions */
 /*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPath(Origin from, Origin to)
+	protected Waypoint[] findShortestPath(Origin to)
 	{
 		if(wpMap == null)
 			return null;
 
-		return wpMap.findShortestPath(from, to);
+		return wpMap.findShortestPath(getPosition(), to);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Find the shortest path between the closest Waypoints to the specified
- *	locations. This uses the previously-generated cost and predecessor
- *	matrices.
- *	@param from the starting position, usually the agent's current location
- *	@param to the position to which we need a path
- *	@return a Waypoint array indicating the shortest path between the
- *	two Waypoints closest to the start and end positions */
+/**	Get the path through the waypoint graph from the current position to
+ *	the closest Waypoint at which an entity of the the given type resides.
+ *	The category, type and subtype are typically passed using the
+ *	constants found in the Entity class.
+ *	@param cat the category of entity to search for, or null to search for
+ *	entities of any category
+ *	@param type the type of entity to search for, or null to search for
+ *	entities of any type
+ *	@param subType the subtype of entity to search for, or null to search for
+ *	entities of any subtype
+ *	@return a Waypoint array indicating the shortest path
+ *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPath(Vector3f from, Vector3f to)
+	protected Waypoint[] findShortestPathToEntity(String cat, String type, String subType)
 	{
 		if(wpMap == null)
 			return null;
 
-		return wpMap.findShortestPath(from, to);
+		return wpMap.findShortestPathToEntity(getPosition(), cat, type, subType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the path through the waypoint graph from the current position to
+ *	the closest Waypoint at which an enemy player is located.
+ *	@return a Waypoint array indicating the shortest path
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	protected Waypoint[] findShortestPathToEnemy()
+	{
+		Entity tempEnemy = getNearestEnemy();
+		return (tempEnemy == null ? null : findShortestPath(tempEnemy.getOrigin()));
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1085,39 +1227,17 @@ public abstract class BasicBot extends Thread implements Bot
  *	the closest Waypoint at which an item of the the given type resides.
  *	The item type is specified by inventory index; see the Inventory class
  *	for a list of inventory constants
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
  *	@param itemInventoryIndex the inventory index corresponding to the
  *	item to search for
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPathToItem(Origin currentPos, int itemInventoryIndex)
+	protected Waypoint[] findShortestPathToItem(int itemInventoryIndex)
 	{
 		if(wpMap == null)
 			return null;
 
-		return wpMap.findShortestPathToItem(currentPos, itemInventoryIndex);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the path through the waypoint graph from the current position to
- *	the closest Waypoint at which an item of the the given type resides.
- *	The item type is specified by inventory index; see the Inventory class
- *	for a list of inventory constants
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param itemInventoryIndex the inventory index corresponding to the
- *	item to search for
- *	@return a Waypoint array indicating the shortest path
- *	@see soc.qase.state.Inventory */
-/*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPathToItem(Vector3f currentPos, int itemInventoryIndex)
-	{
-		if(wpMap == null)
-			return null;
-
-		return wpMap.findShortestPathToItem(currentPos, itemInventoryIndex);
+		return wpMap.findShortestPathToItem(getPosition(), itemInventoryIndex);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1125,41 +1245,48 @@ public abstract class BasicBot extends Thread implements Bot
  *	the closest Waypoint at which an item of the the given type resides.
  *	The category, type and subtype are typically passed using the
  *	constants found in the Entity class.
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
+ *	@param type the type of item to search for, or null to search for
+ *	entities of any type
+ *	@param subType the subtype of item to search for, or null to search for
+ *	entities of any subtype
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPathToItem(Origin currentPos, String cat, String type, String subType)
+	protected Waypoint[] findShortestPathToItem(String type, String subType)
 	{
-		if(wpMap == null)
-			return null;
-
-		return wpMap.findShortestPathToItem(currentPos, cat, type, subType);
+		return findShortestPathToEntity(Entity.CAT_ITEMS, type, subType);
 	}
 
 /*-------------------------------------------------------------------*/
 /**	Get the path through the waypoint graph from the current position to
- *	the closest Waypoint at which an item of the the given type resides.
- *	The category, type and subtype are typically passed using the
- *	constants found in the Entity class.
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
+ *	the closest Waypoint at which a weapon of the the given type resides.
+ *	The type is typically passed using the constants found in the Entity
+ *	class.
+ *	@param type the type of weapon to search for, or null to search for
+ *	weapons of any type
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPathToItem(Vector3f currentPos, String cat, String type, String subType)
+	protected Waypoint[] findShortestPathToWeapon(String type)
 	{
-		if(wpMap == null)
-			return null;
+		return findShortestPathToEntity(Entity.CAT_WEAPONS, type, null);
+	}
 
-		return wpMap.findShortestPathToItem(currentPos, cat, type, subType);
+/*-------------------------------------------------------------------*/
+/**	Get the path through the waypoint graph from the current position to
+ *	the closest Waypoint at which an object of the the given type resides.
+ *	The type and subtype are typically passed using the constants found
+ *	in the Entity class.
+ *	@param type the type of object to search for, or null to search for
+ *	objects of any type
+ *	@param subType the subtype of object to search for, or null to search for
+ *	objects of any subtype
+ *	@return a Waypoint array indicating the shortest path
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	protected Waypoint[] findShortestPathToObject(String type, String subType)
+	{
+		return findShortestPathToEntity(Entity.CAT_OBJECTS, type, subType);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1390,6 +1517,10 @@ public abstract class BasicBot extends Thread implements Bot
 		traceFromView = useVO;
 	}
 
+	private Vector3f dir = new Vector3f(0, 0, 0);
+	private Vector3f pos = new Vector3f(0, 0, 0);
+	private Vector3f enemyPos = new Vector3f(0, 0, 0);
+
 /*-------------------------------------------------------------------*/
 /**	Check whether a particular entity is visible from the player's
  *	current position.
@@ -1420,10 +1551,10 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected boolean isVisible(Vector3f v)
 	{
-		if(v == null || proxy == null || (visWorld = proxy.getWorld()) == null) return false;
+		if(v == null || proxy == null || proxy.getWorld() == null) return false;
 
-		pos.set(visWorld.getPlayer().getPlayerMove().getOrigin());
-		if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
+		pos.set(proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
+		if(traceFromView) pos.add(proxy.getWorld().getPlayer().getPlayerView().getViewOffset());
 
 		return bsp.isVisible(pos, v);
 	}
@@ -1437,10 +1568,6 @@ public abstract class BasicBot extends Thread implements Bot
 		return isNearestEnemyVisible(false);
 	}
 
-	private Entity nearEnemy = null;
-	private Origin tempOrigin = null;
-	private Vector3f dir = new Vector3f(0, 0, 0);
-
 /*-------------------------------------------------------------------*/
 /**	Check whether the nearest enemy in the game is currently visible.
  *	@param withinFOV if true, constrain visibility check to agent's
@@ -1449,24 +1576,19 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected boolean isNearestEnemyVisible(boolean withinFOV)
 	{
-		nearEnemy = getNearestEnemy();
+		Entity nearEnemy = getNearestEnemy();
 
 		if(nearEnemy != null)
 		{
 			enemyPos.set(nearEnemy.getOrigin());
 			dir.sub(enemyPos, pos);
 
-			if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
-			return (withinFOV ? Utils.calcAngles(dir)[0] <= visWorld.getPlayer().getPlayerView().getFOV() / 2.0 && bsp.isVisible(pos, enemyPos) : bsp.isVisible(pos, enemyPos));
+			if(traceFromView) pos.add(proxy.getWorld().getPlayer().getPlayerView().getViewOffset());
+			return (withinFOV ? Utils.calcAngles(dir)[0] <= proxy.getWorld().getPlayer().getPlayerView().getFOV() / 2.0 && bsp.isVisible(pos, enemyPos) : bsp.isVisible(pos, enemyPos));
 		}
 		else
 			return false;
 	}
-
-	private Vector opp = null;
-	private World visWorld = null;
-	private Vector3f pos = new Vector3f(0, 0, 0);
-	private Vector3f enemyPos = new Vector3f(0, 0, 0);
 
 /*-------------------------------------------------------------------*/
 /**	Projects a bounding-box through the game world in a given direction
@@ -1527,7 +1649,7 @@ public abstract class BasicBot extends Thread implements Bot
 			return null;
 
 		pos.set(proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
-		if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
+		if(traceFromView) pos.add(proxy.getWorld().getPlayer().getPlayerView().getViewOffset());
 
 		bsp.setBrushType(brushType);
 
@@ -1579,7 +1701,7 @@ public abstract class BasicBot extends Thread implements Bot
 			return Float.NaN;
 
 		pos.set(proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
-		if(traceFromView) pos.add(visWorld.getPlayer().getPlayerView().getViewOffset());
+		if(traceFromView) pos.add(proxy.getWorld().getPlayer().getPlayerView().getViewOffset());
 
 		bsp.setBrushType(brushType);
 

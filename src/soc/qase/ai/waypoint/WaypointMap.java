@@ -778,56 +778,6 @@ public class WaypointMap implements Serializable
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified Waypoint at which an item
- *	of the the specified type resides. The category, type and subtype
- *	are typically passed using the constants found in the Entity class.
- *	@param currentPos the Waypoint from which to search
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
- *	@return the closest Waypoint at which a matching item exists
- *	@see soc.qase.state.Entity */
-/*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Waypoint currentPos, String cat, String type, String subType)
-	{
-		return findClosestItem(indexOf(currentPos), cat, type, subType);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
- *	of the the specified type resides. The category, type and subtype
- *	are typically passed using the constants found in the Entity class.
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
- *	@return the closest Waypoint at which a matching item exists
- *	@see soc.qase.state.Entity */
-/*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Origin currentPos, String cat, String type, String subType)
-	{
-		return findClosestItem(indexOf(findClosestWaypoint(currentPos)), cat, type, subType);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
- *	of the the specified type resides. The category, type and subtype
- *	are typically passed using the constants found in the Entity class.
- *	@param currentPos the position from which to search (generally the
- *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
- *	@return the closest Waypoint at which a matching item exists
- *	@see soc.qase.state.Entity */
-/*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(Vector3f currentPos, String cat, String type, String subType)
-	{
-		return findClosestItem(indexOf(findClosestWaypoint(currentPos)), cat, type, subType);
-	}
-
-/*-------------------------------------------------------------------*/
 /**	Get the closest Waypoint to the specified position at which an item
  *	of the the given type resides. The item type is specified by inventory
  *	index; see the Inventory class for a list of inventory constants
@@ -862,17 +812,79 @@ public class WaypointMap implements Serializable
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the closest Waypoint to the specified position at which an item
+/**	Get the closest Waypoint to the specified Waypoint at which an entity
+ *	of the the specified type resides. The category, type and subtype
+ *	are typically passed using the constants found in the Entity class.
+ *	@param currentPos the Waypoint from which to search
+ *	@param cat the category of entity to search for, or null to search
+ *	for any category
+ *	@param type the type of entity to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of entity to search for, or null to search
+ *	for any subtype
+ *	@return the closest Waypoint at which a matching entity exists
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	public Waypoint findClosestEntity(Waypoint currentPos, String cat, String type, String subType)
+	{
+		return findClosestEntity(indexOf(currentPos), cat, type, subType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the closest Waypoint to the specified position at which an entity
+ *	of the the specified type resides. The category, type and subtype
+ *	are typically passed using the constants found in the Entity class.
+ *	@param currentPos the position from which to search (generally the
+ *	agent's current location)
+ *	@param cat the category of entity to search for, or null to search
+ *	for any category
+ *	@param type the type of entity to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of entity to search for, or null to search
+ *	for any subtype
+ *	@return the closest Waypoint at which a matching entity exists
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	public Waypoint findClosestEntity(Origin currentPos, String cat, String type, String subType)
+	{
+		return findClosestEntity(indexOf(findClosestWaypoint(currentPos)), cat, type, subType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the closest Waypoint to the specified position at which an entity
+ *	of the the specified type resides. The category, type and subtype
+ *	are typically passed using the constants found in the Entity class.
+ *	@param currentPos the position from which to search (generally the
+ *	agent's current location)
+ *	@param cat the category of entity to search for, or null to search
+ *	for any category
+ *	@param type the type of entity to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of entity to search for, or null to search
+ *	for any subtype
+ *	@return the closest Waypoint at which a matching entity exists
+ *	@see soc.qase.state.Entity */
+/*-------------------------------------------------------------------*/
+	public Waypoint findClosestEntity(Vector3f currentPos, String cat, String type, String subType)
+	{
+		return findClosestEntity(indexOf(findClosestWaypoint(currentPos)), cat, type, subType);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the closest Waypoint to the specified position at which an entity
  *	of the the specified type resides. The category, type and subtype
  *	are typically passed using the constants found in the Entity class.
  *	@param fromIndex the index of the node at which to start searching
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
- *	@return the closest Waypoint at which a matching item exists
+ *	@param cat the category of item to search for, or null to search
+ *	for any category
+ *	@param type the type of item to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of item to search for, or null to search
+ *	for any subtype
+ *	@return the closest Waypoint at which a matching entity exists
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint findClosestItem(int fromIndex, String cat, String type, String subType)
+	public Waypoint findClosestEntity(int fromIndex, String cat, String type, String subType)
 	{
 		int toIndex = -1;
 		WaypointItem wpItem = null;
@@ -1037,20 +1049,23 @@ public class WaypointMap implements Serializable
 
 /*-------------------------------------------------------------------*/
 /**	Get the path through the waypoint graph from the current Waypoint to
- *	the closest Waypoint at which an item of the the given type resides.
+ *	the closest Waypoint at which an entity of the the given type resides.
  *	The category, type and subtype are typically passed using the
  *	constants found in the Entity class.
  *	@param currentPos the Waypoint from which to search
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
+ *	@param cat the category of entity to search for, or null to search
+ *	for any category
+ *	@param type the type of entity to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of entity to search for, or null to search
+ *	for any subtype
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Waypoint currentPos, String cat, String type, String subType)
+	public Waypoint[] findShortestPathToEntity(Waypoint currentPos, String cat, String type, String subType)
 	{
 		int fromIndex = indexOf(currentPos);
-		int toIndex = indexOf(findClosestItem(fromIndex, cat, type, subType));
+		int toIndex = indexOf(findClosestEntity(fromIndex, cat, type, subType));
 
 		if(fromIndex == -1 || toIndex == -1)
 			return null;
@@ -1060,21 +1075,24 @@ public class WaypointMap implements Serializable
 
 /*-------------------------------------------------------------------*/
 /**	Get the path through the waypoint graph from the current position to
- *	the closest Waypoint at which an item of the the given type resides.
+ *	the closest Waypoint at which an entity of the the given type resides.
  *	The category, type and subtype are typically passed using the
  *	constants found in the Entity class.
  *	@param currentPos the position from which to search (generally the
  *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
+ *	@param cat the category of entity to search for, or null to search
+ *	for any category
+ *	@param type the type of entity to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of entity to search for, or null to search
+ *	for any subtype
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Origin currentPos, String cat, String type, String subType)
+	public Waypoint[] findShortestPathToEntity(Origin currentPos, String cat, String type, String subType)
 	{
 		int fromIndex = indexOf(findClosestWaypoint(currentPos));
-		int toIndex = indexOf(findClosestItem(fromIndex, cat, type, subType));
+		int toIndex = indexOf(findClosestEntity(fromIndex, cat, type, subType));
 
 		if(toIndex == -1)
 			return null;
@@ -1084,21 +1102,24 @@ public class WaypointMap implements Serializable
 
 /*-------------------------------------------------------------------*/
 /**	Get the path through the waypoint graph from the current position to
- *	the closest Waypoint at which an item of the the given type resides.
+ *	the closest Waypoint at which an entity of the the given type resides.
  *	The category, type and subtype are typically passed using the
  *	constants found in the Entity class.
  *	@param currentPos the position from which to search (generally the
  *	agent's current location)
- *	@param cat the category of item to search for
- *	@param type the type of item to search for
- *	@param subType the subtype of item to search for
+ *	@param cat the category of entity to search for, or null to search
+ *	for any category
+ *	@param type the type of entity to search for, or null to search
+ *	for any type
+ *	@param subType the subtype of entity to search for, or null to search
+ *	for any subtype
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	public Waypoint[] findShortestPathToItem(Vector3f currentPos, String cat, String type, String subType)
+	public Waypoint[] findShortestPathToEntity(Vector3f currentPos, String cat, String type, String subType)
 	{
 		int fromIndex = indexOf(findClosestWaypoint(currentPos));
-		int toIndex = indexOf(findClosestItem(fromIndex, cat, type, subType));
+		int toIndex = indexOf(findClosestEntity(fromIndex, cat, type, subType));
 
 		if(toIndex == -1)
 			return null;

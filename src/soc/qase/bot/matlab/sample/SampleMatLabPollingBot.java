@@ -10,7 +10,6 @@ import soc.qase.info.*;
 import soc.qase.state.*;
 import soc.qase.tools.vecmath.*;
 
-import java.util.Vector;
 import soc.qase.bot.matlab.MatLabPollingBot;
 
 /*-------------------------------------------------------------------*/
@@ -21,21 +20,6 @@ import soc.qase.bot.matlab.MatLabPollingBot;
 /*-------------------------------------------------------------------*/
 public final class SampleMatLabPollingBot extends MatLabPollingBot
 {
-	private World world = null;
-	private Player player = null;
-	private Vector entities = null;
-
-	private Vector3f pos = null;
-	private Vector3f dir = null;
-
-	private Entity tempEntity = null;
-	private Entity nearestEntity = null;
-	private float entDist = Float.MAX_VALUE;
-
-	private Origin tempOrigin = null;
-	private Vector3f entPos = new Vector3f(0, 0, 0);
-	private Vector3f entDir = new Vector3f(0, 0, 0);
-
 /*-------------------------------------------------------------------*/
 /**	Constructor allowing the user to specify a name and skin (appearance)
  *	for the agent.
@@ -45,7 +29,6 @@ public final class SampleMatLabPollingBot extends MatLabPollingBot
 	public SampleMatLabPollingBot(String botName, String botSkin)
 	{
 		super((botName == null ? "SampleMatLabPollingBot" : botName), botSkin, 2);
-		initBot();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -58,69 +41,33 @@ public final class SampleMatLabPollingBot extends MatLabPollingBot
 	public SampleMatLabPollingBot(String botName, String botSkin, boolean trackInv)
 	{
 		super((botName == null ? "SampleMatLabPollingBot" : botName), botSkin, 2, trackInv);
-		initBot();
 	}
 
-	private void initBot()
-	{
-		pos = new Vector3f(0, 0, 0);
-		dir = new Vector3f(0, 0, 0);
-	}
+	private Vector3f pos = new Vector3f(0, 0, 0);
+	private Vector3f itemPos = new Vector3f(0, 0, 0);
 
 /*-------------------------------------------------------------------*/
 /**	Populate the MatLab parameter array with the relevant values.
- *	@param w the current gamestate
+ *	@param world the current gamestate
  *	@param mlParams an Object array to be populated with data for MatLab
  *	(typically a series of float arrays) */
 /*-------------------------------------------------------------------*/
-	protected void preMatLab(World w, Object[] mlParams)
+	protected void preMatLab(World world, Object[] mlParams)
 	{
-		world = w;
-
-		tempEntity = null;
-		nearestEntity = null;
-		entDist = Float.MAX_VALUE;
-
-		tempOrigin = null;
-		entPos.set(0, 0, 0);
-		entDir.set(0, 0, 0);
-
-		player = world.getPlayer();
-		entities = world.getItems();
-
 		setAction(Action.ATTACK, false);
 
-		for(int i = 0; i < entities.size(); i++)
+		// get the nearest item of any kind
+		Entity nearestItem = getNearestItem(null, null);
+
+		if(nearestItem != null)
 		{
-			tempEntity = (Entity)entities.elementAt(i);
-
-			tempOrigin = tempEntity.getOrigin();
-			entPos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-			
-			tempOrigin = player.getPlayerMove().getOrigin();
-			pos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-
-			entDir.sub(entPos, pos);
-
-			if((nearestEntity == null || entDir.length() < entDist) && entDir.length() > 0)
-			{
-				nearestEntity = tempEntity;
-				entDist = entDir.length();
-			}
-		}
-
-		if(nearestEntity != null)
-		{
-			tempOrigin = nearestEntity.getOrigin();
-			entPos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
-
-			tempOrigin = player.getPlayerMove().getOrigin();
-			pos.set(tempOrigin.getX(), tempOrigin.getY(), 0);
+			pos.set(getPosition());
+			itemPos.set(nearestItem.getOrigin());
 		}
 
 	/* -------PARAMATERS FOR MATLAB------- */
 		matLabParams[0] = pos.toArray();
-		matLabParams[1] = entPos.toArray();
+		matLabParams[1] = itemPos.toArray();
 	/* ----------------------------------- */
 	}
 
