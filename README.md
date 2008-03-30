@@ -12,6 +12,88 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.4.8 (30-03-08)
+-
+**Notes:**
+
+A release that introduces some performance and
+functionality improvements, which were requested by
+various correspondents. Please note that the interfaces
+of two methods in particular (BasicBot.getPlayer and
+WaypointMapGenerator.generate) have changed, as outlined
+below.
+
+**Changes:**
+
+* New method getPlayerInfo will return the User object
+  associated with the current bot, which contains
+  information relating to the agent's in-game name, skin,
+  FoV, etc.
+
+* Similarly, getServerInfo returns the Server object associated
+  with the current game session. This contains information such
+  as the server version, map name, and whether the server
+  is running CTF or a simple deathmatch.
+
+* The getPlayer method in the BasicBot class has been
+  renamed getPlayerState, to properly distinguish it from the
+  new getPlayerInfo method.
+
+* New gamestate processing has been added, enabling
+  QASE to determine when an opposing player dies. The method
+  "hasDied" in the Entity class returns true if the Entity is
+  a player who died during the current game frame. Note that
+  this serves to flag an instantaneous event - it will register
+  as true only for the frame at which the player died, not for
+  the entire period between the player's death and respawn.
+
+* A method, getOpponentByName, has been added to the
+  World class. This allows the programmer to obtain the Entity
+  object associated with a particular player by supplying that
+  player's in-game name as a String.
+
+* The interface and functionality of the "generate"
+  method in WaypointMapGenerator has changed. The programmer
+  need no longer specify whether or not the positions of
+  items should be recorded as part of the WaypointMap; this
+  is done automatically, since it results in a better
+  topological representation of the environment, and because
+  the user can simply opt not to use the item information if
+  he so desires.
+
+* Furthermore, the number of nodes to be used in the waypoint
+  map is now specified as a float value rather than an integer.
+  If the argument supplied is greater than 1, it is taken to
+  represent the actual number of nodes to use. If, however,
+  the value is a decimal less than 1.0, it is treated as
+  specifying the number of nodes as a fraction of the total
+  number of observed player positions in the demo file.
+  
+> For instance, the following call:
+
+>>    WaypointMapGenerator.generate("test.dm2", 50)
+
+> will generate a map consisting of 50 waypoints, whereas
+
+>>    WaypointMapGenerator.generate("test.dm2", 0.3)
+
+> will generate a map containing 30% of the total number of
+  player positions found in the demo.
+
+* Finally, additional error checks have been added to the
+  WaypointMap generation process, to account for more obscure
+  scenarios.
+
+* It has been observed that QASE clients do not connect
+  to Jake2 servers, Jake2 being a Java port of the Quake2 game
+  engine. Initial investigations suggest that Jake2 uses non-
+  standard indices for the Config table, which stores data about
+  the various entities, models and media used in the course of
+  a game session. The Jake2 project has been defunct for some
+  time, which makes obtaining the relevant information somewhat
+  difficult; I'll see what I can find out, and will incorporate
+  any necessary changes into the next release.
+
 r2.4.5 (22-11-07)
 -
 **Notes:**

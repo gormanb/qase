@@ -247,14 +247,36 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Returns the User object associated with this bot, which contains
+ *	information regarding the agent's in-game name, skin, FoV, etc.
+ *	@return the User object containing details of the bot's
+ *	configuration, or null if no such object exists */
+/*-------------------------------------------------------------------*/
+	protected User getPlayerInfo()
+	{
+		return user;
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Returns the Player object associated with this bot, which can then
  *	be further queried for information.
  *	@return the Player object containing full details of the bot's
  *	current state, or null if no such object exists */
 /*-------------------------------------------------------------------*/
-	protected Player getPlayer()
+	protected Player getPlayerState()
 	{
 		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Returns the Server object associated with the current game session,
+ *	which contains information such as the server version, the map name,
+ *	and whether the server is running CTF or a regular deathmatch.
+ *	@return the Server object associated with the current session */
+/*-------------------------------------------------------------------*/
+	protected Server getServerInfo()
+	{
+		return (proxy == null ? null : proxy.getServer());
 	}
 
 /*-------------------------------------------------------------------*/
@@ -427,7 +449,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public int getWalkState()
 	{
-		return getPlayer().getWalkState();
+		return getPlayerState().getWalkState();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1056,18 +1078,20 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Generate a WaypointMap by analysing a recorded DM2 demo. The resulting
  *	WaypointMap is set as the agent's navigation map, to be used when
  *	any waypoint-related BasicBot methods are invoked. A reference to the
- *	object is also returned for convenience.
+ *	object is also returned for convenience. This method records the
+ *	positions at which items were collected in the demo, and holds these
+ *	locations constant through the clustering process.
  *	@param dm2Filename filename of the DM2 demo to analyse
- *	@param numWaypoints the number of nodes to generate for the WaypointMap
- *	@param keepItemPositions if true, records the positions at which
- *	items were collected in the demo, and holds these locations constant
- *	through the clustering process
+ *	@param fNumWaypoints the number of nodes to generate for the WaypointMap.
+ *	If this number is less than 1, it is treated as a percentage of the
+ *	total number of observed player positions. If it is 1 or greater, it
+ *	is treated as an absolute number of nodes to generate.
  *	@return the resulting WaypointMap
- *	@see soc.qase.ai.waypoint.WaypointMapGenerator#generate(String, int, boolean) */
+ *	@see soc.qase.ai.waypoint.WaypointMapGenerator#generate(String, float) */
 /*-------------------------------------------------------------------*/
-	protected WaypointMap generateWaypointMap(String dm2Filename, int numWaypoints, boolean keepItemPositions)
+	protected WaypointMap generateWaypointMap(String dm2Filename, float fNumWaypoints)
 	{
-		return (wpMap = WaypointMapGenerator.generate(dm2Filename, numWaypoints, keepItemPositions));
+		return (wpMap = WaypointMapGenerator.generate(dm2Filename, fNumWaypoints));
 	}
 
 /*-------------------------------------------------------------------*/

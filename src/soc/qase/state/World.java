@@ -409,13 +409,15 @@ public class World
  *	send explicit notification when an item is picked up, this is used
  *	to determine whether or not the agent has just collected an item,
  *	and if so to deduce the entity type, number and respawn interval.
+ *	Similarly, this method is used to determine whether a particular
+ *	player has died during the current game frame.
  *	@param sound the Sound message received from the server */
 /*-------------------------------------------------------------------*/
 	public void processSound(Sound sound)
 	{
 		int pkup = players[currentState].getPlayerStatus().getStatus(PlayerStatus.PICKUP_STRING) - 1056;
 
-		if(sound.getEntityNumber() == playerEntityNum + 1 && pkup > 0 && config.getConfigString(sound.getConfigIndex()).indexOf("pkup") > 0)
+		if(sound.getEntityNumber() == playerEntityNum + 1 && pkup > 0 && config.getConfigString(sound.getConfigIndex()).indexOf("pkup") >= 0)
 		{
 			if(trackInventory && isPlayerActive())
 			{	PlayerGun gun = players[currentState].getPlayerGun();
@@ -465,6 +467,8 @@ public class World
 					respawnTimes[index] = getEntity(index).getRespawnTime();
 			}
 		}
+		else if(config.getConfigString(sound.getConfigIndex()).indexOf("death") >= 0)
+			getEntity(sound.getEntityNumber()).playerDied = true;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -648,6 +652,27 @@ public class World
 	public synchronized Vector getOpponents()
 	{
 		return getOpponents(true);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get entity information on a particular opposing player by supplying
+ *	that opponent's name.
+ *	@return the Entity corresponding to the specified opponent. */
+/*-------------------------------------------------------------------*/
+	public synchronized Entity getOpponentByName(String oppName)
+	{
+		if(oppName == null)
+			return null;
+
+		Vector opps = getOpponents(false);
+
+		for(int i = 0; i < opps.size(); i++)
+		{
+			if(((Entity)opps.elementAt(i)).getName().equalsIgnoreCase(oppName))
+				return (Entity)opps.elementAt(i);
+		}
+
+		return null;
 	}
 
 /*-------------------------------------------------------------------*/

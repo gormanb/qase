@@ -35,15 +35,20 @@ public class WaypointMapGenerator
 {
 /*-------------------------------------------------------------------*/
 /**	Generate and return a WaypointMap by analysing a recorded DM2 demo.
+ *	This method also records the positions at which items were collected
+ *	in the demo, and holds these locations constant through the clustering
+ *	process.
  *	@param dm2File filename of the DM2 demo to analyse
- *	@param numNodes the number of nodes to generate for the WaypointMap
- *	@param keepItemPositions if true, records the positions at which
- *	items were collected in the demo, and holds these locations constant
- *	through the clustering process
+ *	@param fNumNodes the number of nodes to generate for the WaypointMap.
+ *	If this number is less than 1, it is treated as a percentage of the
+ *	total number of observed player positions. If it is 1 or greater, it
+ *	is treated as an absolute number of nodes to generate.
  *	@return the resulting WaypointMap */
 /*-------------------------------------------------------------------*/
-	public static WaypointMap generate(String dm2File, int numNodes, boolean keepItemPositions)
+	public static WaypointMap generate(String dm2File, float fNumNodes)
 	{
+		int numNodes = 0;
+
 		World world = null;
 		WaypointMap wpMap = new WaypointMap();
 		DM2Parser dm2p = new DM2Parser(dm2File);
@@ -51,7 +56,7 @@ public class WaypointMapGenerator
 		Vector isAlive = new Vector();
 		Vector playerPos = new Vector();
 		Vector waypointItems = new Vector();
-		Vector pickupPos = (keepItemPositions ? new Vector() : null);
+		Vector pickupPos = new Vector();
 
 		Vector3f currentPos = null, lastPos = null, itemPos = null;
 
@@ -64,7 +69,7 @@ public class WaypointMapGenerator
 				playerPos.add(currentPos);
 				isAlive.add(new Boolean(world.getPlayer().isAlive()));
 
-				if(keepItemPositions && world.getPickupEntityIndex() != -1 && !duplicateItemNode(pickupPos, (itemPos = new Vector3f(world.getPickupEntity().getOrigin()))))
+				if(world.getPickupEntityIndex() != -1 && !duplicateItemNode(pickupPos, (itemPos = new Vector3f(world.getPickupEntity().getOrigin()))))
 				{
 					pickupPos.add(itemPos);
 					waypointItems.add(world.getPickupEntity());
@@ -75,9 +80,12 @@ public class WaypointMapGenerator
 		}
 
 		Vector3f[] playerPos3f = (Vector3f[])playerPos.toArray(new Vector3f[0]);
-		Vector3f[] pickupPos3f = (keepItemPositions ? (Vector3f[])pickupPos.toArray(new Vector3f[0]) : null);
+		Vector3f[] pickupPos3f = (Vector3f[])pickupPos.toArray(new Vector3f[0]);
 
-		KMeansData kmResults = (keepItemPositions ? KMeansCalc.doKMeans(numNodes, playerPos3f, pickupPos3f) : KMeansCalc.doKMeans(numNodes, playerPos3f));
+		fNumNodes = Math.abs(fNumNodes);
+		numNodes = Math.min(Math.round((fNumNodes < 1 ? fNumNodes * playerPos3f.length : fNumNodes)), playerPos3f.length);
+
+		KMeansData kmResults = KMeansCalc.doKMeans(numNodes, playerPos3f, pickupPos3f);
 
 		wpMap.addNode(kmResults.centroids);
 

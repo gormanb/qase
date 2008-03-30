@@ -45,6 +45,7 @@ public class Entity
 	private String skin = null;
 	private int inventoryIndex = -1;
 	private boolean respawned = false;
+	public boolean playerDied = false;
 
 	public static final String	ANY = null;
 	public static final String	CAT_ITEMS = "items", CAT_WEAPONS = "weapons", CAT_PLAYERS = "players", CAT_OBJECTS = "objects",
@@ -483,6 +484,20 @@ public class Entity
 	public boolean isRespawned()
 	{
 		return respawned;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether this entity died during the current frame. This
+ *	naturally applies only to entities of category "players". Note
+ *	that this value serves to flag an instantaneous event - it will
+ *	register as true only for the frame at which the player died,
+ *	NOT for the entire period between the player's death and respawn.
+ *	@return true if this is a player entity which died during the
+ *	current frame, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean hasDied()
+	{
+		return playerDied;
 	}
 
 /*-------------------------------------------------------------------*/

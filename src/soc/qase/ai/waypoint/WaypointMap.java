@@ -808,7 +808,7 @@ public class WaypointMap implements Serializable
 			}
 		}
 
-		return (Waypoint)nodes.elementAt(toIndex);
+		return (toIndex < 0 ? null : (Waypoint)nodes.elementAt(toIndex));
 	}
 
 /*-------------------------------------------------------------------*/
@@ -905,7 +905,7 @@ public class WaypointMap implements Serializable
 			}
 		}
 
-		return (Waypoint)nodes.elementAt(toIndex);
+		return (toIndex < 0 ? null : (Waypoint)nodes.elementAt(toIndex));
 	}
 
 /*-------------------------------------------------------------------*/
