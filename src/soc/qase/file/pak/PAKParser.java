@@ -62,8 +62,8 @@ public class PAKParser
 		{
 			pakFile = new File(filename);
 			bufIn = new RandomAccessFile(pakFile, "r");
-			fName = new String(filename);
 
+			fName = filename;
 			fileOpen = true;
 		}
 		catch(IOException ioe)

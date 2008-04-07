@@ -9,6 +9,7 @@ import soc.qase.com.*;
 import soc.qase.info.*;
 import soc.qase.state.*;
 import soc.qase.tools.vecmath.*;
+import soc.qase.file.bsp.BSPParser;
 
 import java.util.Vector;
 import java.util.Observable;
@@ -26,6 +27,9 @@ import java.util.Observable;
 /*-------------------------------------------------------------------*/
 public abstract class PollingBot extends BasicBot
 {
+	private String mapName = null;
+	private boolean mapChanged = false;
+
 /*-------------------------------------------------------------------*/
 /**	Constructor allowing the user to specify a name and skin (appearance)
  *	for the agent.
@@ -152,6 +156,8 @@ public abstract class PollingBot extends BasicBot
 		if(ctfTeam != Integer.MIN_VALUE)
 			setCTFTeam(Math.abs(ctfTeam) < 2 ? Math.abs(ctfTeam) : (int)Math.round(Math.random()));
 
+		mapName = getServerInfo().getMapName();
+
 		setConnected(true);
 		this.start();
 
@@ -164,6 +170,20 @@ public abstract class PollingBot extends BasicBot
 	public void disconnect()
 	{
 		setConnected(false);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Indicates whether the current game map has changed since the last
+ *	time this method was called.
+ *	@return true if the map has changed since the last time this method
+ *	was called, false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean mapHasChanged()
+	{
+		boolean tempResponse = mapChanged;
+		mapChanged = false;
+
+		return tempResponse;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -189,6 +209,14 @@ public abstract class PollingBot extends BasicBot
 
 			if(world != null && world.getFrame() != curFrameNum)
 			{
+				mapChanged = !mapName.equals(getServerInfo().getMapName());
+
+				if(mapChanged)
+				{
+					mapName = getServerInfo().getMapName();
+					bsp = new BSPParser();
+				}
+
 				curFrameNum = world.getFrame();
 
 				if(!isBotAlive())

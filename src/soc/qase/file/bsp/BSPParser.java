@@ -92,8 +92,8 @@ public class BSPParser
 			{
 				byteIn = new ByteArrayInputStream(pakBSPFileData);
 				bufIn = new BufferedInputStream(byteIn);
-				fName = new String(filename);
 
+				fName = filename;
 				fileOpen = inPAKFile = true;
 			}			
 		}
@@ -103,8 +103,8 @@ public class BSPParser
 			{
 				bspFile = new File(filename);
 				bufIn = new BufferedInputStream(new FileInputStream(bspFile));
-				fName = new String(filename);
 
+				fName = filename;
 				fileOpen = true;
 			}
 			catch(IOException ioe)

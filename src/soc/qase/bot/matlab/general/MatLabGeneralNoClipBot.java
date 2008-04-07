@@ -81,42 +81,49 @@ public final class MatLabGeneralNoClipBot extends MatLabNoClipBot
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, whether the
- *	agent should operate in high thread safety mode, and whether it
- *	should manually track its inventory.
+/**	Constructor allowing the user to specify a name, skin, initial
+ *	starting position, whether the agent should operate in high thread
+ *	safety mode, and whether it should manually track its inventory.
  *	@param botName name of the character during game session
  *	@param botSkin specifies the character's in-game appearance
+ *	@param initialPosition the position to which the agent should move
+ *	before entering the game as an active participant 
  *	@param highThreadSafety if true, enables high thread safety mode
  *	@param trackInv if true, the agent will manually track its inventory */
 /*-------------------------------------------------------------------*/
-	public MatLabGeneralNoClipBot(String botName, String botSkin, boolean highThreadSafety, boolean trackInv)
+	public MatLabGeneralNoClipBot(String botName, String botSkin, Vector3f initialPosition, boolean highThreadSafety, boolean trackInv)
 	{
-		super((botName == null ? "MatLabGeneralNoClipBot" : botName), botSkin, highThreadSafety, 0, trackInv);
+		super((botName == null ? "MatLabGeneralNoClipBot" : botName), botSkin, initialPosition, highThreadSafety, 0, trackInv);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, server password,
- *	whether the agent should operate in high thread safety mode, and whether
- *	it should manually track its inventory.
+/**	Constructor allowing the user to specify a name, skin, initial
+ *	starting position, server password, whether the agent should operate
+ *	in high thread safety mode, and whether it should manually track its
+ *	inventory.
  *	@param botName name of the character during game session
  *	@param botSkin specifies the character's in-game appearance
+ *	@param initialPosition the position to which the agent should move
+ *	before entering the game as an active participant 
  *	@param password the password of the server, if necessary
  *	@param highThreadSafety if true, enables high thread safety mode
  *	@param trackInv if true, the agent will manually track its inventory */
 /*-------------------------------------------------------------------*/
-	public MatLabGeneralNoClipBot(String botName, String botSkin, String password, boolean highThreadSafety, boolean trackInv)
+	public MatLabGeneralNoClipBot(String botName, String botSkin, Vector3f initialPosition, String password, boolean highThreadSafety, boolean trackInv)
 	{
-		super((botName == null ? "MatLabGeneralNoClipBot" : botName), botSkin, password, highThreadSafety, 0, trackInv);
+		super((botName == null ? "MatLabGeneralNoClipBot" : botName), botSkin, initialPosition, password, highThreadSafety, 0, trackInv);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, connection
- *	receive rate, type of messages received from server, field of view, 
- *	which hand the agent should hold its gun in, server password,
- *	whether the agent should operate in high thread safety mode, and whether
- *	it should manually track its inventory.
+/**	Constructor allowing the user to specify a name, skin, initial
+ *	starting position, connection receive rate, type of messages received
+ *	from server, field of view, which hand the agent should hold its gun
+ *	in, server password, whether the agent should operate in high thread
+ *	safety mode, and whether it should manually track its inventory.
  *	@param botName name of the character during game session
  *	@param botSkin specifies the character's in-game appearance
+ *	@param initialPosition the position to which the agent should move
+ *	before entering the game as an active participant 
  *	@param recvRate rate at which the client communicates with server
  *	@param msgLevel specifies which server messages to register interest in
  *	@param fov specifies the agent's field of vision
@@ -125,9 +132,9 @@ public final class MatLabGeneralNoClipBot extends MatLabNoClipBot
  *	@param highThreadSafety if true, enables high thread safety mode
  *	@param trackInv if true, the agent will manually track its inventory */
 /*-------------------------------------------------------------------*/
-	public MatLabGeneralNoClipBot(String botName, String botSkin, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, boolean trackInv)
+	public MatLabGeneralNoClipBot(String botName, String botSkin, Vector3f initialPosition, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, boolean trackInv)
 	{
-		super((botName == null ? "MatLabGeneralNoClipBot" : botName), botSkin, recvRate, msgLevel, fov, hand, password, highThreadSafety, 0, trackInv);
+		super((botName == null ? "MatLabGeneralNoClipBot" : botName), botSkin, initialPosition, recvRate, msgLevel, fov, hand, password, highThreadSafety, 0, trackInv);
 	}
 
 /*-------------------------------------------------------------------*/

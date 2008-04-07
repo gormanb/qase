@@ -55,7 +55,7 @@ public abstract class BasicBot extends Thread implements Bot
 	private static String q2HomeDir = null;
 
 	protected WaypointMap wpMap = null;
-	private BSPParser bsp = new BSPParser();
+	protected BSPParser bsp = new BSPParser();
 
 	private float sphereRadius = 18.0f;
 	private boolean globalAngles = true;
@@ -283,7 +283,7 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether the agent is currently alive and active in the game.
  *	@return true if the agent is active and alive, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isBotAlive()
+	protected boolean isBotAlive()
 	{
 		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isAlive();
 	}
@@ -293,7 +293,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the current position, or null if the agent is not
  *	currently connected */
 /*-------------------------------------------------------------------*/
-	public Origin getPosition()
+	protected Origin getPosition()
 	{
 		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
 	}
@@ -303,7 +303,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the current orientation, or null if the agent is not
  *	currently connected */
 /*-------------------------------------------------------------------*/
-	public Angles getOrientation()
+	protected Angles getOrientation()
 	{
 		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPlayerView().getViewAngles());
 	}
@@ -313,7 +313,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the agent's health value, or Integer.MIN_VALUE if the agent
  *	is not currently connected */
 /*-------------------------------------------------------------------*/
-	public int getHealth()
+	protected int getHealth()
 	{
 		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.HEALTH) : Integer.MIN_VALUE);
 	}
@@ -324,7 +324,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	in the Inventory class, or Integer.MIN_VALUE if the agent is not
  *	currently connected */
 /*-------------------------------------------------------------------*/
-	public int getWeaponIndex()
+	protected int getWeaponIndex()
 	{
 		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerGun().getInventoryIndex() : Integer.MIN_VALUE);
 	}
@@ -334,7 +334,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the current ammo, or Integer.MIN_VALUE if the agent
  *	is not currently connected */
 /*-------------------------------------------------------------------*/
-	public int getAmmo()
+	protected int getAmmo()
 	{
 		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.AMMO) : Integer.MIN_VALUE);
 	}
@@ -344,7 +344,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the current armor value, or Integer.MIN_VALUE if the agent
  *	is not currently connected */
 /*-------------------------------------------------------------------*/
-	public int getArmor()
+	protected int getArmor()
 	{
 		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.ARMOR) : Integer.MIN_VALUE);
 	}
@@ -400,7 +400,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param angleType the angle to return
  *	@see soc.qase.state.Angles */
 /*-------------------------------------------------------------------*/
-	public float getAngle(int angleType)
+	protected float getAngle(int angleType)
 	{
 		return angles.get(angleType);
 	}
@@ -436,7 +436,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the magnitude of the agent's velocity in the given direction
  *	@see soc.qase.state.Velocity */
 /*-------------------------------------------------------------------*/
-	public int getVelocity(int velocityType)
+	protected int getVelocity(int velocityType)
 	{
 		return velocity.get(velocityType);
 	}
@@ -447,7 +447,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the agent's current walk state
  *	@see soc.qase.state.PlayerMove */
 /*-------------------------------------------------------------------*/
-	public int getWalkState()
+	protected int getWalkState()
 	{
 		return getPlayerState().getWalkState();
 	}
@@ -482,7 +482,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return true if the given action is active, false otherwise
  *	@see soc.qase.state.Action */
 /*-------------------------------------------------------------------*/
-	public boolean getAction(int actionType)
+	protected boolean getAction(int actionType)
 	{
 		return action.get(actionType);
 	}
@@ -566,7 +566,7 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether agent is currently jumping.
  *	@return true if jumping, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isJumping()
+	protected boolean isJumping()
 	{
 		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isJumping();
 	}
@@ -575,7 +575,7 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether agent is currently crouching.
  *	@return true if crouching, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isCrouching()
+	protected boolean isCrouching()
 	{
 		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isCrouching();
 	}
@@ -584,9 +584,33 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether agent is currently in water.
  *	@return true if in water, false otherwise */
 /*-------------------------------------------------------------------*/
-	public boolean isUnderWater()
+	protected boolean isUnderWater()
 	{
 		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isUnderWater();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determines the amount of time remaining until the player begins
+ *	drowning, or Long.MIN_VALUE if the player is not underwater. If
+ *	the player has a Rebreather or Environment Suit active - meaning
+ *	that they can breathe underwater - the value returned will indicate
+ *	the total amount of time until drowning, taking the active item
+ *	into account.
+ *	@return the time remaining until the player starts to drown in
+ *	milliseconds, or Long.MIN_VALUE if the player is not underwater */
+/*-------------------------------------------------------------------*/
+	protected long timeUntilDrowning()
+	{
+		return (proxy != null && proxy.inGame() ? proxy.getWorld().getPlayer().timeUntilDrowning() : Long.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Checks whether the agent is currently drowning.
+ *	@return true if the player is drowning, false otherwise. */
+/*-------------------------------------------------------------------*/
+	protected boolean isDrowning()
+	{
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isDrowning();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -732,7 +756,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param use true if the agent should use global co-ordinates, false
  *	if it should use local */
 /*-------------------------------------------------------------------*/
-	protected void useGlobalAngles(boolean use)
+	public void useGlobalAngles(boolean use)
 	{
 		globalAngles = use;
 	}
@@ -804,7 +828,32 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected void useItem(int item)
 	{
-		proxy.useItem(item);
+		if (proxy != null && proxy.inGame())
+			proxy.useItem(item);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Checks whether or not a particular timed buff (invulnerability,
+ *	quad damage, environment suit, etc) is currently active on the
+ *	bot; if so, returns the time remaining until the buff expires.
+ *	If null is passed, then the time remaining for any active buff is
+ *	returned. If no such buff is active, Integer.MIN_VALUE is returned.
+ *	The string passed to this method should be one of the appropriate
+ *	ICON_XYZ constants from the PlayerStatus class, e.g. ICON_INVULNERABILITY,
+ *	ICON_ENVIRONMENT_SUIT, ICON_QUAD_DAMAGE; this is because  the buff
+ *	is checked by examining the contents of the TIMER_ICON field in
+ *	the player's status array. Note that the time is a floored integer
+ *	representation of the real value - that is, a 30-second buff will
+ *	begin at 29 and end with 0 being returned for the final second it
+ *	is active.
+ *	@param buffIcon icon string of a particular timed buff, or null to check for
+ *	any buff
+ *	@return the time remaining on the active buff, in seconds; or
+ *	Integer.MIN_VALUE if no such buff is found */
+/*-------------------------------------------------------------------*/
+	protected int checkTimedBuff(String buffIcon)
+	{
+		return (proxy != null && proxy.inGame() ? proxy.getWorld().getPlayer().getPlayerStatus().checkTimedBuff(buffIcon) : Integer.MIN_VALUE);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -903,7 +952,8 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected void sendConsoleCommand(String command)
 	{
-		proxy.sendConsoleCommand(command);
+		if(proxy != null && proxy.inGame())
+			proxy.sendConsoleCommand(command);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1331,7 +1381,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getItems(Vector vect)
+	protected Vector getItems(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getItems(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1339,7 +1389,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getModels(Vector vect)
+	protected Vector getModels(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getModels(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1347,7 +1397,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getWeapons(Vector vect)
+	protected Vector getWeapons(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getWeapons(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1355,7 +1405,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getMonsters(Vector vect)
+	protected Vector getMonsters(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getMonsters(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1363,7 +1413,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getDoors(Vector vect)
+	protected Vector getDoors(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getDoors(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1371,7 +1421,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getLifts(Vector vect)
+	protected Vector getLifts(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getLifts(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1379,7 +1429,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getButtons(Vector vect)
+	protected Vector getButtons(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getButtons(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1387,7 +1437,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getIllusion(Vector vect)
+	protected Vector getIllusion(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getIllusion(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1395,7 +1445,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getConveyors(Vector vect)
+	protected Vector getConveyors(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getConveyors(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1403,7 +1453,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getTeleports(Vector vect)
+	protected Vector getTeleports(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getTeleports(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1411,7 +1461,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getNormalTeleports(Vector vect)
+	protected Vector getNormalTeleports(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getNormalTeleports(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1419,7 +1469,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getDMTeleports(Vector vect)
+	protected Vector getDMTeleports(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getDMTeleports(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1427,7 +1477,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getSecretDoors(Vector vect)
+	protected Vector getSecretDoors(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getSecretDoors(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1435,7 +1485,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getPathCorners(Vector vect)
+	protected Vector getPathCorners(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getPathCorners(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1443,7 +1493,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getWalkovers(Vector vect)
+	protected Vector getWalkovers(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getWalkovers(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1451,7 +1501,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getTeleportDestinations(Vector vect)
+	protected Vector getTeleportDestinations(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getTeleportDestinations(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1459,7 +1509,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getMiscObjects(Vector vect)
+	protected Vector getMiscObjects(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getMiscObjects(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1467,7 +1517,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getStartPositions(Vector vect)
+	protected Vector getStartPositions(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getStartPositions(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1475,7 +1525,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getPlayerStartPositions(Vector vect)
+	protected Vector getPlayerStartPositions(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getPlayerStartPositions(vect);	}
 
 /*-------------------------------------------------------------------*/
@@ -1483,8 +1533,95 @@ public abstract class BasicBot extends Thread implements Bot
  *	@param vect the Vector into which the entities will be added
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getDMStartPositions(Vector vect)
+	protected Vector getDMStartPositions(Vector vect)
 	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getDMStartPositions(vect);	}
+
+/*-------------------------------------------------------------------*/
+/** Returns an array of BSPLeaf objects representing the locations
+ *	at which environmental features - water, lava, etc - matching
+ *	the specified criteria are found. The argument should be a bitwise
+ *	OR of one or more of the CONTENTS constants found in the BSPBrush
+ *	class, e.g. CONTENTS_SLIME, CONTENTS_LAVA, CONTENTS_WATER. Each
+ *	BSPLeaf contains two Vector3f objects specifying the minimum and
+ *	maximum extents of the space occupied by the feature. For
+ *	convenience, separate getLavaLocations, getWaterLocations,
+ *	getSlimeLocations, getMistLocations and getWindowLocations
+ *	methods are provided.
+ *	@param brushBits a bitwise OR of the features to search for
+ *	@return the BSPLeaf objects which match said bitwise OR, null
+ *	if no matching leaves were found */
+/*-------------------------------------------------------------------*/
+	protected BSPLeaf[] getEnvironmentFeatureLocations(int brushBits)
+	{
+		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
+			return null;
+
+		Vector envFeatureLeaves = new Vector();
+		BSPLeaf[] bspLeaves = bsp.leafLump.leaves;
+
+		for(int i = 0; i < bspLeaves.length; i++)
+		{
+			if((bspLeaves[i].brushOr & brushBits) != 0)
+				envFeatureLeaves.add(bspLeaves[i]);
+		}
+
+		return (BSPLeaf[])envFeatureLeaves.toArray(new BSPLeaf[0]);
+	}
+
+/*-------------------------------------------------------------------*/
+/** Returns an array of BSPLeaf objects representing the locations
+ *	at which lava pools were found in the game environment.
+ *	@return the BSPLeaf objects corresponding to lava pools, or null
+ *	if no such pools were found */
+/*-------------------------------------------------------------------*/
+	protected BSPLeaf[] getLavaLocations()
+	{
+		return getEnvironmentFeatureLocations(BSPBrush.CONTENTS_LAVA);
+	}
+
+/*-------------------------------------------------------------------*/
+/** Returns an array of BSPLeaf objects representing the locations
+ *	at which water pools were found in the game environment.
+ *	@return the BSPLeaf objects corresponding to water pools, or null
+ *	if no such pools were found */
+/*-------------------------------------------------------------------*/
+	protected BSPLeaf[] getWaterLocations()
+	{
+		return getEnvironmentFeatureLocations(BSPBrush.CONTENTS_WATER);
+	}
+
+/*-------------------------------------------------------------------*/
+/** Returns an array of BSPLeaf objects representing the locations
+ *	at which poison slime pools were found in the game environment.
+ *	@return the BSPLeaf objects corresponding to slime pools, or null
+ *	if no such pools were found */
+/*-------------------------------------------------------------------*/
+	protected BSPLeaf[] getSlimeLocations()
+	{
+		return getEnvironmentFeatureLocations(BSPBrush.CONTENTS_SLIME);
+	}
+
+/*-------------------------------------------------------------------*/
+/** Returns an array of BSPLeaf objects representing the locations
+ *	at which mist coulds were found in the game environment.
+ *	@return the BSPLeaf objects corresponding to mist clouds, or null
+ *	if no such clouds were found */
+/*-------------------------------------------------------------------*/
+	protected BSPLeaf[] getMistLocations()
+	{
+		return getEnvironmentFeatureLocations(BSPBrush.CONTENTS_MIST);
+	}
+
+/*-------------------------------------------------------------------*/
+/** Returns an array of BSPLeaf objects representing the locations
+ *	at which windows were found in the game environment.
+ *	@return the BSPLeaf objects corresponding to windows, or null
+ *	if no windows were found */
+/*-------------------------------------------------------------------*/
+	protected BSPLeaf[] getWindowLocations()
+	{
+		return getEnvironmentFeatureLocations(BSPBrush.CONTENTS_WINDOW);
+	}
 
 /*-------------------------------------------------------------------*/
 /** Returns all entities of the specified type. The supplied entity ID
@@ -1494,8 +1631,8 @@ public abstract class BasicBot extends Thread implements Bot
  *	of the integer constants from BSPEntity
  *	@return a reference to the newly-populated vect for convenience */
 /*-------------------------------------------------------------------*/
-	public Vector getEntityType(Vector vect, int entID)
-	{	return bsp.getEntityType(vect, entID);	}
+	protected Vector getEntityType(Vector vect, int entID)
+	{	return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? null : bsp.getEntityType(vect, entID);	}
 
 	private Origin o = null;
 	private Vector3f bbmin = null, bbmax = null;
@@ -1506,7 +1643,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a reference to the BSPEntity describing the lift if the
  *	agent is on one, null otherwise. */
 /*-------------------------------------------------------------------*/
-	public BSPEntity isOnLift()
+	protected BSPEntity isOnLift()
 	{
 		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
 			return null;
@@ -1580,7 +1717,7 @@ public abstract class BasicBot extends Thread implements Bot
 		pos.set(proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
 		if(traceFromView) pos.add(proxy.getWorld().getPlayer().getPlayerView().getViewOffset());
 
-		return bsp.isVisible(pos, v);
+		return !isBotAlive() || (!bsp.isMapLoaded() && !readMap()) ? false : bsp.isVisible(pos, v);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1600,6 +1737,9 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected boolean isNearestEnemyVisible(boolean withinFOV)
 	{
+		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
+			return false;
+
 		Entity nearEnemy = getNearestEnemy();
 
 		if(nearEnemy != null)
@@ -1750,7 +1890,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public static void setQuake2HomeDirectory(String q2hd)
 	{
-		q2HomeDir = new String(q2hd);
+		q2HomeDir = q2hd;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1759,7 +1899,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	public static String getQuake2HomeDirectory()
 	{
-		return new String(q2HomeDir);
+		return q2HomeDir;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1773,7 +1913,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	@see #setQuake2HomeDirectory
  *	@see #findQuake2HomeDirectory */
 /*-------------------------------------------------------------------*/
-	public boolean readMap(String filename)
+	protected boolean readMap(String filename)
 	{
 		if(filename.substring(0, 6).equalsIgnoreCase("Q2HOME"))
 		{
@@ -1895,7 +2035,7 @@ public abstract class BasicBot extends Thread implements Bot
 		if(q2HomeDir == null || q2HomeDir.length() == 0)
 			q2HomeDir = "c:/quake2";
 
-		return new String(q2HomeDir);
+		return q2HomeDir;
 	}
 
 /*-------------------------------------------------------------------*/

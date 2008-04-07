@@ -19,6 +19,10 @@ import soc.qase.bot.ObserverBot;
 /*-------------------------------------------------------------------*/
 public final class SampleObserverBot extends ObserverBot
 {
+	private Vector3f pos = new Vector3f(0, 0, 0);
+	private Vector3f itemPos = new Vector3f(0, 0, 0);
+	private Vector3f itemDir = new Vector3f(0, 0, 0);
+
 /*-------------------------------------------------------------------*/
 /**	Constructor allowing the user to specify a name and skin (appearance)
  *	for the agent.
@@ -29,72 +33,6 @@ public final class SampleObserverBot extends ObserverBot
 	{
 		super((botName == null ? "SampleObserverBot" : botName), botSkin);
 	}
-
-/*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, and whether
- *	the agent should manually track its inventory.
- *	@param botName name of the character during game session
- *	@param botSkin specifies the character's in-game appearance
- *	@param trackInv if true, the agent will manually track its inventory */
-/*-------------------------------------------------------------------*/
-	public SampleObserverBot(String botName, String botSkin, boolean trackInv)
-	{
-		super((botName == null ? "SampleObserverBot" : botName), botSkin, trackInv);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, whether the
- *	agent should operate in high thread safety mode, and whether it
- *	should manually track its inventory.
- *	@param botName name of the character during game session
- *	@param botSkin specifies the character's in-game appearance
- *	@param highThreadSafety if true, enables high thread safety mode
- *	@param trackInv if true, the agent will manually track its inventory */
-/*-------------------------------------------------------------------*/
-	public SampleObserverBot(String botName, String botSkin, boolean highThreadSafety, boolean trackInv)
-	{
-		super((botName == null ? "SampleObserverBot" : botName), botSkin, highThreadSafety, trackInv);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, server password,
- *	whether the agent should operate in high thread safety mode, and whether
- *	it should manually track its inventory.
- *	@param botName name of the character during game session
- *	@param botSkin specifies the character's in-game appearance
- *	@param password the password of the server, if necessary
- *	@param highThreadSafety if true, enables high thread safety mode
- *	@param trackInv if true, the agent will manually track its inventory */
-/*-------------------------------------------------------------------*/
-	public SampleObserverBot(String botName, String botSkin, String password, boolean highThreadSafety, boolean trackInv)
-	{
-		super((botName == null ? "SampleObserverBot" : botName), botSkin, password, highThreadSafety, trackInv);
-	}
-
-/*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, connection
- *	receive rate, type of messages received from server, field of view, 
- *	which hand the agent should hold its gun in, server password,
- *	whether the agent should operate in high thread safety mode, and whether
- *	it should manually track its inventory.
- *	@param botName name of the character during game session
- *	@param botSkin specifies the character's in-game appearance
- *	@param recvRate rate at which the client communicates with server
- *	@param msgLevel specifies which server messages to register interest in
- *	@param fov specifies the agent's field of vision
- *	@param hand specifies the hand in which the agent hold its gun
- *	@param password the password of the server, if necessary
- *	@param highThreadSafety if true, enables high thread safety mode
- *	@param trackInv if true, the agent will manually track its inventory */
-/*-------------------------------------------------------------------*/
-	public SampleObserverBot(String botName, String botSkin, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, boolean trackInv)
-	{
-		super((botName == null ? "SampleObserverBot" : botName), botSkin, recvRate, msgLevel, fov, hand, password, highThreadSafety, trackInv);
-	}
-
-	private Vector3f pos = new Vector3f(0, 0, 0);
-	private Vector3f itemPos = new Vector3f(0, 0, 0);
-	private Vector3f itemDir = new Vector3f(0, 0, 0);
 
 /*-------------------------------------------------------------------*/
 /**	The agent's core AI routine.

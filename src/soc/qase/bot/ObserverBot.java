@@ -9,6 +9,7 @@ import soc.qase.com.*;
 import soc.qase.info.*;
 import soc.qase.state.*;
 import soc.qase.tools.vecmath.*;
+import soc.qase.file.bsp.BSPParser;
 
 import java.util.Vector;
 import java.util.Observer;
@@ -29,6 +30,9 @@ public abstract class ObserverBot extends BasicBot implements Observer
 {
 	protected boolean pacifyNeeded = false;
 	protected boolean respawnNeeded = false;
+
+	private String mapName = null;
+	private boolean mapChanged = false;
 
 /*-------------------------------------------------------------------*/
 /**	Constructor allowing the user to specify a name and skin (appearance)
@@ -157,6 +161,7 @@ public abstract class ObserverBot extends BasicBot implements Observer
 			setCTFTeam(Math.abs(ctfTeam) < 2 ? Math.abs(ctfTeam) : (int)Math.round(Math.random()));
 
 		proxy.addObserver(this);
+		mapName = getServerInfo().getMapName();
 
 		setConnected(true);
 		this.start();
@@ -175,6 +180,20 @@ public abstract class ObserverBot extends BasicBot implements Observer
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Indicates whether the current game map has changed since the last
+ *	time this method was called.
+ *	@return true if the map has changed since the last time this method
+ *	was called, false otherwise */
+/*-------------------------------------------------------------------*/
+	protected boolean mapHasChanged()
+	{
+		boolean tempResponse = mapChanged;
+		mapChanged = false;
+
+		return tempResponse;
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Required by the Observer pattern. Checks whether the agent is alive
  *	or needs to be respawned, then calls the runAI method.
  *	@param o the object which generated this Observable event - in our
@@ -184,6 +203,14 @@ public abstract class ObserverBot extends BasicBot implements Observer
 /*-------------------------------------------------------------------*/
 	public void update(Observable o, Object a)
 	{
+		mapChanged = !mapName.equals(getServerInfo().getMapName());
+
+		if(mapChanged)
+		{
+			mapName = getServerInfo().getMapName();
+			bsp = new BSPParser();
+		}
+
 		if(!isBotAlive())
 		{
 			if(getAction(Action.ATTACK))

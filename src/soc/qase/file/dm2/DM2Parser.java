@@ -78,7 +78,7 @@ public class DM2Parser extends ServerMessageHandler
 
 		try
 		{
-			fName = new String(filename);
+			fName = filename;
 			dm2File = new File(fName);
 
 			bufIn = new RandomAccessFile(dm2File, "r");

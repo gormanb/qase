@@ -25,6 +25,9 @@ public class Player
 	private PlayerView playerView = null;
 	private PlayerStatus playerStatus = null;
 
+	public long drownTTL = Long.MIN_VALUE;
+	public boolean playerIsDrowning = false;
+
 /*-------------------------------------------------------------------*/
 /**	Default constructor. */
 /*-------------------------------------------------------------------*/
@@ -391,6 +394,30 @@ public class Player
 	{
 		// return getPlayerMove().checkFlags(PlayerMove.FLAG_TIME_WATER);
 		return playerView.checkRender(PlayerView.RDF_UNDERWATER);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determines the amount of time remaining until the player begins
+ *	drowning, or Long.MIN_VALUE if the player is not underwater. If
+ *	the player has a Rebreather or Environment Suit active - meaning
+ *	that they can breathe underwater - the value returned will indicate
+ *	the total amount of time until drowning, taking the active item
+ *	into account.
+ *	@return the time remaining until the player starts to drown in
+ *	milliseconds, or Long.MIN_VALUE if the player is not underwater */
+/*-------------------------------------------------------------------*/
+	public long timeUntilDrowning()
+	{
+		return drownTTL;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Checks whether the agent is currently drowning.
+ *	@return true if the player is drowning, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isDrowning()
+	{
+		return playerIsDrowning;
 	}
 
 /*-------------------------------------------------------------------*/

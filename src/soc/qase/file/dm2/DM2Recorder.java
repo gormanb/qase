@@ -81,7 +81,7 @@ public class DM2Recorder
 		if(recording)
 			stopRecording();
 
-		filename = new String(fName);
+		filename = fName;
 
 		try
 		{	bufOut = new BufferedOutputStream(new FileOutputStream(filename));	}

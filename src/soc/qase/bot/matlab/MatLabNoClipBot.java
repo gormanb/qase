@@ -97,49 +97,55 @@ public abstract class MatLabNoClipBot extends NoClipBot implements MatLabBot
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, whether the
- *	agent should operate in high thread safety mode, the number of
- *	parameters to be passed to MatLab, and whether the agent should
- *	manually track its inventory.
+/**	Constructor allowing the user to specify a name, skin, initial
+ *	starting position, whether the agent should operate in high thread
+ *	safety mode, the number of parameters to be passed to MatLab, and
+ *	whether the agent should manually track its inventory.
  *	@param botName name of the character during game session
  *	@param botSkin specifies the character's in-game appearance
+ *	@param initialPosition the position to which the agent should move
+ *	before entering the game as an active participant 
  *	@param highThreadSafety if true, enables high thread safety mode
  *	@param mlParams number of parameters to be passed to MatLab on each update
  *	@param trackInv if true, the agent will manually track its inventory */
 /*-------------------------------------------------------------------*/
-	public MatLabNoClipBot(String botName, String botSkin, boolean highThreadSafety, int mlParams, boolean trackInv)
+	public MatLabNoClipBot(String botName, String botSkin, Vector3f initialPosition, boolean highThreadSafety, int mlParams, boolean trackInv)
 	{
-		super((botName == null ? "MatLabNoClipBot" : botName), botSkin, highThreadSafety, trackInv);
+		super((botName == null ? "MatLabNoClipBot" : botName), botSkin, initialPosition, highThreadSafety, trackInv);
 		matLabParams = new Object[mlParams];
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, server password,
- *	whether the agent should operate in high thread safety mode, the number of
- *	parameters to be passed to MatLab, and whether the agent should manually
- *	track its inventory.
+/**	Constructor allowing the user to specify a name, skin, initial
+ *	starting position, server password, whether the agent should operate
+ *	in high thread safety mode, the number of parameters to be passed to
+ *	MatLab, and whether the agent should manually track its inventory.
  *	@param botName name of the character during game session
  *	@param botSkin specifies the character's in-game appearance
+ *	@param initialPosition the position to which the agent should move
+ *	before entering the game as an active participant 
  *	@param password the password of the server, if necessary
  *	@param highThreadSafety if true, enables high thread safety mode
  *	@param mlParams number of parameters to be passed to MatLab on each update
  *	@param trackInv if true, the agent will manually track its inventory */
 /*-------------------------------------------------------------------*/
-	public MatLabNoClipBot(String botName, String botSkin, String password, boolean highThreadSafety, int mlParams, boolean trackInv)
+	public MatLabNoClipBot(String botName, String botSkin, Vector3f initialPosition, String password, boolean highThreadSafety, int mlParams, boolean trackInv)
 	{
-		super((botName == null ? "MatLabNoClipBot" : botName), botSkin, password, highThreadSafety, trackInv);
+		super((botName == null ? "MatLabNoClipBot" : botName), botSkin, initialPosition, password, highThreadSafety, trackInv);
 		matLabParams = new Object[mlParams];
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Constructor allowing the user to specify a name, skin, connection
- *	receive rate, type of messages received from server, field of view, 
- *	which hand the agent should hold its gun in, server password,
- *	whether the agent should operate in high thread safety mode, the number of
- *	parameters to be passed to MatLab, and whether the agent should manually
- *	track its inventory.
+/**	Constructor allowing the user to specify a name, skin, initial
+ *	starting position, connection receive rate, type of messages received
+ *	from server, field of view, which hand the agent should hold its gun
+ *	in, server password, whether the agent should operate in high thread
+ *	safety mode, the number of parameters to be passed to MatLab, and
+ *	whether the agent should manually track its inventory.
  *	@param botName name of the character during game session
  *	@param botSkin specifies the character's in-game appearance
+ *	@param initialPosition the position to which the agent should move
+ *	before entering the game as an active participant 
  *	@param recvRate rate at which the client communicates with server
  *	@param msgLevel specifies which server messages to register interest in
  *	@param fov specifies the agent's field of vision
@@ -149,9 +155,9 @@ public abstract class MatLabNoClipBot extends NoClipBot implements MatLabBot
  *	@param mlParams number of parameters to be passed to MatLab on each update
  *	@param trackInv if true, the agent will manually track its inventory */
 /*-------------------------------------------------------------------*/
-	public MatLabNoClipBot(String botName, String botSkin, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, int mlParams, boolean trackInv)
+	public MatLabNoClipBot(String botName, String botSkin, Vector3f initialPosition, int recvRate, int msgLevel, int fov, int hand, String password, boolean highThreadSafety, int mlParams, boolean trackInv)
 	{
-		super((botName == null ? "MatLabNoClipBot" : botName), botSkin, recvRate, msgLevel, fov, hand, password, highThreadSafety, trackInv);
+		super((botName == null ? "MatLabNoClipBot" : botName), botSkin, initialPosition, recvRate, msgLevel, fov, hand, password, highThreadSafety, trackInv);
 		matLabParams = new Object[mlParams];
 	}
 

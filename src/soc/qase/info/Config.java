@@ -165,7 +165,7 @@ public class Config
 		for(int i = 0; i < configStrings.length; i++)
 		{
 			if(configStrings[i] != null)
-				con.setConfigString(i, new String(configStrings[i]));
+				con.setConfigString(i, configStrings[i]);
 		}
 
 		return con;

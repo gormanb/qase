@@ -56,7 +56,7 @@ public class WaypointItem implements Serializable
 /*-------------------------------------------------------------------*/
 	public String getCategory()
 	{
-		return new String(iCategory);
+		return iCategory;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -67,7 +67,7 @@ public class WaypointItem implements Serializable
 /*-------------------------------------------------------------------*/
 	public String getType()
 	{
-		return new String(iType);
+		return iType;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -78,7 +78,7 @@ public class WaypointItem implements Serializable
 /*-------------------------------------------------------------------*/
 	public String getSubType()
 	{
-		return new String(iSubType);
+		return iSubType;
 	}
 
 /*-------------------------------------------------------------------*/

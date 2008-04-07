@@ -79,7 +79,7 @@ public class PAKDirectoryTree
 		for(int i = 0; i < paths.length; i++)
 		{
 			if(paths[i].indexOf(filename) != -1)
-				return new String(paths[i]);
+				return paths[i];
 		}
 
 		return null;
@@ -110,7 +110,7 @@ public class PAKDirectoryTree
 		for(int i = 0; i < paths.length; i++)
 		{
 			if(paths[i].indexOf(partialFilename) != -1)
-				matches.addElement(new String(paths[i]));
+				matches.addElement(paths[i]);
 		}
 
 		return matches;

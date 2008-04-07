@@ -12,6 +12,83 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.5.2 (07-04-08)
+-
+**Notes:**
+
+A release which fixes a recently-discovered bug, as well
+as adding some significant new functionality which has
+been requested by QASE users.
+
+**Changes:**
+
+* Fixed a bug which could prevent the BSPParser
+  embedded within BasicBot from correctly switching to the
+  new BSP map file when the game server changes map. Also
+  updated certain methods to correctly check whether the
+  current map file has been loaded and, if not, to find
+  and load it automatically.
+
+* A new "mapHasChanged" method in ObserverBot and
+  PollingBot (and of course their derivatives) allows the
+  user to determine whether the server has changed the
+  active game map since the last time the method was called.
+
+* New "getEnvironmentFeatureLocations" method in BasicBot
+  allows the user to obtain a list of BSPLeaf objects specifying
+  the location of various phenomena in the game environment - lava,
+  water, slime, and so forth. Convenience methods have also been
+  added for easier access to this data (getLavaLocations,
+  getWaterLocations, getSlimeLocations, getMistLocations,
+  getWindowLocations).
+
+* New methods "timeUntilDrowning" and "isDrowning"
+  have been added to the Player class; the former returns
+  the time remaining until the agent begins to drown in
+  milliseconds, while the latter returns a boolean indicating
+  whether the agent is currently drowning. If an item which
+  allows the bot to breathe underwater is active, then the
+  time remaining on the buff is factored into the value
+  returned by timeUntilDrowning. Convenience methods of the
+  same name have also been added to BasicBot.
+
+* A new method "checkTimedBuff" has been added to
+  the PlayerStatus class, allowing the user to determine if
+  a time-limited buff (invulnerability, quad damage, etc) is
+  active on the bot, and if so to obtain the time remaining
+  until said buff expires. Again, a shortcut method to this
+  functionality has been added to BasicBot.
+
+* The PlayerStatus class has been augmented with
+  new constants specifying the Config strings associated with
+  each status bar icon; these are used in conjunction with
+  the checkTimedBuff method described above. A new method
+  "getIconConfigString" has also been added to PlayerStatus.
+
+* SampleNoClipBot has been added, allowing the user
+  to better examine the functionality of the NoClipBots. These
+  allow the agent to "clip" through the environment to a specific
+  location, as long as the game server has the "set cheats 1"
+  option enabled. Passing a Vector3f object as an argument in
+  a NoClipBot's constructor causes the agent to move to the
+  given location before the first execution of the AI cycle;
+  thereafter, the agent can be instructed to move to any arbitrary
+  point by calling "clipToPosition". This is often highly useful
+  when designing AI models, since it allows the programmer to
+  move the agent to the most appropriate part of the map for
+  testing purposes.
+
+* Unused constructors have been removed from the
+  SampleBots for simplicity and clarity. In addition, several
+  constructors in classes derived from NoClipBot have been
+  updated to include a Vector3f specifying the initial
+  position to which the agent should move, in keeping with
+  the intent of the class.
+
+* A number of methods which were previously marked
+  public in BasicBot have been changed to protected, in order
+  to maintain consistency and design intent.
+
 r2.4.8 (30-03-08)
 -
 **Notes:**

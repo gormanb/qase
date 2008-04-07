@@ -25,7 +25,18 @@ public class PlayerStatus
 	HEALTH_ICON = 0, HEALTH = 1, AMMO_ICON = 2, AMMO = 3, ARMOR_ICON = 4,
 	ARMOR = 5, SELECTED_ICON = 6, PICKUP_ICON = 7, PICKUP_STRING = 8,
 	TIMER_ICON = 9, TIMER = 10, HELPICON = 11, SELECTED_ITEM = 12,
-	LAYOUTS = 13, FRAGS = 14, FLASHES = 15, CHASE = 16, SPECTATOR = 17;
+	LAYOUTS = 13, FRAGS = 14, FLASHES = 15, CHASE = 16, SPECTATOR = 17,
+	CONFIG_ICON_OFFSET = 544;
+
+	public static final String
+	ICON_REBREATHER = "p_rebreather", ICON_ENVIRONMENT_SUIT = "p_envirosuit", ICON_POWER_SHIELD = "i_powershield",
+	ICON_QUAD_DAMAGE = "p_quad", ICON_COMBAT_ARMOR = "i_combatarmor", ICON_JACKET_ARMOR = "i_jacketarmor",
+	ICON_HEALTH = "i_health", ICON_BLASTER = "w_blaster", ICON_CELLS = "a_cells", ICON_RAILGUN = "w_railgun",
+	ICON_SLUGS = "a_slugs", ICON_ROCKET_LAUNCHER = "w_rlauncher", ICON_ROCKETS = "a_rockets", ICON_BULLETS = "a_bullets",
+	ICON_CHAINGUN = "w_chaingun", ICON_BODY_ARMOR = "i_bodyarmor", ICON_ADRENALINE = "p_adrenaline",
+	ICON_SHELLS = "a_shells", ICON_GRENADES = "a_grenades", ICON_HYPERBLASTER = "w_hyperblaster", ICON_SHOTGUN = "w_shotgun",
+	ICON_MACHINEGUN = "w_machinegun", ICON_SUPER_SHOTGUN = "w_sshotgun", ICON_GRENADE_LAUNCHER = "w_glauncher",
+	ICON_PACK = "i_pack", ICON_BFG = "w_bfg", ICON_INVULNERABILITY = "p_invulnerability", ICON_SILENCER = "p_silencer";
 
 /*-------------------------------------------------------------------*/
 /**	Default constructor. Keys are initialised to Integer.MIN_VALUE,
@@ -87,6 +98,42 @@ public class PlayerStatus
 			return stats[key];
 		else
 			return Integer.MIN_VALUE;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the Config string associated with a particular status icon, i.e
+ *	HEALTH_ICON, AMMO_ICON, TIMER_ICON, etc. The returned string should
+ *	match one of the ICON string constants above.
+ *	@param key player status icon key
+ *	@return icon's associated Config string */
+/*-------------------------------------------------------------------*/
+	public String getIconConfigString(int key)
+	{
+		return (stats[key] >= 0 ? config.getConfigString(CONFIG_ICON_OFFSET + stats[key]) : null);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Checks whether or not a particular timed buff (invulnerability,
+ *	quad damage, environment suit, etc) is currently active on the
+ *	player; if so, returns the time remaining until the buff expires.
+ *	If null is passed, then the time remaining for any active buff is
+ *	returned. If no such buff is active, Integer.MIN_VALUE is returned.
+ *	The string passed to this method should be one of the appropriate
+ *	ICON_XYZ constants from the PlayerStatus class, e.g. ICON_INVULNERABILITY,
+ *	ICON_ENVIRONMENT_SUIT, ICON_QUAD_DAMAGE; this is because  the buff
+ *	is checked by examining the contents of the TIMER_ICON field in
+ *	the player's status array. Note that the time is a floored integer
+ *	representation of the real value - that is, a 30-second buff will
+ *	begin at 29 and end with 0 being returned for the final second it
+ *	is active.
+ *	@param buffIcon icon string of a particular timed buff, or null to check for
+ *	any buff
+ *	@return the time remaining on the active buff, in seconds; or
+ *	Integer.MIN_VALUE if no such buff is found */
+/*-------------------------------------------------------------------*/
+	public int checkTimedBuff(String buffIcon)
+	{
+		return (buffIcon == null || buffIcon.equals(getIconConfigString(TIMER_ICON)) ? getStatus(TIMER) : Integer.MIN_VALUE);
 	}
 
 /*-------------------------------------------------------------------*/

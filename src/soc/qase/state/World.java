@@ -45,6 +45,10 @@ public class World
 	private int playerEntityNum = -1;
 	private boolean trackInventory = false;
 
+	private boolean drownSound = false;
+	private long drownTimer = Long.MIN_VALUE;
+	private long envSuitTimer = Long.MIN_VALUE;
+
 	private int[] respawnTimes = null;
 	private boolean[] respawnedEntities = null;
 	private boolean[] deactivatedEntities = null;
@@ -194,6 +198,25 @@ public class World
 			updateInventoryAmmo();
 		else if(trackInventory && !players[currentState].isAlive())
 			inventory.resetCount();
+
+		checkDrownStatus(players[currentState]);
+	}
+
+	private void checkDrownStatus(Player player)
+	{
+		long curTime = System.currentTimeMillis();
+		PlayerStatus pStatus = player.getPlayerStatus();
+
+		if(pStatus.checkTimedBuff(PlayerStatus.ICON_ENVIRONMENT_SUIT) >= 0 || pStatus.checkTimedBuff(PlayerStatus.ICON_REBREATHER) >= 0)
+			envSuitTimer = (envSuitTimer == Long.MIN_VALUE || curTime - envSuitTimer > 30300 ? curTime : envSuitTimer);
+
+		if(player.isUnderWater())
+			drownTimer = (drownTimer == Long.MIN_VALUE || (envSuitTimer != Long.MIN_VALUE && curTime - envSuitTimer <= 28000) ? curTime : drownTimer);
+		else
+			drownTimer = Long.MIN_VALUE;
+
+		player.playerIsDrowning = drownSound = (drownSound && player.isUnderWater() && (envSuitTimer == Long.MIN_VALUE || curTime - envSuitTimer > 28000));
+		player.drownTTL = (drownTimer == Long.MIN_VALUE ? drownTimer : Math.max(drownTimer + 12000 - curTime + (envSuitTimer != Long.MIN_VALUE && curTime - envSuitTimer <= 28000 ? envSuitTimer + 28000 - curTime : 0), 0));
 	}
 
 /*-------------------------------------------------------------------*/
@@ -467,6 +490,8 @@ public class World
 					respawnTimes[index] = getEntity(index).getRespawnTime();
 			}
 		}
+		else if(sound.getEntityNumber() == playerEntityNum + 1 && config.getConfigString(sound.getConfigIndex()).indexOf("gurp") >= 0)
+			drownSound = true;
 		else if(config.getConfigString(sound.getConfigIndex()).indexOf("death") >= 0)
 			getEntity(sound.getEntityNumber()).playerDied = true;
 	}
