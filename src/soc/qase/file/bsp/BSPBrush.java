@@ -34,4 +34,33 @@ public class BSPBrush
 		numSides = Utils.unsignedIntValue(brushData, offset + 4);
 		contents = Utils.intValue(brushData, offset + 8);
 	}
+
+/*-------------------------------------------------------------------*/
+/**	Checks whether the contents - that is, the type of in-game object
+ *	which the brush represents, be it lava, water, solid, mist, etc - of
+ *	this brush matches any of the specified bitwise combination of contents.
+ *	@param brushOr bitwise OR of one or more CONTENTS constants from
+ *	the BSPBrush class
+ *	@return true if the brush contains ANY of the the specified contents,
+ *	false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean checkContents(int brushOr)
+	{
+		return (contents & brushOr) != 0;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Checks whether the contents - that is, the type of in-game object
+ *	which the brush represents, be it lava, water, solid, mist, etc - of
+ *	this brush exactly matches all of the specified bitwise combination
+ *	of contents.
+ *	@param brushOr bitwise OR of one or more CONTENTS constants from
+ *	the BSPBrush class
+ *	@return true if the brush contains ALL of the the specified contents,
+ *	false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean checkStrictContents(int brushOr)
+	{
+		return (contents & brushOr) == brushOr;
+	}
 }

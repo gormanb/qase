@@ -188,9 +188,9 @@ public abstract class PollingBot extends BasicBot
 
 /*-------------------------------------------------------------------*/
 /**	The core AI routine. To be implemented by derived classes.
- *	@param w a World object representing the current gamestate */
+ *	@param world a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
-	public abstract void runAI(World w);	// to be supplied by derived class
+	public abstract void runAI(World world);	// to be supplied by derived class
 
 /*-------------------------------------------------------------------*/
 /**	A thread which acts as the agent's main control loop. Continually
@@ -214,7 +214,7 @@ public abstract class PollingBot extends BasicBot
 				if(mapChanged)
 				{
 					mapName = getServerInfo().getMapName();
-					bsp = new BSPParser();
+					bsp.reset();
 				}
 
 				curFrameNum = world.getFrame();

@@ -72,9 +72,8 @@ public class Inventory
 /*-------------------------------------------------------------------*/
 	public void setCount(int itemIndex, int count)
 	{
-		if(itemIndex < 0) return;
-		if(itemIndex > 255) return;
-		inventoryCount[itemIndex] = count;
+		if(itemIndex > 0 && itemIndex <= 255)
+			inventoryCount[itemIndex] = count;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -95,12 +94,7 @@ public class Inventory
 /*-------------------------------------------------------------------*/
 	public int getCount(int itemIndex)
 	{
-		int result = 0;
-
-		if(itemIndex < 0) return result;
-		if(itemIndex > 255) return result;
-		result = inventoryCount[itemIndex];
-		return result;
+		return (itemIndex > 0 && itemIndex <= 255 ? inventoryCount[itemIndex] : 0);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -133,15 +127,13 @@ public class Inventory
 /*-------------------------------------------------------------------*/
 	public int getCount(String item)
 	{
-		int result = 0;
-		
-		for(int i = 0; i < 256; i++) {
-			if(config.getConfigString(1056 + i).equalsIgnoreCase(item)) {
-				result = inventoryCount[i];
-				break;
-			}
+		for(int i = 0; item != null && i < 256; i++)
+		{
+			if(item.equalsIgnoreCase(config.getItemString(i)))
+				return inventoryCount[i];
 		}
-		return result;
+
+		return 0;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -165,21 +157,14 @@ public class Inventory
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get item string for specified index.
- *	@param itemIndex item index. Should be one of the constants defined
- *	in the Inventory class.
- *	@return item string. */
+/**	Returns the full English name of the specified item.
+ *	@param itemIndex index of the item in the inventory
+ *	@return the full name of the specified inventory item.
+ */
 /*-------------------------------------------------------------------*/
 	public String getItemString(int itemIndex)
 	{
-		String result = null;
-
-		result = new String();
-		if(itemIndex < 0) return result;
-		if(itemIndex > 255) return result;
-		if(config == null) return result;
-		result = config.getConfigString(1056 + itemIndex);
-		return result;
+		return (itemIndex > 0 && itemIndex <= 255 ? config.getItemString(itemIndex) : null);
 	}
 
 /*-------------------------------------------------------------------*/

@@ -20,9 +20,9 @@ import soc.qase.info.*;
  *	categories: objects, items, weapons, or player. If the entity belongs
  *	to one of the first three categories, it can be further investigated
  *	by consequent calls to getType() and getSubType(). However, if the
- *	category corresponds to player, it has no type or sub-type, instead
+ *	category corresponds to player, it has no type or sub-type; instead
  *	the getName() method can be called to investigate the name of the
- *	currently investigated entity (diverse agent). */
+ *	currently investigated entity. */
 /*-------------------------------------------------------------------*/
 public class Entity
 {
@@ -46,9 +46,10 @@ public class Entity
 	private int inventoryIndex = -1;
 	private boolean respawned = false;
 	public boolean playerDied = false;
+	public boolean playerJumped = false;
 
 	public static final String	ANY = null;
-	public static final String	CAT_ITEMS = "items", CAT_WEAPONS = "weapons", CAT_PLAYERS = "players", CAT_OBJECTS = "objects",
+	public static final String	CAT_ITEMS = "items", CAT_WEAPONS = "weapons", CAT_PLAYERS = "players", CAT_OBJECTS = "objects", CAT_MISC = "misc",
 								TYPE_KEYS = "keys", TYPE_ARMOR = "armor", TYPE_HEALTH = "healing", TYPE_AMMO = "ammo", TYPE_MEGAHEALTH = "mega_h",
 								SUBTYPE_MEDIUM = "medium", SUBTYPE_LARGE = "large", SUBTYPE_STIMPACK = "stimpack";
 
@@ -70,8 +71,6 @@ public class Entity
 								SUBTYPE_DATASPINNER = Config.items[Inventory.DATA_SPINNER], SUBTYPE_SECURITYPASS = Config.items[Inventory.SECURITY_PASS], SUBTYPE_COMMANDERSHEAD = Config.items[Inventory.COMMANDERS_HEAD],
 								SUBTYPE_SHELLS = Config.items[Inventory.SHELLS], SUBTYPE_BULLETS = Config.items[Inventory.BULLETS], SUBTYPE_CELLS = Config.items[Inventory.CELLS], SUBTYPE_ROCKETS = Config.items[Inventory.ROCKETS],
 								SUBTYPE_SLUGS = Config.items[Inventory.SLUGS], SUBTYPE_POWERSCREEN = Config.items[Inventory.POWER_SCREEN], SUBTYPE_POWERSHIELD = Config.items[Inventory.POWER_SHIELD];
-
-	private static final String[] allItemStrings = enumerateItemStrings();
 
 /*-------------------------------------------------------------------*/
 /**	Default constructor. */
@@ -108,7 +107,8 @@ public class Entity
 		String currentString = null;
 		int players = 0;
 
-		modelString = getModelString();
+		if(modelString == null)
+			modelString = getModelString();
 
 		if(modelString != null)
 		{
@@ -121,43 +121,38 @@ public class Entity
 
 				if(currentString.equals("items") || currentString.equals("weapons") || currentString.equals("objects"))
 				{
-					category = getStaticReference(currentString);
-					type = getStaticReference(st.nextToken());
+					category = currentString;
+					type = st.nextToken();
 
 					if(st.hasMoreTokens())
 					{
 						currentString = st.nextToken();
 						if(currentString.equals("tris.md2"));
-						else subType = getStaticReference(currentString);
+						else subType = currentString;
 					}
 				}
 			}
 			else
 			{
-				players = Integer.parseInt(config.getConfigString(30));
+				players = config.getMaxClients();
 
-				if(entityNumber < players)
+				if(entityNumber <= players)
 				{
 					st = new StringTokenizer(modelString, "\\");
-					category = CAT_PLAYERS;;
+					category = CAT_PLAYERS;
 					name = st.nextToken();
 
 					if(st.hasMoreTokens())
 						skin = st.nextToken();
 				}
+				else
+				{
+					category = CAT_MISC;
+					type = modelString;
+					subType = modelString;
+				}
 			}
 		}
-	}
-
-	private String getStaticReference(String currentString)
-	{
-		for(int i = 0; i < allItemStrings.length; i++)
-		{
-			if(allItemStrings[i].equals(currentString))
-				return allItemStrings[i];
-		}
-
-		return currentString;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -177,9 +172,9 @@ public class Entity
 		players = Integer.parseInt(config.getConfigString(30));
 
 		if(entityNumber > players)
-			modelString = config.getConfigString(32 + index);
+			modelString = config.getConfigString(Config.SECTION_MODELS + index);
 		else
-			modelString = config.getConfigString(1312 + entityNumber - 1);
+			modelString = config.getConfigString(Config.SECTION_PLAYER_SKINS + entityNumber - 1);
 
 		return modelString;
 	}
@@ -216,34 +211,8 @@ public class Entity
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get entity name. If entity category corresponds to 'player'
- *	this method will return the name of the entity.
- *	@return name. */
-/*-------------------------------------------------------------------*/
-	public String getName()
-	{
-		if(name == null)
-			confirmFamily();
-
-		return (name == null ? "" : name);
-	}
-	
-/*-------------------------------------------------------------------*/
-/**	Get entity skin. If entity category corresponds to 'player'
- *	this method will return the skin of the entity.
- *	@return skin. */
-/*-------------------------------------------------------------------*/
-	public String getSkin()
-	{
-		if(skin == null)
-			confirmFamily();
-
-		return (skin == null ? "" : skin);
-	}
-	
-/*-------------------------------------------------------------------*/
 /**	Get entity category string. The category can assume one of the
- *	following values: "items", "weapons", "objects", or "player"
+ *	following values: "items", "weapons", "objects", or "players"
  *	@return category string. */
 /*-------------------------------------------------------------------*/
 	public String getCategory()
@@ -260,10 +229,7 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public String getType()
 	{
-		if(type == null)
-			confirmFamily();
-
-		return (type == null ? "" : type);
+		return (type != null || !getCategory().equals("players") ? type : "");
 	}
 
 /*-------------------------------------------------------------------*/
@@ -272,10 +238,63 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public String getSubType()
 	{
-		if(subType == null)
-			confirmFamily();
+		return (subType != null || !getCategory().equals("players") ? subType : "");
+	}
 
-		return (subType == null ? "" : subType);
+/*-------------------------------------------------------------------*/
+/**	Convenience method. Indicates whether this Entity represents a player.
+ *	@return true if this Entity represents a player, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isPlayerEntity()
+	{
+		return CAT_PLAYERS.equalsIgnoreCase(getCategory());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience method. Indicates whether this Entity represents an item.
+ *	@return true if this Entity represents an item, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isItemEntity()
+	{
+		return CAT_ITEMS.equalsIgnoreCase(getCategory());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience method. Indicates whether this Entity represents a weapon.
+ *	@return true if this Entity represents a weapon, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isWeaponEntity()
+	{
+		return CAT_WEAPONS.equalsIgnoreCase(getCategory());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Convenience method. Indicates whether this Entity represents an object.
+ *	@return true if this Entity represents an object, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isObjectEntity()
+	{
+		return CAT_OBJECTS.equalsIgnoreCase(getCategory());
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get entity name. If entity category corresponds to 'players'
+ *	this method will return the name of the entity.
+ *	@return name. */
+/*-------------------------------------------------------------------*/
+	public String getName()
+	{
+		return (name != null || getCategory().equals("players") ? name : "");
+	}
+	
+/*-------------------------------------------------------------------*/
+/**	Get entity skin. If entity category corresponds to 'players'
+ *	this method will return the skin of the entity.
+ *	@return skin. */
+/*-------------------------------------------------------------------*/
+	public String getSkin()
+	{
+		return (skin != null || getCategory().equals("players") ? skin : "");
 	}
 	
 /*-------------------------------------------------------------------*/
@@ -501,6 +520,47 @@ public class Entity
 	}
 
 /*-------------------------------------------------------------------*/
+/**	If this Entity represents a Player, this method will indicate whether
+ *	or not the player is currently crouching. Useful when determining
+ *	how an agent should aim at an opponent.
+ *	@return true if the player represented by this Entity is crouching,
+ *	false if this Entity is not a player or is not crouching. */
+/*-------------------------------------------------------------------*/
+	public boolean isCrouching()
+	{
+		return (isPlayerEntity() && solid != null && solid.getSolid() == 4194);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Check whether this entity jumped during the current frame. This
+ *	naturally applies only to entities of category "players". Note
+ *	that this value serves to flag an instantaneous event - it will
+ *	register as true only for the frame at which the player jumped,
+ *	NOT for the entire period between the player's takeoff and landing.
+ *	@return true if this Entity represents a player who jumped during
+ *	the current frame, false otherwise */
+/*-------------------------------------------------------------------*/
+	public boolean isJumping()
+	{
+		return playerJumped;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the inventory index of the current active weapon. This naturally
+ *	applies only to entities of category "players". The value returned
+ *	by this function will match one of the constants defined in the
+ *	PlayerGun class; calling config.getItemName(entity.getWeaponInventoryIndex())
+ *	or inventory.getItemName(entity.getWeaponInventoryIndex()) will
+ *	return the full English-language name of the weapon.
+ *	@return the inventory index of the active weapon, if this Entity
+ *	represents a Player and a valid gun is equipped; -1 otherwise. */
+/*-------------------------------------------------------------------*/
+	public int getWeaponInventoryIndex()
+	{
+		return (isPlayerEntity() && model != null  && model.getFullSkin() != -1 ? model.getWeaponSkin() + 6 : -1);
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Get entity solid.
  *	@return entity solid. */
 /*-------------------------------------------------------------------*/
@@ -526,7 +586,7 @@ public class Entity
 	{
 		this.config = config;
 	}
-	
+
 /*-------------------------------------------------------------------*/
 /**	Merge Entity properties from an existing Entity object into the
  *	current Entity object. Used when assimilating cumulative updates
@@ -537,33 +597,26 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public void merge(Entity entity)
 	{
+		if(model == null || entity == null) model = (entity == null ? (model == null ? new Model() : model) : entity.model); else model.merge(entity.model);
+		if(effects == null || entity == null) effects = (entity == null ? (effects == null ? new Effects() : effects) : entity.effects); else effects.merge(entity.effects);
+		if(origin == null || entity == null) origin = (entity == null ? (origin == null ? new Origin() : origin) : entity.origin); else origin.merge(entity.origin);
+		if(angles == null || entity == null) angles = (entity == null ? (angles == null ? new Angles() : angles) : entity.angles); else angles.merge(entity.angles);
+		if(oldOrigin == null || entity == null) oldOrigin = (entity == null ? (oldOrigin == null ? new Origin() : oldOrigin) : entity.oldOrigin); else oldOrigin.merge(entity.oldOrigin);
+		if(sound == null || entity == null) sound = (entity == null ? (sound == null ? new Sound() : sound) : entity.sound); else sound.merge(entity.sound);
+		if(events == null || entity == null) events = (entity == null ? (events == null ? new Events() : events) : entity.events); else events.merge(entity.events);
+		if(solid == null || entity == null) solid = (entity == null ? (solid == null ? new Solid() : solid) : entity.solid); else solid.merge(entity.solid);
+
+		entityNumber = (entityNumber == 0 && entity != null ? entity.entityNumber : entityNumber);
+		modelString = (entity == null || entity.modelString == null ? getModelString() : entity.modelString);
+
 		if(entity != null)
 		{
-			if(model == null) model = entity.model; else model.merge(entity.model);
-			if(effects == null) effects = entity.effects; else effects.merge(entity.effects);
-			if(origin == null) origin = entity.origin; else origin.merge(entity.origin);
-			if(angles == null) angles = entity.angles; else angles.merge(entity.angles);
-			if(oldOrigin == null) oldOrigin = entity.oldOrigin; else oldOrigin.merge(entity.oldOrigin);
-			if(sound == null) sound = entity.sound; else sound.merge(entity.sound);
-			if(events == null) events = entity.events; else events.merge(entity.events);
-			if(solid == null) solid = entity.solid; else solid.merge(entity.solid);
-
-			modelString = getModelString();
-			entityNumber = entity.getNumber();
-
 			name = entity.name;
 			skin = entity.skin;
 
 			type = entity.type;
 			subType = entity.subType;
 			category = entity.category;
-
-			if(modelString != null && category == CAT_PLAYERS && (name == null || skin == null || !modelString.equals(name + "\\" + skin)))
-			{
-				StringTokenizer st = new StringTokenizer(modelString, "\\");
-				name = st.nextToken();
-				skin = st.nextToken();
-			}
 		}
 	}
 
@@ -597,5 +650,14 @@ public class Entity
 //		ent.setConfig((config == null ? null : config.deepCopy()));
 
 		return ent;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Constructs and returns a string representation of the Entity object.
+ *	@return a string representation of the Entity object */
+/*-------------------------------------------------------------------*/
+	public String toString()
+	{
+		return ("Entity " + getNumber() + ":\t" + getCategory() + " / " + getType() + " / " + getSubType() + " / " + getName() + " / " + getSkin());
 	}
 }

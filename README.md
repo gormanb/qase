@@ -12,6 +12,96 @@ undergrad courses geared towards classic AI.
 
 # Changelog
 
+r2.5.9 (24-08-08)
+-
+**Notes:**
+
+A release which introduces some significant new functionality,
+and fixes a bug which had been introduced in the previous
+version. NOTE THAT SOME METHOD NAMES HAVE ALSO BEEN CHANGED
+TO MAINTAIN API-WIDE CONSISTENCY; a search-and-replace will need
+to be performed on agents which call these methods, as listed below.
+
+**Changes:**
+
+* Fixed a bug, introduced in the previous version, which
+  could sometimes cause a NullPointerException to be thrown,
+  particularly when using the DM2Parser class. Also fixed a minor
+  bug which could cause a single Player entity to be misidentified,
+  if the current number of active players is exactly the same as
+  the maximum allowed number of players.
+
+* Entity objects of category "players" can now be
+  queried using the new methods isCrouching, isJumping and
+  getWeaponInventoryIndex, to obtain additional information
+  about opposing players. QASE tracks these by examining and
+  interpreting incoming sound events, weapon skin changes, and
+  - in the case of crouching - the size of the volume box
+  occupied by the player. Thanks to Modesto Santana and his
+  students for suggesting that this functionality be added.
+
+* The Entity class now contains additional methods -
+  isPlayerEntity, isItemEntity, isObjectEntity, isWeaponEntity -
+  which can be used to more easily ascertain the class to which
+  the Entity belongs.
+
+* The Config table is logically partitioned into
+  separate subsections; QASE now provides constants in the Config
+  class which index the beginning of each of these sections, so
+  that context-sensitive indices encountered in other gamestate
+  objects can be used to directly retrieve the information to which
+  they refer. A new overloading of getConfigString allows the user
+  to specify any such subsection and an index within it.
+
+* An extension of the above, new Config methods
+  getStatusBarString, getMaxClients, getModelString,
+  getPlayerSkinString, getWeaponSkinString, getSoundString,
+  getImageString and getLightStyleString have been added for
+  easy access to each subsection of the Config table.
+
+* The Model class now has two new methods, getSkin and
+  getWeaponSkin, which in the case of Player models returns the
+  indices of the entity in the PlayerSkin and WeaponSkin Config
+  subsections, respectively. These methods are used by the
+  aforementioned Entity.getWeaponInventoryIndex method, and can
+  be used to index the relevant subsections of the Config table
+  as necessary.
+
+* The BSPParser class now has two additional methods,
+  getMapName and getFileName, which return the relevant
+  information about the current BSP file. The BSPBrush class
+  also has two new methods, checkContents and checkStrictContents,
+  which return booleans based on the correlation between the
+  passed content bitmask and the actual brush content bitmask.
+
+* The User class now contains KEY_WEAPON constants,
+  indicating the default keyboard number button associated with
+  each of the game's weapons. These can be used from within
+  BasicBot or its derivatives to change the active weapon.
+
+* The Origin class now has a new method, getXYZ, which
+  returns the 3D co-ordinate represented by the object in the
+  form of a float array.
+
+* Slightly improved overall API performance.
+
+* The BasicBot methods getNearestEnemy, findClosestEnemy,
+  and findShortestPathToEnemy have been renamed getNearestOpponent,
+  findClosestOpponent and findShortestPathToOpponent, to conform to
+  naming conventions established in the World class.
+
+* The getStandState method in the Player class has been
+  renamed getPosture, to conform to the terminology used elsewhere
+  in the API (e.g. in the BasicBot class).
+
+* The getIndex method of the PlayerGun class has been
+  renamed getModelIndex, to differentiate it from the other
+  index-returning methods in the class.
+
+* The getItemName method in the Config and Inventory classes
+  has been renamed getItemString, to conform to naming conventions
+  used in all other Config methods.
+
 r2.5.2 (07-04-08)
 -
 **Notes:**

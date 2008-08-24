@@ -364,10 +364,12 @@ public class Player
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the agent's current standing state (jump, normal or crouched).
- *	@return one of the STAND constants in PlayerMove */
+/**	Get the agent's current posture, as one of the POSTURE constants
+ *	in the PlayerMove class (POSTURE_CROUCH = -1, POSTURE_NORMAL = 0,
+ *	POSTURE_JUMP = 1;).
+ *	@return one of the POSTURE constants in PlayerMove */
 /*-------------------------------------------------------------------*/
-	public int getStandState()
+	public int getPosture()
 	{
 		if(isCrouching())
 			return PlayerMove.POSTURE_CROUCH;

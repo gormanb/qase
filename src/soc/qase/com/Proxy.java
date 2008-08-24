@@ -420,7 +420,7 @@ public class Proxy extends ServerMessageHandler implements Runnable
 /*-------------------------------------------------------------------*/
 	public void useItem(int item)
 	{
-		sendConsoleCommand("use " + world.getConfig().getConfigString(item + 1056));
+		sendConsoleCommand("use " + world.getConfig().getConfigString(Config.SECTION_ITEM_NAMES + item));
 		world.processUsedItem(item);
 	}
 

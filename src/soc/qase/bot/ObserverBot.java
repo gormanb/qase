@@ -208,7 +208,7 @@ public abstract class ObserverBot extends BasicBot implements Observer
 		if(mapChanged)
 		{
 			mapName = getServerInfo().getMapName();
-			bsp = new BSPParser();
+			bsp.reset();
 		}
 
 		if(!isBotAlive())
@@ -237,9 +237,9 @@ public abstract class ObserverBot extends BasicBot implements Observer
 
 /*-------------------------------------------------------------------*/
 /**	The core AI routine. To be implemented by derived classes.
- *	@param w a World object representing the current gamestate */
+ *	@param world a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
-	public abstract void runAI(World w);	// to be supplied by derived class
+	public abstract void runAI(World world);	// to be supplied by derived class
 
 /*-------------------------------------------------------------------*/
 /**	A thread which runs parallel to the Observer pattern updates, checking

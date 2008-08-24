@@ -158,35 +158,17 @@ public abstract class NoClipBot extends ObserverBot
 /*-------------------------------------------------------------------*/
 	public void update(Observable o, Object a)
 	{
-		if(!isBotAlive())
-		{
-			if(getAction(Action.ATTACK))
-				pacifyNeeded = true;
-			else
-				respawnNeeded = true;
-		}
-		else if(a != null && !respawnNeeded)
-		{
-			if(checkNoClip((World)a))
-			{
-				if(getHighThreadSafety())
-				{
-					synchronized(a)
-					{	runAI((World)a);	}
-				}
-				else
-					runAI((World)a);
-			}
-
+		if(a != null && isNoClipComplete((World)a))
+			super.update(o, a);
+		else
 			sendMovement();
-		}
 	}
 
 /*-------------------------------------------------------------------*/
 /**	The core AI routine. To be implemented by derived classes.
- *	@param w a World object representing the current gamestate */
+ *	@param world a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
-	public abstract void runAI(World w);	// to be supplied by derived class
+	public abstract void runAI(World world);	// to be supplied by derived class
 
 /*-------------------------------------------------------------------*/
 /**	Causes the agent to clip from its present location to the specified
@@ -200,7 +182,7 @@ public abstract class NoClipBot extends ObserverBot
 		initPosReached = (initPos == null);
 	}
 
-	private boolean checkNoClip(World w)
+	private boolean isNoClipComplete(World world)
 	{
 		if(!initPosReached)
 		{
@@ -212,7 +194,7 @@ public abstract class NoClipBot extends ObserverBot
 			}
 			else
 			{
-				Vector3f pos = new Vector3f(w.getPlayer().getPlayerMove().getOrigin());
+				Vector3f pos = new Vector3f(world.getPlayer().getPlayerMove().getOrigin());
 				pos.sub(initPos, pos);
 
 				if(pos.length() < 2)
@@ -227,7 +209,7 @@ public abstract class NoClipBot extends ObserverBot
 		}
 		else if(isNoClip)
 		{
-			Vector v = w.getMessages();
+			Vector v = world.getMessages();
 
 			for(int i = 0; i < v.size(); i++)
 			{

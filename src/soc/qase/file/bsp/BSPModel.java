@@ -11,10 +11,10 @@ import soc.qase.tools.Utils;
 /*-------------------------------------------------------------------*/
 /** Wrapper class for Models in the BSP file. The first model correponds to the
  *	base portion of the map while the remaining models correspond to movable
- *	portions of, such as doors, platforms, and buttons. Each model has a list
+ *	portions thereof, such as doors, platforms, and buttons. Each model has a list
  *	of faces and list of brushes; these are especially important for the movable
- *	parts of the map, which (unlike the base portion of the map) do not have BSP
- *	trees associated with them.
+ *	parts of the map, which (unlike the base portion) do not have BSP trees
+ *	associated with them.
  *	@see BSPModelLump */
 /*-------------------------------------------------------------------*/
 public class BSPModel

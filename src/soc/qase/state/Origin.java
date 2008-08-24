@@ -105,6 +105,15 @@ public class Origin
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Get coordinates as an array of float values.
+ *	@return a float[] containing the (x, y, z) co-ordinates. */
+/*-------------------------------------------------------------------*/
+	public float[] getXYZ()
+	{
+		return new float[]{ x, y, z };
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Set X coordinate.
  *	@param x X coordinate. */
 /*-------------------------------------------------------------------*/
@@ -129,6 +138,17 @@ public class Origin
 	public void setZ(int z)
 	{
 		this.z = z;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Set coordinates from an array of int values.
+ *	@param xyz an in[] containing the (x, y, z) co-ordinates to be set. */
+/*-------------------------------------------------------------------*/
+	public void setXYZ(int[] xyz)
+	{
+		x = xyz[0];
+		y = xyz[1];
+		z = xyz[2];
 	}
 
 /*-------------------------------------------------------------------*/

@@ -70,6 +70,7 @@ public class BSPEntity
 	public boolean isWeapon = false;
 	public boolean isMonster = false;
 	public boolean isMiscObject = false;
+	public boolean isWorldSpawn = false;
 
 	public boolean isLift = false;
 	public boolean isDoor = false;
@@ -117,7 +118,7 @@ public class BSPEntity
 							BSP_CONVEYOR = 5, BSP_BUTTON = 6, BSP_ILLUSION = 7, BSP_NORMAL_TELEPORT = 8,
 							BSP_DM_TELEPORT = 9, BSP_SECRET_DOOR = 10, BSP_CORNER = 11, BSP_WALKOVER = 12,
 							BSP_DESTINATION = 13, BSP_PLAYER_START = 14, BSP_DM_START = 15,
-							BSP_MISC_OBJECT = 16, BSP_MODEL = 17;
+							BSP_MISC_OBJECT = 16, BSP_MODEL = 17, BSP_WORLDSPAWN = 18;
 
 	private Hashtable hash = new Hashtable();
 
@@ -187,7 +188,12 @@ public class BSPEntity
 			else if(key.equals("classname"))
 			{	className = value;
 
-				if(value.equals("info_player_start"))
+				if(value.equals("worldspawn"))
+				{
+					isWorldSpawn = true;
+					entityType = BSP_WORLDSPAWN;
+				}
+				else if(value.equals("info_player_start"))
 				{
 					isPlayerStart = true;
 					entityType = BSP_PLAYER_START;

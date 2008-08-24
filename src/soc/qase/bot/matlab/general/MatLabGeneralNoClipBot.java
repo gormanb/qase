@@ -140,10 +140,11 @@ public final class MatLabGeneralNoClipBot extends MatLabNoClipBot
 /*-------------------------------------------------------------------*/
 /**	Pre-process data for MatLab. Here, it does nothing; MatLab controls
  *	the AI cycle directly.
+ *	@param world the current gamestate
  *	@param mlParams an Object array containing data for processing by
  *	MatLab (typically a collection of float arrays) */
 /*-------------------------------------------------------------------*/
-	protected void preMatLab(World w, Object[] mlParams)	// apply the results which MatLab provided
+	protected void preMatLab(World world, Object[] mlParams)	// apply the results which MatLab provided
 	{
 		/* do nothing - MatLab should directly access the bot using setAngles, etc. */
 	}

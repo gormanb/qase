@@ -166,22 +166,22 @@ public abstract class MatLabNoClipBot extends NoClipBot implements MatLabBot
  *	the handing over of control to MatLab, and the postprocessing of
  *	MatLab's results. Implemented here as final, to prevent subclasses
  *	from overriding.
- *	@param w the current gamestate */
+ *	@param world the current gamestate */
 /*-------------------------------------------------------------------*/
-	public final void runAI(World w)
+	public final void runAI(World world)
 	{
-		preMatLab(w, matLabParams);	// pre-MatLab processing
+		preMatLab(world, matLabParams);	// pre-MatLab processing
 		processMatLab();			// hand control to MatLab
 		postMatLab(matLabResults);	// post-MatLab processing
 	}
 
 /*-------------------------------------------------------------------*/
 /**	Populate the MatLab parameter array with the relevant values.
- *	@param w the current gamestate
+ *	@param world the current gamestate
  *	@param mlParams an Object array to be populated with data for MatLab
  *	(typically a series of float arrays) */
 /*-------------------------------------------------------------------*/
-	protected abstract void preMatLab(World w, Object[] mlParams);
+	protected abstract void preMatLab(World world, Object[] mlParams);
 
 /*-------------------------------------------------------------------*/
 /**	Hand control to MatLab and wait for it to relinquish.*/

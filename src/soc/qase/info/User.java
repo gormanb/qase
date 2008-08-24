@@ -23,6 +23,11 @@ public class User
 
 	public static final int HAND_RIGHT = 0, HAND_LEFT = 1, HAND_CENTER = 2;
 
+	// indicates the default number button on the keyboard associated with each weapon
+	public static final int KEY_BLASTER = 1, KEY_SHOTGUN = 2, KEY_SUPER_SHOTGUN = 3, KEY_MACHINEGUN = 4,
+							KEY_CHAINGUN = 5, KEY_GRENADE_LAUNCHER = 6, KEY_ROCKET_LAUNCHER = 7,
+							KEY_HYPERBLASTER = 8, KEY_RAILGUN = 9, KEY_BFG = 0;
+
 /*-------------------------------------------------------------------*/
 /**	Constructor. Records the user's specified options.
  *	@param name the name by which the agent will be known by other

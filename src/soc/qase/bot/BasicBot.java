@@ -180,9 +180,9 @@ public abstract class BasicBot extends Thread implements Bot
 
 /*-------------------------------------------------------------------*/
 /**	The core AI routine. To be implemented by derived classes.
- *	@param w a World object representing the current gamestate */
+ *	@param world a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
-	public abstract void runAI(World w);
+	public abstract void runAI(World world);
 
 /*-------------------------------------------------------------------*/
 /**	Flag the agent as being connected to or disconnected from the game server.
@@ -581,6 +581,17 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Get the agent's current posture, as one of the POSTURE constants
+ *	in the PlayerMove class (POSTURE_CROUCH = -1, POSTURE_NORMAL = 0,
+ *	POSTURE_JUMP = 1;).
+ *	@return one of the POSTURE constants in PlayerMove */
+/*-------------------------------------------------------------------*/
+	protected int getPosture()
+	{
+		return  (proxy != null && proxy.inGame() ? proxy.getWorld().getPlayer().getPosture() : Integer.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Check whether agent is currently in water.
  *	@return true if in water, false otherwise */
 /*-------------------------------------------------------------------*/
@@ -790,7 +801,9 @@ public abstract class BasicBot extends Thread implements Bot
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Change the current weapon by specifying a number from 0-9.
+/**	Change the current weapon by specifying a number from 0-9. The
+ *	argument should be one of the KEY_WEAPON constants defined in the
+ *	User class.
  *	@param gun the keyboard index of the weapon to activate */
 /*-------------------------------------------------------------------*/
 	protected void changeWeaponByKeyboardIndex(int gun)
@@ -811,8 +824,9 @@ public abstract class BasicBot extends Thread implements Bot
 
 /*-------------------------------------------------------------------*/
 /**	Change the current weapon by specifying the index of the associated
- *	weapon model in the Config table.
- *	@param gun the Config index of the weapon to activate
+ *	weapon model in the Model subsection of the Config table, i.e. the
+ *	value returned by calling playerGun.getIndex().
+ *	@param gun the index of the weapon to activate
  *	@see soc.qase.info.Config */
 /*-------------------------------------------------------------------*/
 	protected void changeWeaponByGunModelIndex(int gun)
@@ -823,7 +837,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 /**	Use the specified item. Items are specified by inventory index,
  *	using the constants from the Inventory class.
- *	@param item the keyboard index of the weapon to activate
+ *	@param item the inventory index of the weapon to activate
  *	@see soc.qase.state.Inventory */
 /*-------------------------------------------------------------------*/
 	protected void useItem(int item)
@@ -873,10 +887,10 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected int getInventoryItemCount(int itemIndex)
 	{
-		World w;
+		World world;
 		Inventory inv;
 
-		if(proxy == null || (w = proxy.getWorld()) == null || (inv = w.getInventory()) == null)
+		if(proxy == null || (world = proxy.getWorld()) == null || (inv = world.getInventory()) == null)
 			return -1;
 
 		return inv.getCount(itemIndex);
@@ -893,10 +907,10 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected int[] getInventoryItemCount(int startItemIndex, int endItemIndex)
 	{
-		World w;
+		World world;
 		Inventory inv;
 
-		if(proxy == null || (w = proxy.getWorld()) == null || (inv = w.getInventory()) == null)
+		if(proxy == null || (world = proxy.getWorld()) == null || (inv = world.getInventory()) == null)
 			return null;
 
 		return inv.getCount(startItemIndex, endItemIndex);
@@ -911,10 +925,10 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected int getInventoryItemCount(String item)
 	{
-		World w;
+		World world;
 		Inventory inv;
 
-		if(proxy == null || (w = proxy.getWorld()) == null || (inv = w.getInventory()) == null)
+		if(proxy == null || (world = proxy.getWorld()) == null || (inv = world.getInventory()) == null)
 			return -1;
 
 		return inv.getCount(item);
@@ -1028,7 +1042,7 @@ public abstract class BasicBot extends Thread implements Bot
  *	which are currently active.
  *	@return nearest enemy */
 /*-------------------------------------------------------------------*/
-	protected Entity getNearestEnemy()
+	protected Entity getNearestOpponent()
 	{
 		if(proxy == null || proxy.getWorld() == null)
 			return null;
@@ -1172,9 +1186,9 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return the closest Waypoint to the nearest enemy player
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint findClosestEnemy()
+	protected Waypoint findClosestOpponent()
 	{
-		Entity tempEnemy = getNearestEnemy();
+		Entity tempEnemy = getNearestOpponent();
 
 		if(wpMap == null || tempEnemy == null)
 			return null;
@@ -1290,9 +1304,9 @@ public abstract class BasicBot extends Thread implements Bot
  *	@return a Waypoint array indicating the shortest path
  *	@see soc.qase.state.Entity */
 /*-------------------------------------------------------------------*/
-	protected Waypoint[] findShortestPathToEnemy()
+	protected Waypoint[] findShortestPathToOpponent()
 	{
-		Entity tempEnemy = getNearestEnemy();
+		Entity tempEnemy = getNearestOpponent();
 		return (tempEnemy == null ? null : findShortestPath(tempEnemy.getOrigin()));
 	}
 
@@ -1740,7 +1754,7 @@ public abstract class BasicBot extends Thread implements Bot
 		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
 			return false;
 
-		Entity nearEnemy = getNearestEnemy();
+		Entity nearEnemy = getNearestOpponent();
 
 		if(nearEnemy != null)
 		{

@@ -421,7 +421,8 @@ public class World
 	{
 		PlayerGun gun = players[currentState].getPlayerGun();
 		PlayerStatus status = players[currentState].getPlayerStatus();
-		int ammoIndex = gun.getAmmoInventoryIndexByGun(gun.getGunInventoryIndex(gun.getIndex()));
+
+		int ammoIndex = gun.getAmmoInventoryIndex();
 
 		if(ammoIndex != -1)
 			inventory.setCount(ammoIndex, status.getStatus(PlayerStatus.AMMO));
@@ -438,7 +439,7 @@ public class World
 /*-------------------------------------------------------------------*/
 	public void processSound(Sound sound)
 	{
-		int pkup = players[currentState].getPlayerStatus().getStatus(PlayerStatus.PICKUP_STRING) - 1056;
+		int pkup = players[currentState].getPlayerStatus().getStatus(PlayerStatus.PICKUP_STRING) - Config.SECTION_ITEM_NAMES;
 
 		if(sound.getEntityNumber() == playerEntityNum + 1 && pkup > 0 && config.getConfigString(sound.getConfigIndex()).indexOf("pkup") >= 0)
 		{
@@ -492,8 +493,10 @@ public class World
 		}
 		else if(sound.getEntityNumber() == playerEntityNum + 1 && config.getConfigString(sound.getConfigIndex()).indexOf("gurp") >= 0)
 			drownSound = true;
-		else if(config.getConfigString(sound.getConfigIndex()).indexOf("death") >= 0)
+		else if(config.getConfigString(sound.getConfigIndex()).indexOf("death") >= 0 && getEntity(sound.getEntityNumber()) != null)
 			getEntity(sound.getEntityNumber()).playerDied = true;
+		else if(config.getConfigString(sound.getConfigIndex()).indexOf("jump") >= 0 && getEntity(sound.getEntityNumber()) != null)
+			getEntity(sound.getEntityNumber()).playerJumped = true;
 	}
 
 /*-------------------------------------------------------------------*/

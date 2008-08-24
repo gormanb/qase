@@ -9,10 +9,10 @@ import java.util.Vector;
 import java.util.StringTokenizer;
 
 /*-------------------------------------------------------------------*/
-/** Represents the Edge lump of the BSP file. The Edge Lump is the
- *	area of the file containing details of geometric edges between
- *	vertices in the map.
- *	@see BSPEdge */
+/** Represents the Entity lump of the BSP file. The entities lump stores
+ *	game-related map information, including information about the map name,
+ *	weapons, health, armor, triggers, spawn points, lights, and models to
+ *	be placed in the map. */
 /*-------------------------------------------------------------------*/
 public class BSPEntityLump extends BSPLump
 {
@@ -22,10 +22,13 @@ public class BSPEntityLump extends BSPLump
 	public BSPEntity[] entities = null;
 
 /*-------------------------------------------------------------------*/
-/** Constructor. Process Edge lump data.
+/** Constructor. Initialises the Entity lump attributes and process
+ *	lump data.
  *	@param inData the BSP file data
- *	@param off the offset of the Edge lump in the byte array
- *	@param len the length of the Edge lump */
+ *	@param off the offset of the Entity lump in the byte array
+ *	@param len the length of the Entity lump
+ *	@param bspModels an array of BSP Model objects, with which some
+ *	entries in the Entities lump will be associated */
 /*-------------------------------------------------------------------*/
 	public BSPEntityLump(byte[] inData, int off, int len, BSPModel[] bspModels)
 	{
@@ -35,9 +38,9 @@ public class BSPEntityLump extends BSPLump
 	}
 
 /*-------------------------------------------------------------------*/
-/** Process Edge lump data. Every 4 bytes corresponds to a different
- *	edge. This method sequentially creates BSPEdge objects from raw
- *	byte data. */
+/** Process Entity lump data. The raw Entity lump data consists of a
+ *	single long string. Individual Entity objects are extracted by
+ *	tokenizing this string. */
 /*-------------------------------------------------------------------*/
 	protected void processLumpData()
 	{

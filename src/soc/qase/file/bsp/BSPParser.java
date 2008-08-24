@@ -83,6 +83,10 @@ public class BSPParser
 /*-------------------------------------------------------------------*/
 	public boolean load(String filename)
 	{
+		if(mapRead) // if the BSPParser already contains BSP data, reset it and load new data
+			reset();
+
+		// # in filename means PAK archive
 		if(filename.indexOf('#') != -1)
 		{
 			StringTokenizer st = new StringTokenizer(filename, "#");
@@ -111,9 +115,22 @@ public class BSPParser
 			{	}
 		}
 
+		// parse the data and build BSP structures
 		mapRead = (fileOpen && readBSPData());
 
-		close();
+		// close file handles and reset internal variables
+		try { bufIn.close(); byteIn.close(); } catch(Exception ioe){}
+
+		bufIn = null;
+		byteIn = null;
+		bspFile = null;
+
+		fileOpen = inPAKFile = false;
+		headerData = lumpData = pakBSPFileData = null;
+
+		if(!mapRead) // if map reading was unsuccessful, reset all class variables
+			reset();
+
 		return mapRead;
 	}
 
@@ -241,6 +258,36 @@ public class BSPParser
 		}
 
 		return false;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Returns the name of the current map (not necessarily the same as
+ *	the BSP file name), or null if the map does not have a name or no
+ *	map is loaded.
+ *	@return the name of the currently-loaded map, or null if no such
+ *	map/name. */
+/*-------------------------------------------------------------------*/
+	public String getMapName()
+	{
+		if(!mapRead)
+			return null;
+
+		for(int i = 0; i < entitiesLump.entities.length; i++)
+		{
+			if(entitiesLump.entities[i].isWorldSpawn)
+				return entitiesLump.entities[i].getAttribute("message");
+		}
+
+		return null;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Returns the path and name of the .bsp file associated with the BSPParser.
+ *	@return the name of the current .bsp file. */
+/*-------------------------------------------------------------------*/
+	public String getFileName()
+	{
+		return fName;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -688,8 +735,8 @@ public class BSPParser
 			{
 				BSPBrush brush = brushLump.brushes[leafBrushLump.leafBrushTable[leaf.firstLeafBrush + i]];
 
-				if (brush.numSides > 0 && (brush.contents & BRUSH_BITS) != 0)
-					checkBrush( brush );
+				if (brush.numSides > 0 && brush.checkContents(BRUSH_BITS))
+					checkBrush(brush);
 			}
 
 			// don't have to do anything else for leaves
@@ -874,22 +921,61 @@ public class BSPParser
 		}
 	}
 
-	private void close()
+/*-------------------------------------------------------------------*/
+/**	Resets all contents of the BSPParser object. Called if a new BSP
+ *	file is loaded while a previous file is active, or by the user
+ *	for any arbitraty purpose. */
+/*-------------------------------------------------------------------*/
+	public void reset()
 	{
-		try
-		{
-			bufIn.close();
-			byteIn.close();
-		}
-		catch(Exception ioe)
-		{	}
+		// reset BSP structures
+		lumpData = null;
+		headerData = null;
+		pakBSPFileData = null;
 
 		fName = null;
+		bspFile = null;
+
 		bufIn = null;
 		byteIn = null;
-		bspFile = null;
-		pakBSPFileData = null;
-		headerData = lumpData = null;
-		fileOpen = inPAKFile = false;
+
+		mapRead = false;
+		fileOpen = false;
+		inPAKFile = false;
+
+		bspLumps = null;
+		bspHeader = null;
+
+		planeLump = null;
+		vertexLump = null;
+		nodeLump = null;
+		leafLump = null;
+		leafFaceLump = null;
+		faceEdgeLump = null;
+		edgeLump = null;
+		modelLump = null;
+		brushLump = null;
+		brushSideLump = null;
+		leafBrushLump = null;
+
+		entitiesLump = null;
+
+		// reset private trace variables
+		TRACE_TYPE = 0;
+		BRUSH_BITS = BSPBrush.CONTENTS_SOLID;
+
+		traceRadius = 0.0f;
+		outputFraction = 0.0f;
+
+		outputAllSolid = false;
+		outputStartsOut = false;
+
+		outputEnd = new Vector3f(0, 0, 0);
+		inputStart = new Vector3f(0, 0, 0);
+		inputEnd = new Vector3f(0, 0, 0);
+
+		traceMins = null;
+		traceMaxs = null;
+		traceExtents = new Vector3f(0, 0, 0);
 	}
 }

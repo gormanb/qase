@@ -26,7 +26,7 @@ public interface Bot
 
 /*-------------------------------------------------------------------*/
 /**	The agent's main AI loop should reside in this method.
- *	@param w a World object representing the current gamestate */
+ *	@param world a World object representing the current gamestate */
 /*-------------------------------------------------------------------*/
-	public void runAI(World w);
+	public void runAI(World world);
 }

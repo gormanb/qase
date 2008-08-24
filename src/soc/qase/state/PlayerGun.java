@@ -18,13 +18,16 @@ import soc.qase.info.Config;
 public class PlayerGun
 {
 	private int gunCD = 0;
-	private int index = -1;
 	private int frame = -1;
+	private int modelIndex = -1;
+
 	private Origin offset = null;
 	private Angles angles = null;
 	private boolean isFiring = false;
 
 	private static final int[][] weaponsIndex = getWeaponsArray();
+
+	// gun and ammunition inventory indices
 	public static final int BLASTER = 7, SHOTGUN = 8, SUPER_SHOTGUN = 9,
 	MACHINEGUN = 10, CHAINGUN = 11, GRENADES = 12, GRENADE_LAUNCHER = 13,
 	ROCKET_LAUNCHER = 14, HYPERBLASTER = 15, RAILGUN = 16, BFG10K = 17,
@@ -80,7 +83,7 @@ public class PlayerGun
 /*-------------------------------------------------------------------*/
 	public static int getGunInventoryIndex(int gunIndex)
 	{
-		return Config.modelIndexToInventoryIndex(gunIndex + 32); // model indices start at Config[31]
+		return Config.modelIndexToInventoryIndex(Config.SECTION_MODELS + gunIndex); // model indices start at Config[32]
 	}
 
 /*-------------------------------------------------------------------*/
@@ -176,12 +179,14 @@ public class PlayerGun
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get player gun index.
- *	@return player gun index. */
+/**	Get player gun model index, i.e. the index of the model associated
+ *	with this gun in the Model subsection of the Config table, the start
+ *	of which is given by Config.SECTION_MODELS.
+ *	@return player gun model index. */
 /*-------------------------------------------------------------------*/
-	public int getIndex()
+	public int getModelIndex()
 	{
-		return index;
+		return modelIndex;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -190,7 +195,7 @@ public class PlayerGun
 /*-------------------------------------------------------------------*/
 	public int getInventoryIndex()
 	{
-		return getGunInventoryIndex(index);
+		return getGunInventoryIndex(modelIndex);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -209,7 +214,7 @@ public class PlayerGun
 /*-------------------------------------------------------------------*/
 	public void setIndex(int index)
 	{
-		this.index = index;
+		modelIndex = index;
 	}
 	
 /*-------------------------------------------------------------------*/
@@ -311,13 +316,13 @@ public class PlayerGun
 		if(playerGun == null)
 			return;
 
-		if(index == -1) index = playerGun.getIndex();
 		if(frame == -1) frame = playerGun.getFrame();
 		if(playerGun.gunCD > 0) gunCD = playerGun.gunCD - 1;
+		if(modelIndex == -1) modelIndex = playerGun.getModelIndex();
 		if(offset == null) offset = playerGun.offset; else offset.merge(playerGun.offset);
 		if(angles == null) angles = playerGun.angles; else angles.merge(playerGun.angles);
 
-		if((getInventoryIndex() == 7 && frame == 6) || (ammoReduced && index == playerGun.getIndex())) // ammo changed, gun did not
+		if((getInventoryIndex() == 7 && frame == 6) || (ammoReduced && modelIndex == playerGun.getModelIndex())) // ammo changed, gun did not
 		{
 			this.isFiring = true;
 			gunCD = WEAPON_CDS[getInventoryIndex() - 7];

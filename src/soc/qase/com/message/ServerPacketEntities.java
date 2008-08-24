@@ -132,11 +132,8 @@ public class ServerPacketEntities extends Message
 	{
 		int value = 0;
 
-		int mSkin = -1;
-		int mFrame = -1;
-
-		int mIndex = -1;
-		int mIndexVal = -1;
+		int mFrame = -1; long mSkin = -1;
+		int[] mIndexVal = new int[]{ -1, -1, -1, -1};
 
 		int prevOff = offset;
 
@@ -145,8 +142,7 @@ public class ServerPacketEntities extends Message
 		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			mIndex = 0;
-			mIndexVal = value;
+			mIndexVal[0] = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(0, 0);
@@ -154,8 +150,7 @@ public class ServerPacketEntities extends Message
 		{	
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			mIndex = 1;
-			mIndexVal = value;
+			mIndexVal[1] = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(1, 0);
@@ -163,8 +158,7 @@ public class ServerPacketEntities extends Message
 		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			mIndex = 2;
-			mIndexVal = value;
+			mIndexVal[2] = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(2, 0);
@@ -172,8 +166,7 @@ public class ServerPacketEntities extends Message
 		{
 			value = (int)data[offset];
 			if(value < 0) value = value + 256;
-			mIndex = 3;
-			mIndexVal = value;
+			mIndexVal[3] = value;
 			offset = offset + 1;
 		}
 		//else result.setIndex(3, 0);
@@ -198,7 +191,7 @@ public class ServerPacketEntities extends Message
 		{
 			if((bitmask & 0x02000000) != 0)
 			{
-				mSkin = (int)(Utils.intValue(data, offset));
+				mSkin = Utils.unsignedIntValue(data, offset);
 				offset = offset + 4;
 			}
 			else
@@ -211,21 +204,21 @@ public class ServerPacketEntities extends Message
 		}
 		else if((bitmask & 0x02000000) != 0)
 		{
-			mSkin = (int)(Utils.shortValue(data, offset));
+			mSkin = Utils.shortValue(data, offset);
 			offset = offset + 2;
 		}
 
-		return (offset > prevOff ? new Model(mIndex, mIndexVal, mFrame, mSkin) : null);
+		return (offset > prevOff ? new Model(mIndexVal, mFrame, mSkin) : null);
 	}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 	private Effects processEffects()
 	{
-		int effect = 0;
+		int effect = -1;
 
 		int nEffect = -1;
-		int rEffect = 0;
+		int rEffect = -1;
 
 		int prevOff = offset;
 		
@@ -316,7 +309,7 @@ public class ServerPacketEntities extends Message
 /*-------------------------------------------------------------------*/
 	private Angles processAngles()
 	{
-		int angle = 0;
+		int angle = -1;
 
 		int yaw = -1;
 		int roll = -1;
@@ -356,9 +349,9 @@ public class ServerPacketEntities extends Message
 /*-------------------------------------------------------------------*/
 	private Origin processOldOrigin()
 	{
-		int x = 0;
-		int y = 0;
-		int z = 0;
+		int x = -1;
+		int y = -1;
+		int z = -1;
 
 		int prevOff = offset;
 
@@ -404,7 +397,7 @@ public class ServerPacketEntities extends Message
 /*-------------------------------------------------------------------*/
 	private Events processEvents()
 	{
-		int event = 0;
+		int event = -1;
 		int prevOff = offset;
 
 		// process events 
