@@ -6,10 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-
 /*-------------------------------------------------------------------*/
 /**	Entity updates. May come after a ServerPacketEntities block. It isn't
  *	really necessary, since ServerPacketEntities handles all the delta

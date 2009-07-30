@@ -5,9 +5,9 @@
 
 package soc.qase.ai.gann;
 
-import java.util.Vector;
-import java.util.Random;
 import java.io.Serializable;
+import java.util.Vector;
+
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

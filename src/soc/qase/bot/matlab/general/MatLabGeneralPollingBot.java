@@ -5,12 +5,9 @@
 
 package soc.qase.bot.matlab.general;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.vecmath.*;
-
 import soc.qase.bot.matlab.MatLabPollingBot;
+import soc.qase.state.World;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	The MatGeneralBot family provides a framework to allow MatLab to

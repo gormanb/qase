@@ -6,10 +6,7 @@
 
 package soc.qase.com.packet;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import soc.qase.com.message.*;
+import soc.qase.com.message.Message;
 
 /*-------------------------------------------------------------------*/
 /**	Packet wrapper used when sending client messages to host.

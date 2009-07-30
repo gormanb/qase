@@ -6,8 +6,7 @@
 
 package soc.qase.state;
 
-import soc.qase.info.*;
-import soc.qase.com.message.*;
+import soc.qase.info.Config;
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

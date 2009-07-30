@@ -6,10 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-
 /*-------------------------------------------------------------------*/
 /**	Internal message indicating misparsed packets. Not an actual game
  *	message. */

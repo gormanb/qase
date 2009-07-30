@@ -6,17 +6,34 @@
 
 package soc.qase.com;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import java.util.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.Utils;
-import soc.qase.com.packet.*;
-import soc.qase.com.message.*;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
+import soc.qase.com.message.ClientCommand;
+import soc.qase.com.message.ClientMove;
+import soc.qase.com.message.ServerDisconnect;
+import soc.qase.com.message.ServerInventory;
+import soc.qase.com.message.ServerMessageHandler;
+import soc.qase.com.message.ServerPacketEntities;
+import soc.qase.com.message.ServerPrint;
+import soc.qase.com.message.ServerReconnect;
+import soc.qase.com.message.ServerStuffText;
+import soc.qase.com.packet.ClientPacket;
+import soc.qase.com.packet.ConnectionlessPacket;
+import soc.qase.com.packet.Packet;
+import soc.qase.com.packet.Sequence;
+import soc.qase.com.packet.ServerPacket;
 import soc.qase.file.dm2.DM2Recorder;
+import soc.qase.info.Config;
+import soc.qase.info.Server;
+import soc.qase.info.User;
+import soc.qase.state.Action;
+import soc.qase.state.Angles;
+import soc.qase.state.Move;
+import soc.qase.state.Velocity;
+import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	The Proxy class is a wrapper class for high-level communication

@@ -5,13 +5,12 @@
 
 package soc.qase.bot;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.vecmath.*;
-
-import java.util.Vector;
 import java.util.Observable;
+import java.util.Vector;
+
+import soc.qase.state.PlayerMove;
+import soc.qase.state.World;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	NoClipBot is an extension of ObserverBot, and as such also occupies

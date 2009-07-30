@@ -5,13 +5,17 @@
 
 package soc.qase.file.bsp;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.Vector;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
-import soc.qase.tools.Utils;
 import soc.qase.file.pak.PAKParser;
+import soc.qase.tools.Utils;
 import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/

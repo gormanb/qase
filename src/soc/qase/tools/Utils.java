@@ -6,13 +6,15 @@
 
 package soc.qase.tools;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import java.util.Random;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Properties;
-import soc.qase.tools.vecmath.*;
+import java.util.Random;
+
+import soc.qase.tools.vecmath.Vector2f;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	Utility class. Implements a number of common data manipulation

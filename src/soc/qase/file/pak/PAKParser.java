@@ -5,10 +5,11 @@
 
 package soc.qase.file.pak;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Vector;
-import java.util.Arrays;
-import soc.qase.file.bsp.*;
+
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

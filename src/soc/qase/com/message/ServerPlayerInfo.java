@@ -6,10 +6,10 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import soc.qase.state.*;
+import soc.qase.state.Angles;
+import soc.qase.state.Origin;
+import soc.qase.state.Player;
+import soc.qase.state.Velocity;
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

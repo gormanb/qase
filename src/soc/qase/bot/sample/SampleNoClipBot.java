@@ -5,12 +5,12 @@
 
 package soc.qase.bot.sample;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.vecmath.*;
-
 import soc.qase.bot.NoClipBot;
+import soc.qase.state.Action;
+import soc.qase.state.Entity;
+import soc.qase.state.PlayerMove;
+import soc.qase.state.World;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	A ready-made example of a standalone QASE agent, designed to demonstrate

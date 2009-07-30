@@ -5,8 +5,8 @@
 
 package soc.qase.file.bsp;
 
-import soc.qase.tools.vecmath.Vector3f;
 import soc.qase.tools.Utils;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /** Wrapper class for Planes in the BSP file. These are generic geometric

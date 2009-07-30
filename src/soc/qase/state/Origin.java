@@ -6,7 +6,8 @@
 
 package soc.qase.state;
 
-import soc.qase.tools.vecmath.*;
+import soc.qase.tools.vecmath.Vector2f;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	Wrapper class for origin attributes. The class implements functionality

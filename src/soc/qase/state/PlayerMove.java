@@ -103,6 +103,9 @@ public class PlayerMove
 /*-------------------------------------------------------------------*/
 	public String getFlagsString()
 	{
+		if(flags == -1)
+			return "";
+
 		String result = "";
 
 		if((flags & FLAG_CROUCH) != 0) result += "crouch:";
@@ -135,7 +138,7 @@ public class PlayerMove
 /*-------------------------------------------------------------------*/
 	public boolean checkFlags(int flagMask)
 	{
-		return (flags & flagMask) != 0;
+		return flags != -1 && (flags & flagMask) != 0;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -215,7 +218,7 @@ public class PlayerMove
 /*-------------------------------------------------------------------*/
 /**	Get player's directional velocity.
  *	@return a 2D vector indicating the player's veolcities along the
- *	X and Z axes */
+ *	X and Y axes */
 /*-------------------------------------------------------------------*/
 	public Vector2f getDirectionalVelocity()
 	{

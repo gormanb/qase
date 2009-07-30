@@ -6,11 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import soc.qase.tools.Utils;
-
 /*-------------------------------------------------------------------*/
 /**	Message wrapper used when signalling console command from
  *	client to host. */

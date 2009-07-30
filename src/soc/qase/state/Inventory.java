@@ -7,9 +7,8 @@
 package soc.qase.state;
 
 import java.util.Arrays;
-import soc.qase.state.*;
-import soc.qase.info.*;
-import soc.qase.com.message.*;
+
+import soc.qase.info.Config;
 
 /*-------------------------------------------------------------------*/
 /**	Wrapper class for inventory attributes. */

@@ -6,14 +6,8 @@
 
 package soc.qase.bot.matlab;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.vecmath.*;
-
-import java.util.Vector;
-import java.util.Observable;
 import soc.qase.bot.PollingBot;
+import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	MatLabPollingBot provides a framework to allow QASE to interact

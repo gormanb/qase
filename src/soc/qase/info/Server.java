@@ -6,7 +6,7 @@
 
 package soc.qase.info;
 
-import soc.qase.com.message.*;
+import soc.qase.com.message.ServerData;
 
 /*-------------------------------------------------------------------*/
 /**	Server information wrapper. */

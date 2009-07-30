@@ -5,21 +5,24 @@
 
 package soc.qase.file.dm2;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import soc.qase.com.message.*;
+import soc.qase.com.message.Message;
+import soc.qase.com.message.ServerData;
+import soc.qase.com.message.ServerDownload;
+import soc.qase.com.message.ServerReconnect;
+import soc.qase.com.message.ServerStuffText;
 import soc.qase.com.packet.ServerPacket;
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/
 /**	The DM2Recorder allows the agent to automatically record a demo of
- *	itself during play. Improves upon Quake 2’s standard recording
+ *	itself during play. Improves upon Quake 2's standard recording
  *	facilities by allowing demos spanning multiple maps to be recorded
  *	in playable format. The incoming network stream is sampled, edited
  *	as necessary, and saved to file when the agent disconnects from

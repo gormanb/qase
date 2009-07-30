@@ -6,6 +6,7 @@
 package soc.qase.ai.waypoint;
 
 import java.io.Serializable;
+
 import soc.qase.state.Entity;
 
 /*-------------------------------------------------------------------*/

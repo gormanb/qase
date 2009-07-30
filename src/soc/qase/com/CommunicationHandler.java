@@ -6,12 +6,15 @@
 
 package soc.qase.com;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import java.util.*;
-import soc.qase.com.message.*;
-import soc.qase.com.packet.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+import soc.qase.com.message.Connectionless;
+import soc.qase.com.packet.ClientPacket;
+import soc.qase.com.packet.ConnectionlessPacket;
+import soc.qase.com.packet.Packet;
+import soc.qase.com.packet.Sequence;
 
 /*-------------------------------------------------------------------*/
 /**	The CommunicationHandler class is a wrapper class for low-level

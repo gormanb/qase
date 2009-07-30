@@ -5,15 +5,15 @@
 
 package soc.qase.ai.waypoint;
 
-import java.util.Vector;
-import java.io.Serializable;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Vector;
 
-import soc.qase.state.Origin;
 import soc.qase.state.Entity;
+import soc.qase.state.Origin;
 import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/

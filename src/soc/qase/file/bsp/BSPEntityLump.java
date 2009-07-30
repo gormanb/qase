@@ -5,8 +5,8 @@
 
 package soc.qase.file.bsp;
 
-import java.util.Vector;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 /*-------------------------------------------------------------------*/
 /** Represents the Entity lump of the BSP file. The entities lump stores

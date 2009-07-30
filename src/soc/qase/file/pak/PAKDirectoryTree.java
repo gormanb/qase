@@ -5,9 +5,10 @@
 
 package soc.qase.file.pak;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
-import java.util.HashMap;
+
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

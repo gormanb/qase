@@ -6,6 +6,7 @@
 package soc.qase.ai.gann;
 
 import java.io.Serializable;
+
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

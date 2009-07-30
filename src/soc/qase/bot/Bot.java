@@ -5,7 +5,7 @@
 
 package soc.qase.bot;
 
-import soc.qase.state.*;
+import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	An interface which specifies the minimal structure to which Bots must

@@ -6,13 +6,12 @@
 package soc.qase.file.bsp;
 
 import java.util.Hashtable;
-
-import soc.qase.state.*;
-import soc.qase.tools.Utils;
-import soc.qase.tools.vecmath.Vector3f;
-
-import java.util.StringTokenizer;
 import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
+import soc.qase.state.Angles;
+import soc.qase.state.Origin;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /** Wrapper class for Entities in the BSP file; that is, doors, buttons,

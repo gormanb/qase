@@ -6,11 +6,8 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import soc.qase.state.*;
-import soc.qase.com.packet.*;
+import soc.qase.com.packet.Sequence;
+import soc.qase.state.Move;
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

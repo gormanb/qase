@@ -1,19 +1,83 @@
 
-# QASE: Quake 2 Agent Simulation Environment
+QASE: Quake2 Agent Simulation Environment
+=========================================
 
-Bernard Gorman <bernard.gorman@gmail.com>
+QASE is a Java-based framework for creating artificial agents ("bots") in Quake2.
 
-# About
+Features
+--------
 
-QASE is a Java-based framework designed to provide all the functionality
-necessary to create game agents in Quake 2. Powerful enough to facilitate
-high-end games research, it is also suitable for hobbyist projects and
-undergrad courses geared towards classic AI.
+##### Automatic Waypoint Map Generator
+By supplying a DM2 recording of a player navigating a level, QASE can automatically build a waypoint map based on the player's observed movements - that is, a topological graph of the environment which indicates the pathways favoured by the player. The items collected by the player are also recorded, and from these QASE builds a list of shortest paths from each waypoint to every item available. Once generated, these waypoint maps can be saved to disk and reloaded for future use.
 
-# Changelog
+##### Augmented Gamestate
+Rather than simply reporting the server-supplied gamestate to the agent, QASE performs additional processing to augment it with relevant information not provided by the standard protocol. For instance, Quake2 has no explicit item-collection event notification, and requires the user to query the server - with a delay - to retrieve the agent's current inventory. QASE resolves this by deducing exactly which item has been collected, and tracks the agent's inventory locally so that it is available on every timestep. Building on this, QASE maintains a map of collected items and their known respawn times, flagging the agent whenever such an event occurs.
 
-r2.5.9 (24-08-08)
--
+##### Environment Sensing
+Upon entering a map, QASE will automatically find and parse the corresponding BSP geometry file, allowing the agent to perform ray- or object-tracing collision detection with its surroundings. QASE also performs some additional analysis to provide further information about the entities in the level; for instance, it allows the agent to determine whether it is currently riding an elevator, and presents a graph view of the locations of and links between any teleporters in the current map.
+
+##### DM2 Parser & Recorder
+QASE includes a `DM2Parser` class which allows the user to "play back" a recorded match and examine the gamestate at each step. It also incorporates a `DM2Recorder` class which permits the agent to record itself during play. This actually improves upon Quake2's own DM2 recording facilities, enabling matches spanning multiple maps to be recorded in playable format.
+
+##### Network Layer & Team-Based CTF
+QASE incorporates a full implementation of the Quake2 client network protocol, allowing any number of agents to connect to a local or remote server. All network communication, as well as the additional processing discussed above, is transparent to the agent, which simply receives a callback at each update interval. The network layer also provides support for Threewave's team-based Capture-the-Flag mod, including team-switching functions and the ability to easily determine whether a particular player is on your team or the opposing.
+
+##### AI Framework
+Apart from the waypoint map generator described above, QASE includes implementations of a number of AI constructs. These include a a clustering toolbox, a genetic algorithm generator, and a neural network framework. The latter are designed to be used in tandem, to create evolutionary neural networks; that is, the networks gradually evolve towards a given fitness function. They are not directly used by the library, but are included for education purposes and to aid agent development.
+
+##### MatLab Integration
+QASE provides a special set of agents designed to be controlled via the MatLab programming environment, which provides a rich set of toolboxes well-suited to developing the agent's AI. On each server update, QASE first pre-processes the required data; it then flags MatLab to take over control of the AI cycle. The MatLab function obtains the agent's input data, processes it, passes the results back to the agent, and signals that the agent should reassume control. The bot then applies the output in a
+postprocessing step.
+
+Usage
+-----
+
+See the `docs` directory for the QASE User's Guide and various supplementary documentation.
+
+Changelog
+---------
+
+#### v2.6.0 (30-07-09)
+
+**Notes:**
+
+A maintenance release which improves upon some existing
+functionality. NOTE THAT SOME METHOD NAMES HAVE BEEN CHANGED; a
+search-and-replace will need to be performed on agents which call
+these methods, as listed below.
+
+**Changes:**
+
+* The isNearestEnemyVisible methods in BasicBot have been
+  renamed isNearestOpponentVisible, to maintain API-wide consistency.
+
+* Improved the functionality of the DM2Parser class in a
+  number of ways. Added a new method, getMapWorldInfo, which returns
+  the number of maps contained within a DM2 file and the number of
+  gamestate timesteps in each. Also added methods getMapNumber and
+  getWorldNumber, allowing external code to determine the current
+  position of the DM2Parser within the demo.
+
+* The goToBlock method in DM2Parser has been renamed goToWorld,
+  to avoid confusion between individual message blocks and a complete
+  gamestate object.
+
+* New isFiring convenience method in the BasicBot class.
+
+* Added new convenience methods in the Player class: getPosition,
+  getOrientation, getHealth, getArmor, getWeaponIndex, getAmmo, isFiring.
+
+* Added new convenience methods in the Angles class: getYPR returns
+  an array containing all current angles, while a new overloaded set
+  method allows all angles to be changed simultaneously. A new constructor
+  has also been provided, which accepts an array of 3 floats as initial
+  YPR values.
+
+* fixed a bug which could, on rare occasions, cause an
+ exception to be thrown by the getType or getSubType methods.
+
+#### v2.5.9 (24-08-08)
+
 **Notes:**
 
 A release which introduces some significant new functionality,
@@ -102,8 +166,8 @@ to be performed on agents which call these methods, as listed below.
   has been renamed getItemString, to conform to naming conventions
   used in all other Config methods.
 
-r2.5.2 (07-04-08)
--
+#### v2.5.2 (07-04-08)
+
 **Notes:**
 
 A release which fixes a recently-discovered bug, as well
@@ -179,8 +243,8 @@ been requested by QASE users.
   public in BasicBot have been changed to protected, in order
   to maintain consistency and design intent.
 
-r2.4.8 (30-03-08)
--
+#### v2.4.8 (30-03-08)
+
 **Notes:**
 
 A release that introduces some performance and
@@ -235,17 +299,10 @@ below.
   the value is a decimal less than 1.0, it is treated as
   specifying the number of nodes as a fraction of the total
   number of observed player positions in the demo file.
-  
-> For instance, the following call:
 
->>    WaypointMapGenerator.generate("test.dm2", 50)
+>    WaypointMapGenerator.generate("test.dm2", 50); // generate map of 50 waypoints
 
-> will generate a map consisting of 50 waypoints, whereas
-
->>    WaypointMapGenerator.generate("test.dm2", 0.3)
-
-> will generate a map containing 30% of the total number of
-  player positions found in the demo.
+>    WaypointMapGenerator.generate("test.dm2", 0.3); // generate 30% of total positions
 
 * Finally, additional error checks have been added to the
   WaypointMap generation process, to account for more obscure
@@ -261,8 +318,8 @@ below.
   difficult; I'll see what I can find out, and will incorporate
   any necessary changes into the next release.
 
-r2.4.5 (22-11-07)
--
+#### v2.4.5 (22-11-07)
+
 **Notes:**
 
 A release which makes an important change to the way in which
@@ -277,7 +334,7 @@ of the Inventory and WaypointMap objects from within BasicBot.
 * By default, BasicBot constructors will now enable QASE's
   local inventory-tracking mechanism rather than requiring the
   programmer to explicitly enable it. QASE provides two approaches
-  to tracking the agent's inventory, which Quake 2 maintains on the
+  to tracking the agent's inventory, which Quake2 maintains on the
   server side during game sessions and which is therefore not
   always available to the client; local tracking and automatic
   refreshing. Local tracking involves detecting each item pickup
@@ -311,8 +368,8 @@ of the Inventory and WaypointMap objects from within BasicBot.
 
 * Updated the Sample bots to use the new methods mentioned above.
 
-r2.4.2 (16-11-07)
--
+#### v2.4.2 (16-11-07)
+
 **Notes:**
 
 A(nother) release which fixes a small recently-discovered bug,
@@ -342,8 +399,8 @@ and adds some extra convenience functions.
 * Updated the JavaDoc with better descriptions of the Inventory
   access methods, and info on the new BasicBot functions.
 
-r2.4.1 (02-07-07)
--
+#### v2.4.1 (02-07-07)
+
 **Notes:**
 
 A release which fixes a small recently-discovered bug, and 
@@ -368,8 +425,8 @@ adds some extra convenience functions.
 * Updated the JavaDoc with information for the isOnLift
 method in BasicBot.
 
-r2.4.0 (11-05-07)
--
+#### v2.4.0 (11-05-07)
+
 **Notes:**
 
 Another significant update. This release allows the Entity
@@ -388,8 +445,8 @@ the library and presented to the user as edges in a graph.
 in BasicBot and other classes which allow the Entity data to be
 easily queried.
 
-r2.3.0 (03-05-07)
--
+#### v2.3.0 (03-05-07)
+
 **Notes:**
 
 A significant update. This release incorporates full support
@@ -419,8 +476,8 @@ on your team or the opposing.
 
 * Some noticeable performance improvements.
 
-r2.2.0 (19-10-06)
--
+#### v2.2.0 (19-10-06)
+
 **Notes:**
 
 A release which primarily addresses a recently-discovered bug,
@@ -448,8 +505,8 @@ architectural change in the API.
 * Updated some sections of the Javadoc, as well as the
   User's Guide.
 
-r2.1.9 (14/08/06)
--
+#### v2.1.9 (14/08/06)
+
 **Notes:**
 
 Another interim release, since time constraints have
@@ -498,8 +555,8 @@ and intuitive.
 * Some typographical errors in the Javadoc pages have
   been corrected.
 
-r2.1.5 (19/02/2006)
--
+#### v2.1.5 (19/02/2006)
+
 **Notes:**
 
 An interim release designed to address a bug which
@@ -525,8 +582,8 @@ to throw an exception.
   velocities. Accounts for changes in speed due to
   submersion in water/other fluids.
 
-r2.1.0 (15/12/2005)
--
+#### v2.1.0 (15/12/2005)
+
 **Notes:**
 
 Updates some core elements of the QASE engine which could
@@ -542,7 +599,7 @@ not be completed in time for the initial release.
 * Separate representations of weapon models while on the
   ground and in the player's hands
 
-r2.0.0 (04/12/2005)
--
+#### v2.0.0 (04/12/2005)
+
 * Initial public release. See the User Guide and other docs for a full list
 of features.

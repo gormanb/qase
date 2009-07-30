@@ -5,15 +5,12 @@
 
 package soc.qase.ai.gann;
 
-import java.util.Random;
-import java.util.Vector;
-import java.util.ArrayList;
-
-import java.io.Serializable;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Vector;
 
 /*-------------------------------------------------------------------*/
 /**	Represents and controls a neural network, designed to be used in

@@ -6,9 +6,10 @@
 
 package soc.qase.state;
 
-import java.util.*;
-import soc.qase.com.message.*;
-import soc.qase.info.*;
+import java.util.StringTokenizer;
+
+import soc.qase.info.Config;
+import soc.qase.info.Server;
 
 /*-------------------------------------------------------------------*/
 /**	Wrapper class for entity attributes (players, items, weapons,
@@ -222,14 +223,14 @@ public class Entity
 
 		return (category == null ? "" : category);
 	}
-	
+
 /*-------------------------------------------------------------------*/
 /**	Get entity type string.
  *	@return entity type string. */
 /*-------------------------------------------------------------------*/
 	public String getType()
 	{
-		return (type != null || !getCategory().equals("players") ? type : "");
+		return (type == null ? (getCategory().equals("players") || type == null ? "" : type) : type);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -238,7 +239,7 @@ public class Entity
 /*-------------------------------------------------------------------*/
 	public String getSubType()
 	{
-		return (subType != null || !getCategory().equals("players") ? subType : "");
+		return (subType == null ? (getCategory().equals("players") || subType == null ? "" : subType) : subType);
 	}
 
 /*-------------------------------------------------------------------*/

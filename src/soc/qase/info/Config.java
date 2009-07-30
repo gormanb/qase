@@ -6,8 +6,6 @@
 
 package soc.qase.info;
 
-import soc.qase.com.message.*;
-
 /*-------------------------------------------------------------------*/
 /**	Wrapper class for game configuration strings. */
 /*-------------------------------------------------------------------*/

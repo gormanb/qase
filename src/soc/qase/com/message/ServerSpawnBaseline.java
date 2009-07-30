@@ -6,10 +6,14 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import soc.qase.state.*;
+import soc.qase.state.Angles;
+import soc.qase.state.Effects;
+import soc.qase.state.Entity;
+import soc.qase.state.Events;
+import soc.qase.state.Model;
+import soc.qase.state.Origin;
+import soc.qase.state.Solid;
+import soc.qase.state.Sound;
 import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/

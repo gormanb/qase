@@ -5,16 +5,15 @@
 
 package soc.qase.ai.gann;
 
-import java.util.Vector;
-import java.util.Arrays;
-import java.util.Random;
-import soc.qase.tools.Utils;
-
-import java.io.Serializable;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Vector;
+
+import soc.qase.tools.Utils;
 
 /*-------------------------------------------------------------------*/
 /**	A genetic algorithm generator class. Maintains fitness stats, controls

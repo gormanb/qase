@@ -6,11 +6,12 @@
 
 package soc.qase.com.message;
 
-import soc.qase.com.packet.*;
-import soc.qase.state.*;
-import soc.qase.info.*;
-
 import java.util.Observable;
+
+import soc.qase.com.packet.ClientPacket;
+import soc.qase.com.packet.ServerPacket;
+import soc.qase.info.Server;
+import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	Abstract class used as base for all classes which read and process

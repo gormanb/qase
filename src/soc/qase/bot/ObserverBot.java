@@ -5,15 +5,12 @@
 
 package soc.qase.bot;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.vecmath.*;
-import soc.qase.file.bsp.BSPParser;
-
-import java.util.Vector;
-import java.util.Observer;
 import java.util.Observable;
+import java.util.Observer;
+
+import soc.qase.info.Server;
+import soc.qase.state.Action;
+import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	ObserverBot, along with PollingBot, occupies the highest level of

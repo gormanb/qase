@@ -5,12 +5,12 @@
 
 package soc.qase.bot.matlab.sample;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.tools.vecmath.*;
-
 import soc.qase.bot.matlab.MatLabPollingBot;
+import soc.qase.state.Action;
+import soc.qase.state.Entity;
+import soc.qase.state.PlayerMove;
+import soc.qase.state.World;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	A ready-made example of a class written to interface with MatLab.

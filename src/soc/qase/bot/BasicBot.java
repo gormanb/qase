@@ -5,19 +5,32 @@
 
 package soc.qase.bot;
 
-import soc.qase.com.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.file.bsp.*;
-import soc.qase.file.pak.*;
-import soc.qase.tools.Utils;
-import soc.qase.ai.waypoint.*;
-import soc.qase.tools.vecmath.*;
-
-import java.io.*;
+import java.io.File;
 import java.util.Vector;
 
-import java.util.Observable;
+import soc.qase.ai.waypoint.Waypoint;
+import soc.qase.ai.waypoint.WaypointMap;
+import soc.qase.ai.waypoint.WaypointMapGenerator;
+import soc.qase.com.Proxy;
+import soc.qase.file.bsp.BSPBrush;
+import soc.qase.file.bsp.BSPEntity;
+import soc.qase.file.bsp.BSPLeaf;
+import soc.qase.file.bsp.BSPParser;
+import soc.qase.file.pak.PAKParser;
+import soc.qase.info.Server;
+import soc.qase.info.User;
+import soc.qase.state.Action;
+import soc.qase.state.Angles;
+import soc.qase.state.Entity;
+import soc.qase.state.Inventory;
+import soc.qase.state.Origin;
+import soc.qase.state.Player;
+import soc.qase.state.PlayerGun;
+import soc.qase.state.Velocity;
+import soc.qase.state.World;
+import soc.qase.tools.Utils;
+import soc.qase.tools.vecmath.Vector2f;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	An abstract class which provides all the base functionality needed
@@ -295,7 +308,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected Origin getPosition()
 	{
-		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPlayerMove().getOrigin());
+		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPosition());
 	}
 
 /*-------------------------------------------------------------------*/
@@ -305,7 +318,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected Angles getOrientation()
 	{
-		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getPlayerView().getViewAngles());
+		return ((proxy == null || proxy.getWorld() == null) ? null : proxy.getWorld().getPlayer().getOrientation());
 	}
 
 /*-------------------------------------------------------------------*/
@@ -315,7 +328,17 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected int getHealth()
 	{
-		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.HEALTH) : Integer.MIN_VALUE);
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getHealth() : Integer.MIN_VALUE);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the amount of armor currently held by the agent.
+ *	@return the current armor value, or Integer.MIN_VALUE if the agent
+ *	is not currently connected */
+/*-------------------------------------------------------------------*/
+	protected int getArmor()
+	{
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getArmor() : Integer.MIN_VALUE);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -326,7 +349,7 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected int getWeaponIndex()
 	{
-		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerGun().getInventoryIndex() : Integer.MIN_VALUE);
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getWeaponIndex() : Integer.MIN_VALUE);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -336,17 +359,16 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected int getAmmo()
 	{
-		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.AMMO) : Integer.MIN_VALUE);
+		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getAmmo() : Integer.MIN_VALUE);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Get the amount of armor currently held by the agent.
- *	@return the current armor value, or Integer.MIN_VALUE if the agent
- *	is not currently connected */
+/**	Determines whether the player is currently firing his gun.
+ *	@return true if the player is firing, false otherwise. */
 /*-------------------------------------------------------------------*/
-	protected int getArmor()
+	public boolean isFiring()
 	{
-		return ((proxy != null && proxy.inGame()) ? proxy.getWorld().getPlayer().getPlayerStatus().getStatus(PlayerStatus.ARMOR) : Integer.MIN_VALUE);
+		return proxy != null && proxy.inGame() && proxy.getWorld().getPlayer().isFiring();
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1015,7 +1037,7 @@ public abstract class BasicBot extends Thread implements Bot
 	protected Entity getNearestEntity(Vector filteredEntities)
 	{
 		Entity tempEntity = null;
-		Entity nearestEnemy = null;
+		Entity nearestEntity = null;
 
 		Origin currentPos = getPosition();
 
@@ -1030,11 +1052,11 @@ public abstract class BasicBot extends Thread implements Bot
 			if(tempDistance < distance && tempDistance > 0)
 			{
 				distance = tempDistance;
-				nearestEnemy = tempEntity;
+				nearestEntity = tempEntity;
 			}
 		}
 
-		return nearestEnemy;
+		return nearestEntity;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1188,12 +1210,12 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected Waypoint findClosestOpponent()
 	{
-		Entity tempEnemy = getNearestOpponent();
+		Entity nearestOpponent = getNearestOpponent();
 
-		if(wpMap == null || tempEnemy == null)
+		if(wpMap == null || nearestOpponent == null)
 			return null;
 
-		return wpMap.findClosestWaypoint(tempEnemy.getOrigin());
+		return wpMap.findClosestWaypoint(nearestOpponent.getOrigin());
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1306,8 +1328,8 @@ public abstract class BasicBot extends Thread implements Bot
 /*-------------------------------------------------------------------*/
 	protected Waypoint[] findShortestPathToOpponent()
 	{
-		Entity tempEnemy = getNearestOpponent();
-		return (tempEnemy == null ? null : findShortestPath(tempEnemy.getOrigin()));
+		Entity nearestOpponent = getNearestOpponent();
+		return (nearestOpponent == null ? null : findShortestPath(nearestOpponent.getOrigin()));
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1694,7 +1716,7 @@ public abstract class BasicBot extends Thread implements Bot
 
 	private Vector3f dir = new Vector3f(0, 0, 0);
 	private Vector3f pos = new Vector3f(0, 0, 0);
-	private Vector3f enemyPos = new Vector3f(0, 0, 0);
+	private Vector3f oppPos = new Vector3f(0, 0, 0);
 
 /*-------------------------------------------------------------------*/
 /**	Check whether a particular entity is visible from the player's
@@ -1738,9 +1760,9 @@ public abstract class BasicBot extends Thread implements Bot
 /**	Check whether the nearest enemy in the game is currently visible.
  *	@return true if visible, false otherwise */
 /*-------------------------------------------------------------------*/
-	protected boolean isNearestEnemyVisible()
+	protected boolean isNearestOpponentVisible()
 	{
-		return isNearestEnemyVisible(false);
+		return isNearestOpponentVisible(false);
 	}
 
 /*-------------------------------------------------------------------*/
@@ -1749,20 +1771,20 @@ public abstract class BasicBot extends Thread implements Bot
  *	line-of-sight
  *	@return true if visible, false otherwise */
 /*-------------------------------------------------------------------*/
-	protected boolean isNearestEnemyVisible(boolean withinFOV)
+	protected boolean isNearestOpponentVisible(boolean withinFOV)
 	{
 		if(!isBotAlive() || (!bsp.isMapLoaded() && !readMap()))
 			return false;
 
-		Entity nearEnemy = getNearestOpponent();
+		Entity nearestOpponent = getNearestOpponent();
 
-		if(nearEnemy != null)
+		if(nearestOpponent != null)
 		{
-			enemyPos.set(nearEnemy.getOrigin());
-			dir.sub(enemyPos, pos);
+			oppPos.set(nearestOpponent.getOrigin());
+			dir.sub(oppPos, pos);
 
 			if(traceFromView) pos.add(proxy.getWorld().getPlayer().getPlayerView().getViewOffset());
-			return (withinFOV ? Utils.calcAngles(dir)[0] <= proxy.getWorld().getPlayer().getPlayerView().getFOV() / 2.0 && bsp.isVisible(pos, enemyPos) : bsp.isVisible(pos, enemyPos));
+			return (withinFOV ? Utils.calcAngles(dir)[0] <= proxy.getWorld().getPlayer().getPlayerView().getFOV() / 2.0 && bsp.isVisible(pos, oppPos) : bsp.isVisible(pos, oppPos));
 		}
 		else
 			return false;

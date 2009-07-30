@@ -6,8 +6,9 @@
 package soc.qase.ai.kmeans;
 
 import java.util.Arrays;
+
 import soc.qase.tools.Utils;
-import soc.qase.tools.vecmath.*;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	The KMeansCalc class is designed to give students an insight into

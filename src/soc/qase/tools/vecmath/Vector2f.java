@@ -6,6 +6,7 @@
 package soc.qase.tools.vecmath;
 
 import java.io.Serializable;
+
 import soc.qase.state.Origin;
 
 /*-------------------------------------------------------------------*/

@@ -6,10 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-
 /*-------------------------------------------------------------------*/
 /**	Indicates that the client should reconnect to the server. */
 /*-------------------------------------------------------------------*/

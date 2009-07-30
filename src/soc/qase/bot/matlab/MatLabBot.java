@@ -6,7 +6,6 @@
 package soc.qase.bot.matlab;
 
 import soc.qase.bot.Bot;
-import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	An interface which extends the fundamental Bot interface, requiring

@@ -6,9 +6,6 @@
 
 package soc.qase.state;
 
-import soc.qase.com.message.*;
-import soc.qase.info.*;
-
 /*-------------------------------------------------------------------*/
 /**	The Player class is used as a wrapper class for a set of information
  *	concerning an agent's state as a player in the simulated environment.
@@ -310,12 +307,77 @@ public class Player
 	}
 
 /*-------------------------------------------------------------------*/
+/**	Get the player's current position.
+ *	@return the current position */
+/*-------------------------------------------------------------------*/
+	public Origin getPosition()
+	{
+		return getPlayerMove().getOrigin();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the player's current orientation.
+ *	@return the current orientation */
+/*-------------------------------------------------------------------*/
+	public Angles getOrientation()
+	{
+		return getPlayerView().getViewAngles();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the player's current health.
+ *	@return the player's health value */
+/*-------------------------------------------------------------------*/
+	public int getHealth()
+	{
+		return getPlayerStatus().getStatus(PlayerStatus.HEALTH);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the amount of armor currently held by the player.
+ *	@return the current armor value */
+/*-------------------------------------------------------------------*/
+	public int getArmor()
+	{
+		return getPlayerStatus().getStatus(PlayerStatus.ARMOR);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the inventory index of the current weapon.
+ *	@return the index of the current weapon, as indicated by the
+ *	constants in the Inventory class */
+/*-------------------------------------------------------------------*/
+	public int getWeaponIndex()
+	{
+		return getPlayerGun().getInventoryIndex();
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get the amount of ammo the agent has for the current weapon.
+ *	@return the current ammo, or Integer.MIN_VALUE if the agent
+ *	is not currently connected */
+/*-------------------------------------------------------------------*/
+	public int getAmmo()
+	{
+		return getPlayerStatus().getStatus(PlayerStatus.AMMO);
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Determines whether the player is currently firing his gun.
+ *	@return true if the player is firing, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public boolean isFiring()
+	{
+		return getPlayerGun().isFiring();
+	}
+
+/*-------------------------------------------------------------------*/
 /**	Check whether agent is currently alive.
  *	@return true if alive, false otherwise */
 /*-------------------------------------------------------------------*/
 	public boolean isAlive()
 	{
-		return getPlayerStatus().getStatus(PlayerStatus.HEALTH) > 0;
+		return getHealth() > 0;
 	}
 
 /*-------------------------------------------------------------------*/

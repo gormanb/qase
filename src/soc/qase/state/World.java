@@ -6,9 +6,13 @@
 
 package soc.qase.state;
 
-import java.util.*;
-import soc.qase.info.*;
-import soc.qase.com.message.*;
+import java.util.Arrays;
+import java.util.Vector;
+
+import soc.qase.com.message.ServerFrame;
+import soc.qase.info.Config;
+import soc.qase.info.Layout;
+import soc.qase.info.Server;
 import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
@@ -582,12 +586,7 @@ public class World
 		Entity[] ents = new Entity[entityNums.length];
 
 		for(int i = 0; i < entityNums.length; i++)
-		{
-			ents[i] = (entityNums[i] >= 0 ? entities[currentState][entityNums[i]] : null);
-			
-			if(ents[i] != null)
-				ents[i].setConfig(config);
-		}
+			ents[i] = getEntity(entityNums[i]);
 
 		return ents;
 	}

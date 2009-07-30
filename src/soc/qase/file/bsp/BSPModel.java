@@ -5,8 +5,8 @@
 
 package soc.qase.file.bsp;
 
-import soc.qase.tools.vecmath.Vector3f;
 import soc.qase.tools.Utils;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /** Wrapper class for Models in the BSP file. The first model correponds to the

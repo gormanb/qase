@@ -5,8 +5,8 @@
 
 package soc.qase.ai.gann;
 
-import java.util.Vector;
 import java.io.Serializable;
+import java.util.Vector;
 
 /*-------------------------------------------------------------------*/
 /**	Represents a single later in the neural network. */

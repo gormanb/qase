@@ -6,10 +6,7 @@
 
 package soc.qase.state;
 
-import java.util.*;
-import soc.qase.info.*;
-import soc.qase.com.message.*;
-import soc.qase.tools.vecmath.*;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	Represents a temporary entity - a projectile, blood, weapon trails,

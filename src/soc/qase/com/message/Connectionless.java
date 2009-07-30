@@ -6,10 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-
 /*-------------------------------------------------------------------*/
 /**	Special messages sent outside the normal flow of network traffic,
  *	such as at session-setup or to interrogate and maintain the state

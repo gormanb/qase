@@ -5,17 +5,16 @@
 
 package soc.qase.ai.gann;
 
-import soc.qase.com.Proxy;
-import soc.qase.state.World;
-
-import java.util.Observer;
-import java.util.Observable;
-
-import java.io.Serializable;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Observable;
+import java.util.Observer;
+
+import soc.qase.com.Proxy;
+import soc.qase.state.World;
 
 /*-------------------------------------------------------------------*/
 /**	A class which provides the basic template of a 'bridge' between

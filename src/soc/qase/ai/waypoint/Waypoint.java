@@ -5,8 +5,9 @@
 
 package soc.qase.ai.waypoint;
 
-import java.util.Vector;
 import java.io.Serializable;
+import java.util.Vector;
+
 import soc.qase.state.Origin;
 import soc.qase.tools.vecmath.Vector3f;
 

@@ -6,11 +6,9 @@
 
 package soc.qase.com.packet;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
+import soc.qase.com.message.ClientMove;
+import soc.qase.com.message.Message;
 import soc.qase.tools.Utils;
-import soc.qase.com.message.*;
 
 /*-------------------------------------------------------------------*/
 /**	The Packet class is used when sending messages from client to

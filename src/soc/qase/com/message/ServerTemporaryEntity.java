@@ -6,14 +6,12 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
 import java.util.Arrays;
-import soc.qase.tools.Utils;
+
 import soc.qase.state.Origin;
-import soc.qase.tools.vecmath.*;
 import soc.qase.state.TemporaryEntity;
+import soc.qase.tools.Utils;
+import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/
 /**	Wrapper for temporary entity messages - a projectile, blood, weapon trails,

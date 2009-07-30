@@ -46,7 +46,17 @@ public class Angles
 		setYaw(yaw);
 		setRoll(roll);
 	}
-	
+
+/*-------------------------------------------------------------------*/
+/**	Constructor. Build Angles object from angle data.
+ *	@param fAngles the values to which the angles should be set;
+ *	fAngles[0] = yaw, [1] = pitch, [2] = roll */
+/*-------------------------------------------------------------------*/
+	public Angles(float[] fAngles)
+	{
+		set(fAngles);
+	}
+
 /*-------------------------------------------------------------------*/
 /**	Constructor. Build Angles object from existing object.
  *	@param angles source object */
@@ -74,6 +84,15 @@ public class Angles
 			return roll;
 
 		return Float.NaN;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Get a float array containing the yaw, pitch and roll angles.
+ *	@return a 3-element array where [0] = yaw, [1] = pitch, [2] = roll */
+/*-------------------------------------------------------------------*/
+	public float[] getYPR()
+	{
+		return new float[]{ yaw, pitch, roll };
 	}
 
 /*-------------------------------------------------------------------*/
@@ -128,6 +147,18 @@ public class Angles
 		this.yaw = yaw;
 		this.roll = roll;
 		this.pitch = pitch;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Set the current angles to the values specified in the passed array.
+ *	@param fAngles the new values to which the angles should be set;
+ *	fAngles[0] = yaw, [1] = pitch, [2] = roll */
+/*-------------------------------------------------------------------*/
+	public void set(float[] fAngles)
+	{
+		this.yaw = fAngles[0];
+		this.pitch = fAngles[1];
+		this.roll = fAngles[2];
 	}
 
 /*-------------------------------------------------------------------*/

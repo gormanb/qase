@@ -5,23 +5,25 @@
 
 package soc.qase.file.dm2;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-import java.util.*;
-import soc.qase.info.*;
-import soc.qase.state.*;
-import soc.qase.com.packet.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.Vector;
+
+import soc.qase.com.message.ServerData;
+import soc.qase.com.message.ServerMessageHandler;
+import soc.qase.com.message.ServerReconnect;
+import soc.qase.com.packet.ServerPacket;
+import soc.qase.state.World;
 import soc.qase.tools.Utils;
-import soc.qase.com.message.*;
 
 /*-------------------------------------------------------------------*/
-/**	Quake 2’s inbuilt client, used by human players to connect
+/**	Quake 2's inbuilt client, used by human players to connect
  *	to the game server, facilitates the recording of matches from
  *	the perspective of each individual player. These demo or
  *	DM2 files contain an edited copy of the network packet
  *	stream received by the client during the game session,
- *	capturing the player’s actions and the state of all entities at
+ *	capturing the player's actions and the state of all entities at
  *	each discrete time step. The DM2Parser allows QASE to read and
  *	analyse such recordings; it treats the demo file as a virtual server,
  *	'connecting' to it and reading blocks of data in exactly the
@@ -40,6 +42,8 @@ public class DM2Parser extends ServerMessageHandler
 	private RandomAccessFile bufIn = null;
 
 	private int mapNumber = -1;
+	private int worldNumber = -1;
+
 	private int fileOffset = 0;
 	private byte[] fileContents = null;
 
@@ -118,6 +122,7 @@ public class DM2Parser extends ServerMessageHandler
 
 		server = null;
 		mapNumber = -1;
+		worldNumber = -1;
 		world = new World(true);
 
 		try
@@ -177,76 +182,160 @@ public class DM2Parser extends ServerMessageHandler
 		}
 		while(world.getFrame() == currentFrame);
 
+		worldNumber++;
+
 		return world;
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Skip to a particular block in the demo. Note that this is NOT the frame
- *	number, which may start at any number depending on how much time
- *	elapsed between the time the server was started and the time the
- *	client connected. Note also that the blockNum is zero-indexed. In
- *	short, passing b will return the (b+1)th gamestate in the demo.
- *	@param blockNum the block to which the parser should skip
- *	@return the gamestate at the specified block */
+/**	Skip to a particular gamestate (world) in the demo. Note that this
+ * 	is NOT the frame number, which may start at any number depending
+ * 	on how much time elapsed between the time the server was started
+ * 	and the time the client connected. Note also that the worldNum
+ * 	is zero-indexed. In short, passing b will return the (b+1)th
+ * 	gamestate in the demo.
+ *	@param worldNum the gamestate to which the parser should skip
+ *	@return the specified gamestate, or null if no such world exists */
 /*-------------------------------------------------------------------*/
-	public synchronized World goToBlock(int blockNum)
+	public synchronized World goToWorld(int worldNum)
 	{
-		return goToBlock(-1, blockNum);
+		return goToWorld(-1, worldNum);
 	}
 
 /*-------------------------------------------------------------------*/
-/**	Skip to a particular block in a particular map of a multi-map demo.
- *	Note that this is NOT the frame number, which may start at any
- *	number depending on how much time elapsed between the time the
- *	server was started and the time the client connected. Note also
- *	that mapNum and blockNum are zero-indexed. In short, passing (m, b)
- *	will return the (b+1)th gamestate of the (m+1)th map in the demo.
- *	Passing -1 for mapNum will ignore the map number, rendering the
- *	method identical to goToBlock(int).
+/**	Skip to a particular gamestate (world) in a particular map of a
+ * 	multi-map demo. Note that this is NOT the frame number, which may
+ * 	start at any number depending on how much time elapsed between the
+ * 	time the server was started and the time the client connected. Note
+ * 	also that mapNum and worldNum are zero-indexed. In short, passing
+ * 	(m, b) will return the (b+1)th gamestate of the (m+1)th map in the
+ * 	demo. Passing -1 for mapNum will ignore the map number, rendering the
+ *	method identical to goToWorld(int).
  *	@param mapNum the map within the demo to which the parser should skip
- *	@param blockNum the block within the map to which the parser should skip
- *	@return the gamestate at the specified block */
+ *	@param worldNum the gamestate within the map to which the parser should skip
+ *	@return the specified gamestate, or null if no such world exists */
 /*-------------------------------------------------------------------*/
-	public synchronized World goToBlock(int mapNum, int blockNum)
+	public synchronized World goToWorld(int mapNum, int worldNum)
 	{
 		if(!fileOpen)
 			return null;
+		else if(mapNum < 0 && worldNum < 0)
+		{
+			reset();
+			return null;
+		}
 
-		int curBlockNum = -1;
-		long filePosition = 0;
-		World oldWorld = world;
+// --------------------------------------------------------------
+		// save the current state of various params for quick-reset
+		// if skipping to the specified gamestate fails
+		int oldMapNum = mapNumber;
+		int oldWorldNum = worldNumber;
 		boolean tempVerbose = verbose;
 
-		try
-		{	filePosition = bufIn.getFilePointer();	}
-		catch(IOException ioe)
-		{	}
+// --------------------------------------------------------------
 
 		reset();
 		verbose = false;
 
-		do
+		do	// attempt to skip to the specified gamestate
 		{
-			curBlockNum++;
 			world = getNextWorld();
 		}
-		while(curBlockNum != blockNum && mapNumber != mapNum && world != null);
+		while(world != null && (mapNumber != mapNum || worldNumber != worldNum));
+
+// --------------------------------------------------------------
 
 		verbose = tempVerbose;
-		
+
+		// if the user tried to skip to a non-existent
+		// index, reset to the previous position
 		if(world == null)
 		{
-			world = oldWorld;
-
-			try
-			{	bufIn.seek(filePosition);	}
-			catch(IOException ioe)
-			{	}
-
+			goToWorld(oldMapNum, oldWorldNum);
 			return null;
 		}
-		
+
 		return world;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Gets information about the maps contained within the current DM2,
+ *	then moves the file point back to its previous position.
+ *	@return an array of integer values; [0] indicates the number of
+ *	maps in the DM2, while subsequent elements indicate the number
+ *	of gamestates in the corresponding map. */
+/*-------------------------------------------------------------------*/
+	public synchronized int[] getMapWorldInfo()
+	{
+		if(!fileOpen)
+			return null;
+
+// --------------------------------------------------------------
+		// save the current state of various params for quick-reset
+		int oldMapNum = mapNumber;
+		int oldWorldNum = worldNumber;
+		boolean tempVerbose = verbose;
+
+// --------------------------------------------------------------
+
+		reset();
+		verbose = false;
+
+		int curWorldNum = -1;
+
+		// Vector for temporary storage of map info
+		Vector mbInfo = new Vector();
+
+		do	// collect map info
+		{
+			world = getNextWorld();
+
+			// worldNumber resets on each map change; if it has,
+			// then add the current count to the list and continue
+			if(world == null || worldNumber < curWorldNum)
+				mbInfo.add(new Integer(curWorldNum+1));
+
+			curWorldNum = worldNumber;
+		}
+		while(world != null && !isEOF());
+
+// --------------------------------------------------------------
+
+		// create the int array to be returned and populate it
+		int[] mapWorldInfo = new int[mapNumber+2];
+
+		// [0] indicates the number of maps
+		mapWorldInfo[0] = mapNumber + 1;
+
+		// [1.. n] indicates the number of gamestates in each map
+		for(int i = 0; i < mbInfo.size(); i++)
+			mapWorldInfo[i+1] = ((Integer)mbInfo.elementAt(i)).intValue();
+
+// --------------------------------------------------------------
+
+		// reset to the position before the method was called
+		verbose = tempVerbose;
+		goToWorld(oldMapNum, oldWorldNum);
+
+		return mapWorldInfo;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Gets the index of the current map within the DM2.
+ *	@return the number of the current map within the DM2 (zero-indexed). */
+/*-------------------------------------------------------------------*/
+	public synchronized int getMapNumber()
+	{
+		return mapNumber;
+	}
+
+/*-------------------------------------------------------------------*/
+/**	Gets the index of the current world within the current map.
+ *	@return the number of the current world (zero-indexed). */
+/*-------------------------------------------------------------------*/
+	public synchronized int getWorldNumber()
+	{
+		return worldNumber;
 	}
 
 /*-------------------------------------------------------------------*/
@@ -258,7 +347,11 @@ public class DM2Parser extends ServerMessageHandler
 		return fileOpen;
 	}
 
-	private synchronized boolean isEOF()
+/*-------------------------------------------------------------------*/
+/**	Check whether the DM2Parser has reached the end of the file.
+ *	@return true if end of file has been reached, false otherwise. */
+/*-------------------------------------------------------------------*/
+	public synchronized boolean isEOF()
 	{
 		return EOF;
 	}
@@ -282,12 +375,13 @@ public class DM2Parser extends ServerMessageHandler
 /**	Overrides the default method in ServerMessageHandler. When entering
  *	a new map, the client receives a ServerData message containing
  *	information at the level. DM2Parser acts by recording this data and
- *	incrementing the map number (used by the goToBlock methods).
+ *	incrementing the map number (used by the goToWorld methods).
  *	@param message the ServerData message */
 /*-------------------------------------------------------------------*/
 	protected void processServerData(ServerData message)
 	{
 		super.processServerData(message);
+		worldNumber = -1;
 		mapNumber++;		
 	}
 }

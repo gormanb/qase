@@ -6,10 +6,12 @@
 package soc.qase.ai.waypoint;
 
 import java.util.Vector;
-import soc.qase.file.dm2.*;
-import soc.qase.ai.kmeans.*;
-import soc.qase.state.World;
+
+import soc.qase.ai.kmeans.KMeansCalc;
+import soc.qase.ai.kmeans.KMeansData;
+import soc.qase.file.dm2.DM2Parser;
 import soc.qase.state.Entity;
+import soc.qase.state.World;
 import soc.qase.tools.vecmath.Vector3f;
 
 /*-------------------------------------------------------------------*/

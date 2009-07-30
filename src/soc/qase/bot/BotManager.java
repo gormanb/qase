@@ -5,9 +5,8 @@
 
 package soc.qase.bot;
 
-import soc.qase.bot.sample.*;
-import soc.qase.file.dm2.*;
-import soc.qase.state.*;
+import soc.qase.bot.sample.SampleObserverBot;
+import soc.qase.bot.sample.SamplePollingBot;
 
 /*-------------------------------------------------------------------*/
 /**	An executable class, designed to demonstrate QASE. Connects three

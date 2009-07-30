@@ -6,10 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-
 /*-------------------------------------------------------------------*/
 /**	A wrapper for a command string, decoded by the game server console. */
 /*-------------------------------------------------------------------*/

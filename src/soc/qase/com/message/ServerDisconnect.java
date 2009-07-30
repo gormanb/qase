@@ -6,10 +6,6 @@
 
 package soc.qase.com.message;
 
-import java.io.*;
-import java.net.*;
-import java.lang.*;
-
 /*-------------------------------------------------------------------*/
 /**	Notifies the client that it should disconnect from the server. */
 /*-------------------------------------------------------------------*/
